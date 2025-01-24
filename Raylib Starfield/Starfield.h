@@ -5,16 +5,11 @@
 #include <ctime>
 #include <vector>
 #include "Star.h"
+#include "Utils.h"
 
 class Starfield
 {
 public:
-	std::vector<Star> stars;
-	int starDrawDistance;
-	int width;
-	int height;
-	int depth;
-
 	Starfield(int starCount, int starDrawDistance, int width, int height, int depth);
 	Starfield(int starCount, int starDrawDistance);
 	~Starfield();
@@ -22,7 +17,11 @@ public:
 	void DrawStars(Camera& camera);
 
 private:
-
+	std::vector<Star> stars;
+	int starDrawDistance;
+	int width;
+	int height;
+	int depth;
 };
 
 #endif // !H_STARFIELD

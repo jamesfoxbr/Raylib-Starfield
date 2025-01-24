@@ -2,13 +2,14 @@
 #define H_UTILS_H
 
 #include <cstdlib>
+#include <iostream>
+#include <string>
 #include "raylib.h"
+#include "Globals.h"
 
-double distance(Vector3 p1, Vector3 p2)
-{
-    double d = sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2) * 1.0);
-    return d;
-}
+double distance(Vector3 p1, Vector3 p2);
+; void DrawCoordinates(Camera camera);
+void targetCursor();
 
 #endif // !H_UTILS_H
 
