@@ -4,11 +4,13 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <random>
 #include "raylib.h"
 #include "Globals.h"
 
+int diceRoller(int minimun, int maximun);
 double distance(Vector3 p1, Vector3 p2);
-; void DrawCoordinates(Camera camera);
+void DrawCoordinates(Camera camera);
 void targetCursor();
 
 #endif // !H_UTILS_H

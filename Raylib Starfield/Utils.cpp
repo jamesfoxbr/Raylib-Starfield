@@ -1,5 +1,14 @@
 #include "Utils.h"
 
+int diceRoller(int minimun, int maximun)
+{
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_int_distribution<int> dist(minimun, maximun);
+
+    return dist(mt);
+}
+
 double distance(Vector3 p1, Vector3 p2)
 {
     double d = sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2) * 1.0);

@@ -10,6 +10,7 @@ public:
 	Camera3D camera = {0};
 
 	Window();
+	~Window();
 };
 
 #endif // !H_WINDOW_H

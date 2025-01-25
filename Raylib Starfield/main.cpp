@@ -1,6 +1,7 @@
 #include "Starfield.h"
 #include "Globals.h"
 #include "Window.h"
+#include "Controls.h"
 
 int main() {
 
@@ -8,12 +9,14 @@ int main() {
 
     DisableCursor();   
 
-    Starfield starfield(5000, 50);
+    Starfield starfield(50000, 50);
+    Controls control;
 
     // Main game loop
-    while (!WindowShouldClose()) {
-
-        UpdateCamera(&window.camera, CAMERA_FREE);
+    while (!WindowShouldClose()) 
+    {
+        control.Move();
+        UpdateCameraPro(&window.camera, control.cameraPosition, control.cameraRotation, CAMERA_CUSTOM);
 
         BeginDrawing(); 
 
@@ -30,9 +33,5 @@ int main() {
 
         EndDrawing(); 
     }
-
-    // De-Initialization
-    CloseWindow(); 
-
     return 0;
 }

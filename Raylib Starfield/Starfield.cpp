@@ -31,7 +31,6 @@ void Starfield::InitializeStars(int starCount, int starDrawDistance, int width, 
         stars[i].SetPosition({static_cast<float>((std::rand() % (width * 2)) - width),   // x
                              static_cast<float>((std::rand() % (height * 2)) - height),  // y
                              static_cast<float>((std::rand() % (depth * 2)) - depth)});  // z
-        stars[i].SetColor(Color(std::rand() % 255, std::rand() % 255, std::rand() % 255, 255));
         stars[i].SetName("Star " + std::to_string(i)); // Assign a name for each star
     }
 }
@@ -42,7 +41,7 @@ void Starfield::DrawStars(Camera& camera)
     for (auto& star : stars) {
 
         // Draw visible stars
-        float scale = 0.02f;
+        float scale = 0.1f;
 
         if (distance(camera.position, star.GetPosition()) > 50.0f)
         {
