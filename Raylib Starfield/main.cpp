@@ -1,4 +1,4 @@
-#include "Starfield.h"
+#include "Space.h"
 #include "Globals.h"
 #include "Window.h"
 #include "Controls.h"
@@ -9,14 +9,18 @@ int main() {
 
     DisableCursor();   
 
-    Starfield starfield(50000, 50);
     Controls control;
+
+    Space space(window.camera);
 
     // Main game loop
     while (!WindowShouldClose()) 
     {
+        control.MouseLook();
         control.Move();
         UpdateCameraPro(&window.camera, control.cameraPosition, control.cameraRotation, CAMERA_CUSTOM);
+        control.cameraPosition = {0.0f, 0.0f, 0.0f};
+        control.cameraRotation = {0.0f, 0.0f, 0.0f};
 
         BeginDrawing(); 
 
@@ -24,7 +28,7 @@ int main() {
 
         BeginMode3D(window.camera);
 
-            starfield.DrawStars(window.camera);
+        space.Update();
 
         EndMode3D();
 

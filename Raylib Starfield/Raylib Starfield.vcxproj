@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="Controls.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Space.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Starfield.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -139,6 +140,7 @@
   <ItemGroup>
     <ClInclude Include="Controls.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="Space.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="Starfield.h" />
     <ClInclude Include="Utils.h" />
