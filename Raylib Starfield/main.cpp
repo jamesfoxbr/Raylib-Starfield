@@ -4,7 +4,6 @@
 #include "Controls.h"
 
 int main() {
-
     Window window;
     Controls control;
     Space space(window.camera);
@@ -16,15 +15,17 @@ int main() {
         control.Update();
 
         BeginDrawing(); 
-
             ClearBackground(BLACK);
 
-        BeginMode3D(window.camera);
+        // 3D stuff go inside this area
+        BeginMode3D(window.camera); 
 
-        space.Update();
+            space.Update();
 
+        // end of the 3d drawing area
         EndMode3D();
 
+        // 2D stuff fized to the screen space go in this area
             DrawCoordinates(window.camera);
             targetCursor();
 
