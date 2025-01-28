@@ -17,9 +17,7 @@ private:
 	Camera& camera;
 	std::vector<Starfield> starfields;
 
-	void UpdateChunk();
-	void ProcessChunk();
-	void InstantiateStarfield(Vector3 chunkCoords);
-	void UnloadFarChunks(Vector3 chunkCoords);
+	void InstantiateStarfield();
+	void UnloadFarChunks();
 };
 #endif 

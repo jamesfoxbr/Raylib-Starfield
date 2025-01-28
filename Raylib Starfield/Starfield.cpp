@@ -11,11 +11,15 @@ Starfield::Starfield(int starCount, int starDrawDistance, int width, int height,
     InitializeStars(starCount, starDrawDistance, width, height, depth);
 }
 
-Starfield::Starfield(int starCount, int starDrawDistance)
+Starfield::Starfield(int starCount, int starDrawDistance, Vector3 position)
     :
     stars(starCount),
     starDrawDistance(starDrawDistance)
 {
+    this->position.x = position.x * 100;
+    this->position.y = position.y * 100;
+    this->position.z = position.z * 100;
+
     InitializeStars(starCount, starDrawDistance, 100, 100, 100);
 }
 
@@ -28,9 +32,9 @@ void Starfield::InitializeStars(int starCount, int starDrawDistance, int width, 
     // Randomly initialize the stars
     std::srand(static_cast<unsigned int>(std::time(0)));
     for (int i = 0; i < starCount; ++i) {
-        stars[i].SetPosition({static_cast<float>((std::rand() % (width * 2)) - width),   // x
-                             static_cast<float>((std::rand() % (height * 2)) - height),  // y
-                             static_cast<float>((std::rand() % (depth * 2)) - depth)});  // z
+        stars[i].SetPosition({static_cast<float>((std::rand() % (width)))  + position.x,    // x
+                              static_cast<float>((std::rand() % (height))) + position.y,    // y
+                              static_cast<float>((std::rand() % (depth)))  + position.z});  // z
         stars[i].SetName("Star " + std::to_string(i)); // Assign a name for each star
     }
 }
@@ -52,4 +56,8 @@ void Starfield::DrawStars(Camera& camera)
             DrawSphereEx(star.GetPosition(), scale, 4, 5, star.GetColor());
         }
     }
+
+    const Vector3 cubePosition = {position.x + width / 2, position.y + height / 2, position.z + depth / 2};
+
+    DrawCubeWires(cubePosition, (float)width, (float)height, (float)depth, WHITE);
 }

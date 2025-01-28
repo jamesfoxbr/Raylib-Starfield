@@ -7,7 +7,7 @@ Window::Window()
 	SetTargetFPS(60);
 
 	// Camera setup
-	camera.position = Vector3{10.0f, 10.0f, 10.0f};  // Camera position (eye level about 1.75m)
+	camera.position = Vector3{0.0f, 0.0f, 10.0f};  // Camera position (eye level about 1.75m)
 	camera.target = Vector3{0.0f, 0.0f, 0.0f};       // Camera target (look at the origin)
 	camera.up = Vector3{0.0f, 1.0f, 0.0f};           // Camera up direction (Y-axis)
 	camera.fovy = 45.0f;                             // Field of view (in degrees)
