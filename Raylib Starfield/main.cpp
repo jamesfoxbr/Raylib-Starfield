@@ -6,21 +6,14 @@
 int main() {
 
     Window window;
-
-    DisableCursor();   
-
     Controls control;
-
     Space space(window.camera);
 
     // Main game loop
     while (!WindowShouldClose()) 
     {
-        control.MouseLook();
-        control.Move();
-        UpdateCameraPro(&window.camera, control.cameraPosition, control.cameraRotation, CAMERA_CUSTOM);
-        control.cameraPosition = {0.0f, 0.0f, 0.0f};
-        control.cameraRotation = {0.0f, 0.0f, 0.0f};
+        UpdateCameraPro(&window.camera, control.GetCameraPostion(), control.GetCameraRotation(), 0.0f);
+        control.Update();
 
         BeginDrawing(); 
 

@@ -2,6 +2,7 @@
 #define H_SPACE_H
 
 #include <raylib.h>
+#include <unordered_map>
 #include "Starfield.h"
 
 class Space

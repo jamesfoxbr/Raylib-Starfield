@@ -11,6 +11,14 @@ Controls::~Controls()
 {
 }
 
+void Controls::Update()
+{
+	cameraPosition = {0.0f, 0.0f, 0.0f};
+	cameraRotation = {0.0f, 0.0f, 0.0f};
+	Move();
+	MouseLook();
+}
+
 void Controls::Move()
 {
 	if (IsKeyDown(KEY_LEFT_SHIFT))
@@ -25,6 +33,7 @@ void Controls::Move()
 	if (IsKeyDown(KEY_W))
 	{
 		cameraPosition.x = speed;
+
 	}
 	else if (IsKeyDown(KEY_S))
 	{
@@ -54,16 +63,25 @@ void Controls::MouseLook()
 {
 	CurrentMousePosition = GetMousePosition();
 	
-
 	if (LastMousePosition.x != CurrentMousePosition.x)
 	{
-		cameraRotation.x = CurrentMousePosition.x - LastMousePosition.x;
+		cameraRotation.x = (CurrentMousePosition.x - LastMousePosition.x) * mouseSensibility;
 	}
 	if (LastMousePosition.y != CurrentMousePosition.y)
 	{
-		cameraRotation.y = CurrentMousePosition.y - LastMousePosition.y;
+		cameraRotation.y = (CurrentMousePosition.y - LastMousePosition.y) * mouseSensibility;
 	}
 
 	LastMousePosition = CurrentMousePosition;
 	
+}
+
+Vector3 Controls::GetCameraPostion()
+{
+	return cameraPosition;
+}
+
+Vector3 Controls::GetCameraRotation()
+{
+	return cameraRotation;
 }

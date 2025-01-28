@@ -15,8 +15,6 @@ Space::~Space()
 void Space::Update()
 {
 	starfields[0].DrawStars(camera);
-	//UpdateChunk();
-	//ProcessChunk();
 }
 
 void Space::UpdateChunk()
