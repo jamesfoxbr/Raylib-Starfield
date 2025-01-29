@@ -19,7 +19,7 @@ public:
 	const Color& GetColor() const;
 	const std::string& GetName() const;
 	void SetSize(const float size);
-	const float GetSize();
+	const float& GetSize() const;
 	const char SpectralClass();
 
 private:

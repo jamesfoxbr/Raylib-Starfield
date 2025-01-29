@@ -24,29 +24,29 @@ void Star::SetColor()
 	{
 		color = DARKBLUE;
 	}
-	if (spectralClass == 'B')
+	else if (spectralClass == 'B')
 	{
 		color = BLUE;
 	}
-	if (spectralClass == 'A')
+	else if (spectralClass == 'A')
 	{
 		color = SKYBLUE;
 	}
-	if (spectralClass == 'F')
+	else if (spectralClass == 'F')
 	{
-		color = WHITE;
+		color = RED;
 	}
-	if (spectralClass == 'G')
+	else if (spectralClass == 'G')
 	{
 		color = YELLOW;
 	}
-	if (spectralClass == 'K')
+	else if (spectralClass == 'K')
 	{
 		color = ORANGE;
 	}
-	if (spectralClass == 'M')
+	else
 	{
-		color = RED;
+		color = WHITE;
 	}
 }
 
@@ -75,7 +75,7 @@ void Star::SetSize(const float size)
 	this->size = size;
 }
 
-const float Star::GetSize()
+const float& Star::GetSize() const
 {
 	return this->size;
 }
@@ -83,7 +83,7 @@ const float Star::GetSize()
 const char Star::SpectralClass()
 {
 	// TODO: correct star percentages. This is just a placeholder
-	int roll = diceRoller(0, 100);
+	const int roll = diceRoller(0, 100);
 
 	if (roll < 1)
 	{

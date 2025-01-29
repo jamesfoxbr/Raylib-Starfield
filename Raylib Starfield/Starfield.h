@@ -11,18 +11,19 @@
 class Starfield
 {
 public:
-	Starfield(int starCount, int starDrawDistance, int chunkSize);
-	Starfield(int starCount, int starDrawDistance, Vector3 position, int chunkSize);
+	Starfield(const int starCount, const int starDrawDistance, const int chunkSize);
+	Starfield(const int starCount, const int starDrawDistance, const Vector3 position, const int chunkSize);
 	~Starfield();
-	const void InitializeStars(int starCount, int starDrawDistance, int size);
+	const void InitializeStars(const int starCount, const int starDrawDistance, const int size);
 	const void DrawStars(const Camera& camera) const;
-	const Vector3 GetPosition();
+	const Vector3 GetPosition() const;
 
 private:
 	Vector3 position = {0.0f, 0.0f, 0.0f};
 	std::vector<Star> stars;
 	int starDrawDistance = 100;
 	int size;
+	int currentStarNumber = 0;
 };
 
 #endif // !H_STARFIELD

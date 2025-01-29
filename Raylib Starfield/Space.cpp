@@ -24,9 +24,9 @@ void Space::Update()
 
 void Space::InstantiateStarfield()
 {
-    constexpr int numberOfStars     = 300;
-	constexpr int chunkSize         = 200;
-    constexpr int chunkDrawDistance = 2; // how many chunks will draw in each direction from the central chunk de camera is at momenet
+    constexpr int numberOfStars     = 200; // number of stars in each chunk
+	constexpr int chunkSize         = 100; // width, height and depth of the chunk
+    constexpr int chunkDrawDistance = 2;   // how many chunks will draw in each direction from the central chunk de camera is at momenet
 
     int camX = int(camera.position.x / chunkSize);
     int camY = int(camera.position.y / chunkSize);
@@ -34,7 +34,7 @@ void Space::InstantiateStarfield()
 
     for (int dx = -chunkDrawDistance + camX; dx <= chunkDrawDistance + camX; dx++)
     {
-        for (int dy = - chunkDrawDistance + camY; dy <= chunkDrawDistance + camY; dy++)
+        for (int dy = -chunkDrawDistance + camY; dy <= chunkDrawDistance + camY; dy++)
         {
             for (int dz = -chunkDrawDistance + camZ; dz <= chunkDrawDistance + camZ; dz++)
             {

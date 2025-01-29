@@ -1,3 +1,3 @@
 #pragma once
-constexpr int screenWidth  = 800;
-constexpr int screenHeight = 600;
+constexpr int screenWidth  = 1600;
+constexpr int screenHeight = 900;

@@ -17,9 +17,9 @@ double distance(const Vector3 p1, const Vector3 p2)
 
 void DrawCoordinates(const Camera& camera)
 {
-    std::string positionX = "X: " + std::to_string(camera.position.x);
-    std::string positionY = " / Y: " + std::to_string(camera.position.y);
-    std::string positionZ = " / Z: " + std::to_string(camera.position.z);
+    std::string positionX = "X: " + std::to_string(int(camera.position.x));
+    std::string positionY = " / Y: " + std::to_string(int(camera.position.y));
+    std::string positionZ = " / Z: " + std::to_string(int(camera.position.z));
 
     std::string str = positionX + positionY + positionZ;  // Create the string first
 
