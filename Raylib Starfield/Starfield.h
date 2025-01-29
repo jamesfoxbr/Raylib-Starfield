@@ -11,14 +11,14 @@
 class Starfield
 {
 public:
-	Starfield(const int starCount, const int starDrawDistance, const int chunkSize);
-	Starfield(const int starCount, const int starDrawDistance, const Vector3 position, const int chunkSize);
+	Starfield(const int starCount, const int starDrawDistance, const Vector3 position, const int chunkSize, std::mt19937& random);
 	~Starfield();
-	const void InitializeStars(const int starCount, const int starDrawDistance, const int size);
+	const void InitializeStars(const int starCount, const int starDrawDistance, const int size, std::mt19937& random);
 	const void DrawStars(const Camera& camera) const;
-	bool IsPointInFrontOfCamera(const Vector3& camPos, const Vector3& camForward, const Vector3& point) const;
 	const Vector3 GetPosition() const;
 	const int GetNumberOfStars() const;
+
+	bool IsStarClicked(Camera& camera) const;
 
 private:
 	Vector3 position = {0.0f, 0.0f, 0.0f};

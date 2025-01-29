@@ -20,7 +20,7 @@ public:
 	const std::string& GetName() const;
 	void SetSize(const float size);
 	const float& GetSize() const;
-	const char SpectralClass();
+	void SpectralClass(int r);
 
 private:
 	Vector3 position;

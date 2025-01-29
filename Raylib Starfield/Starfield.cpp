@@ -1,15 +1,6 @@
 #include "Starfield.h"
 
-Starfield::Starfield(const int starCount, const int starDrawDistance, const int chunkSize)
-    :
-    stars(starCount), 
-    starDrawDistance(starDrawDistance),
-	size(chunkSize)
-{
-    InitializeStars(starCount, starDrawDistance, chunkSize);
-}
-
-Starfield::Starfield(const int starCount, const int starDrawDistance, Vector3 position, const int chunkSize)
+Starfield::Starfield(const int starCount, const int starDrawDistance, Vector3 position, const int chunkSize, std::mt19937& random)
     :
     stars(starCount),
     starDrawDistance(starDrawDistance),
@@ -19,23 +10,25 @@ Starfield::Starfield(const int starCount, const int starDrawDistance, Vector3 po
     this->position.y = position.y * chunkSize;
     this->position.z = position.z * chunkSize;
 
-    InitializeStars(starCount, starDrawDistance, chunkSize);
+    InitializeStars(starCount, starDrawDistance, chunkSize, random);
 }
 
 Starfield::~Starfield()
 {
 }
 
-const void Starfield::InitializeStars(const int starCount, const int starDrawDistance, const int chunkSize)
+const void Starfield::InitializeStars(const int starCount, const int starDrawDistance, const int chunkSize, std::mt19937& random)
 {
     // Randomly initialize the stars
-    std::srand(static_cast<unsigned int>(std::time(0)));
+	random.seed(unsigned int(position.x + position.y + position.x));
     for (int i = 0; i < starCount; ++i) 
     {
-        stars[i].SetPosition({static_cast<float>((std::rand() % (size))) + position.x,    // x
-                              static_cast<float>((std::rand() % (size))) + position.y,    // y
-                              static_cast<float>((std::rand() % (size))) + position.z});  // z
-        stars[i].SetName("Star " + std::to_string(i)); // Assign a name for each star
+        stars[i].SetPosition({random() % (size)+position.x,    // x
+                              random() % (size)+position.y,    // y
+                              random() % (size)+position.z});  // z
+
+        stars[i].SetName("Star " + std::to_string(i));         // Assign a name for each star
+		stars[i].SpectralClass(random() % 100);                // Assign a spectral class for each star
 
 		numberOfStars = i;
     }
@@ -79,4 +72,20 @@ const Vector3 Starfield::GetPosition() const
 const int Starfield::GetNumberOfStars() const
 {
     return numberOfStars;
+}
+
+bool Starfield::IsStarClicked(Camera& camera) const
+{
+    for (auto& star : stars)
+    {
+        Vector2 screenPos = GetWorldToScreen(star.GetPosition(), camera);
+        const float starSize = 20.0f;      // Use the star's size for collision detection
+		const float clickDistance = 100.0f; // How far the mouse can be from the star to click it
+        if (CheckCollisionPointCircle({screenWidth / 2, screenHeight / 2}, screenPos, starSize) && distance(star.GetPosition(), camera.position) < clickDistance)
+        {
+			DrawCube(star.GetPosition(), 1.0f, 1.0f, 1.0f, RED);
+            return true;
+        }
+    }
+    return false;
 }

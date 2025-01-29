@@ -4,8 +4,6 @@
 
 Star::Star()
 {
-	spectralClass = SpectralClass();
-	SetColor();
 }
 
 Star::~Star()
@@ -80,37 +78,40 @@ const float& Star::GetSize() const
 	return this->size;
 }
 
-const char Star::SpectralClass()
+void Star::SpectralClass(int r)
 {
 	// TODO: correct star percentages. This is just a placeholder
-	const int roll = diceRoller(0, 100);
+	const int roll = r;
+	
 
 	if (roll < 1)
 	{
-		return 'O';
+		spectralClass = 'O';
 	}
 	else if (roll < 2)
 	{
-		return 'B';
+		spectralClass = 'B';
 	}
 	else if (roll < 3)
 	{
-		return 'A';
+		spectralClass = 'A';
 	}
 	else if (roll < 4)
 	{
-		return 'F';
+		spectralClass = 'F';
 	}
 	else if (roll < 8)
 	{
-		return 'G';
+		spectralClass = 'G';
 	}
 	else if (roll < 76)
 	{
-		return 'K';
+		spectralClass = 'K';
 	}
 	else
 	{
-		return 'M';
+		spectralClass = 'M';
 	}
+	
+	SetColor();
 }

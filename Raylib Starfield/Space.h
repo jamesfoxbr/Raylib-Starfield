@@ -17,6 +17,7 @@ public:
 private:
 	Camera& camera;
 	std::vector<Starfield> starfields;
+	std::mt19937 random;
 
 	void InstantiateStarfield();
 };

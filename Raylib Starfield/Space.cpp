@@ -4,6 +4,7 @@ Space::Space(Camera& camera)
 	:
 	camera(camera)
 {
+    random.seed(555);
 }
 
 Space::~Space()
@@ -14,10 +15,13 @@ void Space::Update()
 {
 	InstantiateStarfield();
 
-	// Draw stars from the starfield class
 	for (auto& starfield : starfields)
 	{
-		starfield.DrawStars(camera);
+		starfield.DrawStars(camera);    // Draw stars from the starfield class
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && starfield.IsStarClicked(camera))
+        {
+			// code of star clicking here
+        }
 	}
 }
 
@@ -52,7 +56,7 @@ void Space::InstantiateStarfield()
             {
                 if (starfields.size() < 1)
                 {
-                    Starfield starfield(numberOfStars, 50, Vector3{(float)dx, (float)dy, (float)dz}, chunkSize);
+                    Starfield starfield(numberOfStars, starDrawDistance, Vector3{(float)dx, (float)dy, (float)dz}, chunkSize, random);
                     starfields.push_back(starfield);
                 }
                 else
@@ -78,7 +82,7 @@ void Space::InstantiateStarfield()
                     }
                     if (!positionOccupied)
                     {
-                        Starfield starfield(numberOfStars, starDrawDistance, Vector3{(float)dx, (float)dy, (float)dz}, chunkSize);
+                        Starfield starfield(numberOfStars, starDrawDistance, Vector3{(float)dx, (float)dy, (float)dz}, chunkSize, random);
                         starfields.push_back(starfield);
                     }
                 }
