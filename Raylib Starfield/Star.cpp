@@ -12,7 +12,7 @@ Star::~Star()
 {
 }
 
-void Star::SetPosition(Vector3 position)
+void Star::SetPosition(const Vector3 position)
 {
 	this->position = position;
 }
@@ -50,17 +50,17 @@ void Star::SetColor()
 	}
 }
 
-void Star::SetName(std::string name)
+void Star::SetName(const std::string name)
 {
 	this->name = name;
 }
 
-Vector3 Star::GetPosition()
+const Vector3 Star::GetPosition() const
 {
 	return position;
 }
 
-Color Star::GetColor()
+const Color Star::GetColor() const
 {
 	return color;
 }
@@ -70,17 +70,17 @@ std::string Star::GetName()
 	return name;
 }
 
-void Star::SetSize(float size)
+void Star::SetSize(const float size)
 {
 	this->size = size;
 }
 
-float Star::GetSize()
+const float Star::GetSize()
 {
 	return this->size;
 }
 
-char Star::SpectralClass()
+const char Star::SpectralClass()
 {
 	// TODO: correct star percentages. This is just a placeholder
 	int roll = diceRoller(0, 100);

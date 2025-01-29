@@ -41,12 +41,12 @@ const void Starfield::InitializeStars(int starCount, int starDrawDistance, int c
 const void Starfield::DrawStars(Camera& camera)
 {
 
-    for (auto& star : stars) {
+    for (const auto& star : stars) {
 
         // Draw visible stars
         constexpr float scale = 0.1f;
 
-        if (distance(camera.position, star.GetPosition()) > 50.0f)
+        if (distance(camera.position, star.GetPosition()) > starDrawDistance)
         {
             DrawPoint3D(star.GetPosition(), star.GetColor());
         }

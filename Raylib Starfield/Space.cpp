@@ -24,13 +24,13 @@ void Space::Update()
 
 void Space::InstantiateStarfield()
 {
-    int camX = int(camera.position.x / 100);
-    int camY = int(camera.position.y / 100);
-    int camZ = int(camera.position.z / 100);
-
-    constexpr int numberOfStars = 50;
+    constexpr int numberOfStars = 25;
 	constexpr int chunkSize     = 50;
     constexpr int chunkDistance = 2;
+
+    int camX = int(camera.position.x / chunkSize);
+    int camY = int(camera.position.y / chunkSize);
+    int camZ = int(camera.position.z / chunkSize);
 
     for (int dx = -chunkDistance + camX; dx <= chunkDistance + camX; dx++)
     {

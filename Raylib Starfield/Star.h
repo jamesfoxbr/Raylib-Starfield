@@ -12,15 +12,15 @@ public:
 	Star();
 	~Star();
 
-	void SetPosition(Vector3 position);
+	void SetPosition(const Vector3 position);
 	void SetColor();
-	void SetName(std::string name);
-	Vector3 GetPosition();
-	Color GetColor();
+	void SetName(const std::string name);
+	const Vector3 GetPosition() const;
+	const Color GetColor() const;
 	std::string GetName();
-	void SetSize(float size);
-	float GetSize();
-	char SpectralClass();
+	void SetSize(const float size);
+	const float GetSize();
+	const char SpectralClass();
 
 private:
 	Vector3 position;
