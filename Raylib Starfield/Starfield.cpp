@@ -38,21 +38,25 @@ const void Starfield::InitializeStars(int starCount, int starDrawDistance, int c
     }
 }
 
-const void Starfield::DrawStars(Camera& camera)
+const void Starfield::DrawStars(const Camera& camera) const
 {
+    RLFrustum rlFrustum; // Create an instance of RLFrustum
 
-    for (const auto& star : stars) {
-
+    for (auto& star : stars) {
         // Draw visible stars
-        constexpr float scale = 0.1f;
+        float scale = 0.1f;
 
-        if (distance(camera.position, star.GetPosition()) > starDrawDistance)
+        if (distance(camera.position, star.GetPosition()) > 50)
         {
-            DrawPoint3D(star.GetPosition(), star.GetColor());
+                DrawPoint3D(star.GetPosition(), star.GetColor());
         }
         else
         {
-            DrawSphereEx(star.GetPosition(), scale, 4, 5, star.GetColor());
+           
+            if (rlFrustum.SphereIn(star.GetPosition(), scale))
+            {
+                DrawSphereEx(star.GetPosition(), scale, 4, 5, star.GetColor());
+            }
         }
     }
 

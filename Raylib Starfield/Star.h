@@ -14,10 +14,10 @@ public:
 
 	void SetPosition(const Vector3 position);
 	void SetColor();
-	void SetName(const std::string name);
-	const Vector3 GetPosition() const;
-	const Color GetColor() const;
-	std::string GetName();
+	void SetName(const std::string& name);
+	const Vector3& GetPosition() const;
+	const Color& GetColor() const;
+	const std::string& GetName() const;
 	void SetSize(const float size);
 	const float GetSize();
 	const char SpectralClass();

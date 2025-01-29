@@ -24,21 +24,21 @@ void Space::Update()
 
 void Space::InstantiateStarfield()
 {
-    constexpr int numberOfStars = 25;
-	constexpr int chunkSize     = 50;
-    constexpr int chunkDistance = 2;
+    constexpr int numberOfStars     = 300;
+	constexpr int chunkSize         = 200;
+    constexpr int chunkDrawDistance = 2; // how many chunks will draw in each direction from the central chunk de camera is at momenet
 
     int camX = int(camera.position.x / chunkSize);
     int camY = int(camera.position.y / chunkSize);
     int camZ = int(camera.position.z / chunkSize);
 
-    for (int dx = -chunkDistance + camX; dx <= chunkDistance + camX; dx++)
+    for (int dx = -chunkDrawDistance + camX; dx <= chunkDrawDistance + camX; dx++)
     {
-        for (int dy = -chunkDistance + camY; dy <= chunkDistance + camY; dy++)
+        for (int dy = - chunkDrawDistance + camY; dy <= chunkDrawDistance + camY; dy++)
         {
-            for (int dz = -chunkDistance + camZ; dz <= chunkDistance + camZ; dz++)
+            for (int dz = -chunkDrawDistance + camZ; dz <= chunkDrawDistance + camZ; dz++)
             {
-                if (starfields.size() < 27)
+                if (starfields.size() < 1)
                 {
                     Starfield starfield(numberOfStars, 50, Vector3{(float)dx, (float)dy, (float)dz}, chunkSize);
                     starfields.push_back(starfield);
@@ -53,7 +53,7 @@ void Space::InstantiateStarfield()
                             positionOccupied = true;
                             break;
                         }
-                        if (distance(it->GetPosition(), camera.position) > chunkSize * 2)
+                        if (distance(it->GetPosition(), camera.position) > chunkSize * chunkDrawDistance * 2)
                         {
                             it = starfields.erase(it);
                         }

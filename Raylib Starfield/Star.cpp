@@ -50,22 +50,22 @@ void Star::SetColor()
 	}
 }
 
-void Star::SetName(const std::string name)
+void Star::SetName(const std::string& name)
 {
 	this->name = name;
 }
 
-const Vector3 Star::GetPosition() const
+const Vector3& Star::GetPosition() const 
 {
 	return position;
 }
 
-const Color Star::GetColor() const
+const Color& Star::GetColor() const
 {
 	return color;
 }
 
-std::string Star::GetName()
+const std::string& Star::GetName() const
 {
 	return name;
 }

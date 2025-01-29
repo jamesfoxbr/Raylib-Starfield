@@ -6,6 +6,7 @@
 #include <vector>
 #include "Star.h"
 #include "Utils.h"
+#include "rlFrustum.h"
 
 class Starfield
 {
@@ -14,7 +15,7 @@ public:
 	Starfield(int starCount, int starDrawDistance, Vector3 position, int chunkSize);
 	~Starfield();
 	const void InitializeStars(int starCount, int starDrawDistance, int size);
-	const void DrawStars(Camera& camera);
+	const void DrawStars(const Camera& camera) const;
 	const Vector3 GetPosition();
 
 private:
