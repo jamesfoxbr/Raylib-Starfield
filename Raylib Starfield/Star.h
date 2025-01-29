@@ -1,7 +1,6 @@
 #ifndef H_STAR_H
 #define H_STAR_H
 
-#include <string>
 #include "raylib.h"
 #include "Utils.h"
 

@@ -18,9 +18,14 @@ void Space::Update()
 	for (auto& starfield : starfields)
 	{
 		starfield.DrawStars(camera);    // Draw stars from the starfield class
-        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && starfield.IsStarClicked(camera))
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && starfield.IsStarClicked(camera) != nullptr)
         {
-			// code of star clicking here
+			selectedStar = starfield.IsStarClicked(camera);
+			std::cout << "Star " << selectedStar->GetName() << " clicked!" << std::endl;
+        }
+        else
+        {
+			selectedStar = nullptr;
         }
 	}
 }
@@ -90,5 +95,7 @@ void Space::InstantiateStarfield()
         }
     }
 }
+
+
 
 

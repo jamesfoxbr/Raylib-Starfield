@@ -18,14 +18,17 @@ public:
 	const Vector3 GetPosition() const;
 	const int GetNumberOfStars() const;
 
-	bool IsStarClicked(Camera& camera) const;
+	Star* IsStarClicked(Camera& camera) const;
+
+	std::string GenerateName(size_t length, std::mt19937& rng);
 
 private:
-	Vector3 position = {0.0f, 0.0f, 0.0f};
 	std::vector<Star> stars;
+	Vector3 position = {0.0f, 0.0f, 0.0f};
 	int starDrawDistance = 100;
 	int size;
 	int numberOfStars = 0;
+
 };
 
 #endif // !H_STARFIELD
