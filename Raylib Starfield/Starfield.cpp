@@ -36,37 +36,47 @@ const void Starfield::InitializeStars(const int starCount, const int starDrawDis
                               static_cast<float>((std::rand() % (size))) + position.y,    // y
                               static_cast<float>((std::rand() % (size))) + position.z});  // z
         stars[i].SetName("Star " + std::to_string(i)); // Assign a name for each star
+
+		numberOfStars = i;
     }
 }
 
 const void Starfield::DrawStars(const Camera& camera) const
 {
-    RLFrustum rlFrustum; // Create an instance of RLFrustum
+    Vector3 cameraForward = Vector3Subtract(camera.target, camera.position);
+    cameraForward = Vector3Normalize(cameraForward); // Get forward direction
 
     for (auto& star : stars) {
-        // Draw visible stars
-        float scale = 0.1f;
+        Vector3 toStar = Vector3Subtract(star.GetPosition(), camera.position);
+        float dotProduct = Vector3DotProduct(cameraForward, toStar);
 
+        // Check if the star is in front of the camera
+        if (dotProduct <= 0) continue; // Skip stars behind the camera
+
+        float scale = 0.1f;
         if (distance(camera.position, star.GetPosition()) > starDrawDistance)
         {
             DrawPoint3D(star.GetPosition(), star.GetColor());
         }
         else
         {
-           
-            if (rlFrustum.SphereIn(star.GetPosition(), scale))
+            if (scale < 0.1f) 
             {
-                DrawSphereEx(star.GetPosition(), scale, 4, 5, star.GetColor());
+                scale = 0.1f;
             }
+
+            DrawSphereEx(star.GetPosition(), scale, 4, 5, star.GetColor());
         }
     }
-
-    //const Vector3 cubePosition = {position.x + size / 2, position.y + size / 2, position.z + size / 2};
-
-    //DrawCubeWires(cubePosition, (float)size, (float)size, (float)size, WHITE); // starfield area
 }
+
 
 const Vector3 Starfield::GetPosition() const
 {
     return position;
+}
+
+const int Starfield::GetNumberOfStars() const
+{
+    return numberOfStars;
 }

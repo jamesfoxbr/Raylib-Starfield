@@ -12,6 +12,7 @@ public:
 	~Space();
 	void Update();
 	size_t GetNumberOfStarfields()  { return starfields.size(); }
+	int GetNumberOfStars();
 	
 private:
 	Camera& camera;

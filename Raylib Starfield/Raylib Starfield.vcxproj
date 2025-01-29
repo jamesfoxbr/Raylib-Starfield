@@ -70,6 +70,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -131,7 +137,6 @@
   <ItemGroup>
     <ClCompile Include="Controls.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="rlFrustum.cpp" />
     <ClCompile Include="Space.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Starfield.cpp" />
@@ -141,7 +146,6 @@
   <ItemGroup>
     <ClInclude Include="Controls.h" />
     <ClInclude Include="Globals.h" />
-    <ClInclude Include="rlFrustum.h" />
     <ClInclude Include="Space.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="Starfield.h" />

@@ -4,7 +4,6 @@ Space::Space(Camera& camera)
 	:
 	camera(camera)
 {
-	
 }
 
 Space::~Space()
@@ -22,11 +21,24 @@ void Space::Update()
 	}
 }
 
+int Space::GetNumberOfStars()
+{
+    int n = 0;
+
+    for (auto& starfield : starfields)
+    {
+        n += starfield.GetNumberOfStars();
+    }
+
+    return n;
+}
+
 void Space::InstantiateStarfield()
 {
     constexpr int numberOfStars     = 200; // number of stars in each chunk
 	constexpr int chunkSize         = 100; // width, height and depth of the chunk
     constexpr int chunkDrawDistance = 2;   // how many chunks will draw in each direction from the central chunk de camera is at momenet
+	constexpr int starDrawDistance  = 100; // how far the stars will be drawn from the camera
 
     int camX = int(camera.position.x / chunkSize);
     int camY = int(camera.position.y / chunkSize);
@@ -53,6 +65,8 @@ void Space::InstantiateStarfield()
                             positionOccupied = true;
                             break;
                         }
+
+                        // Removing distant starfields
                         if (distance(it->GetPosition(), camera.position) > chunkSize * chunkDrawDistance * 2)
                         {
                             it = starfields.erase(it);
@@ -64,7 +78,7 @@ void Space::InstantiateStarfield()
                     }
                     if (!positionOccupied)
                     {
-                        Starfield starfield(numberOfStars, 50, Vector3{(float)dx, (float)dy, (float)dz}, chunkSize);
+                        Starfield starfield(numberOfStars, starDrawDistance, Vector3{(float)dx, (float)dy, (float)dz}, chunkSize);
                         starfields.push_back(starfield);
                     }
                 }
