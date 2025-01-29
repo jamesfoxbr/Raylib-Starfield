@@ -37,3 +37,9 @@ void targetCursor()
     DrawLine((int)center.x - size, (int)center.y, (int)center.x + size, (int)center.y, RAYWHITE);  // Horizontal line
     DrawLine((int)center.x, (int)center.y - size, (int)center.x, (int)center.y + size, RAYWHITE);  // Vertical line
 }
+
+void DrawDebugText(const std::string& text, int x, int y, int fontSize, Color color)
+{
+	const char* cstr = text.c_str(); // Then get a const char* pointer
+	DrawText(cstr, x, y, fontSize, color);
+}

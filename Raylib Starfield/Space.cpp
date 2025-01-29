@@ -24,24 +24,23 @@ void Space::Update()
 
 void Space::InstantiateStarfield()
 {
-    std::cout << starfields.size() << "\n";
-    int camX = camera.position.x / 100;
-    int camY = camera.position.y / 100;
-    int camZ = camera.position.z / 100;
+    int camX = int(camera.position.x / 100);
+    int camY = int(camera.position.y / 100);
+    int camZ = int(camera.position.z / 100);
 
-    const int numberOfStars = 100;
-    const int maxChunks = 35;
-	const int chunkSize = 100;
+    constexpr int numberOfStars = 50;
+	constexpr int chunkSize     = 50;
+    constexpr int chunkDistance = 2;
 
-    for (int dx = -1 + camX; dx <= 1 + camX; dx++)
+    for (int dx = -chunkDistance + camX; dx <= chunkDistance + camX; dx++)
     {
-        for (int dy = -1 + camY; dy <= 1 + camY; dy++)
+        for (int dy = -chunkDistance + camY; dy <= chunkDistance + camY; dy++)
         {
-            for (int dz = -1 + camZ; dz <= 1 + camZ; dz++)
+            for (int dz = -chunkDistance + camZ; dz <= chunkDistance + camZ; dz++)
             {
                 if (starfields.size() < 27)
                 {
-                    Starfield starfield(numberOfStars, 50, Vector3{(float)dx, (float)dy, (float)dz});
+                    Starfield starfield(numberOfStars, 50, Vector3{(float)dx, (float)dy, (float)dz}, chunkSize);
                     starfields.push_back(starfield);
                 }
                 else
@@ -54,7 +53,7 @@ void Space::InstantiateStarfield()
                             positionOccupied = true;
                             break;
                         }
-                        if (distance(it->GetPosition(), camera.position) > chunkSize)
+                        if (distance(it->GetPosition(), camera.position) > chunkSize * 2)
                         {
                             it = starfields.erase(it);
                         }
@@ -63,9 +62,9 @@ void Space::InstantiateStarfield()
                             ++it;
                         }
                     }
-                    if (!positionOccupied && starfields.size() < maxChunks)
+                    if (!positionOccupied)
                     {
-                        Starfield starfield(numberOfStars, 50, Vector3{(float)dx, (float)dy, (float)dz});
+                        Starfield starfield(numberOfStars, 50, Vector3{(float)dx, (float)dy, (float)dz}, chunkSize);
                         starfields.push_back(starfield);
                     }
                 }
