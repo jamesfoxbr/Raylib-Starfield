@@ -21,5 +21,9 @@ private:
 	std::mt19937 random;
 
 	void InstantiateStarfield();
+	void DrawStars();
+
+	Mesh sphereMesh = GenMeshSphere(0.1f, 4, 5); // Generate a sphere mesh
+	Material material = LoadMaterialDefault(); // Load default material
 };
 #endif 

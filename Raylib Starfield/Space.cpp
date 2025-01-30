@@ -9,25 +9,28 @@ Space::Space(Camera& camera)
 
 Space::~Space()
 {
+    UnloadMesh(sphereMesh); // Unload the mesh
 }
 
 void Space::Update()
 {
 	InstantiateStarfield();
+    DrawStars();
 
-	for (auto& starfield : starfields)
-	{
-		starfield.DrawStars(camera);    // Draw stars from the starfield class
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && starfield.IsStarClicked(camera) != nullptr)
-        {
-			selectedStar = starfield.IsStarClicked(camera);
-			std::cout << "Star " << selectedStar->GetName() << " clicked!" << std::endl;
-        }
-        else
-        {
-			selectedStar = nullptr;
-        }
-	}
+	//for (auto& starfield : starfields)
+	//{
+	//	starfield.DrawStars(camera);    // Draw stars from the starfield class
+
+    //       if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && starfield.IsStarClicked(camera) != nullptr)
+     //       {
+	//		selectedStar = starfield.IsStarClicked(camera);
+	//		std::cout << "Star " << selectedStar->GetName() << " clicked!" << std::endl;
+    //       }
+    //       else
+    //       {
+	//		selectedStar = nullptr;
+    //       }
+	//}
 }
 
 int Space::GetNumberOfStars()
@@ -90,6 +93,59 @@ void Space::InstantiateStarfield()
                         Starfield starfield(numberOfStars, starDrawDistance, Vector3{(float)dx, (float)dy, (float)dz}, chunkSize, random);
                         starfields.push_back(starfield);
                     }
+                }
+            }
+        }
+    }
+}
+
+void Space::DrawStars()
+{
+    constexpr int starDrawDistance = 100; // how far the stars will be drawn from the camera
+    Vector3 cameraForward = Vector3Subtract(camera.target, camera.position);
+    cameraForward = Vector3Normalize(cameraForward); // Get forward direction
+
+    for (auto& starfield : starfields)
+    {
+		
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && starfield.IsStarClicked(camera) != nullptr)
+        {
+            selectedStar = starfield.IsStarClicked(camera);
+            std::cout << "Star " << selectedStar->GetName() << " clicked!" << std::endl;
+        }
+        else
+        {
+            selectedStar = nullptr;
+        }
+
+        for (auto& star : starfield.GetStars())
+        {
+            Vector3 toStar = Vector3Subtract(star.GetPosition(), camera.position);
+            float dotProduct = Vector3DotProduct(cameraForward, toStar);
+
+            // Check if the star is in front of the camera
+            if (dotProduct <= 0) continue; // Skip stars behind the camera
+
+            if (distance(camera.position, star.GetPosition()) > starDrawDistance)
+            {
+                DrawPoint3D(star.GetPosition(), star.GetColor());
+            }
+            else
+            {
+                Matrix transform = MatrixTranslate(star.GetPosition().x, star.GetPosition().y, star.GetPosition().z);
+                material.maps[MATERIAL_MAP_DIFFUSE].color = star.GetColor();
+                DrawMesh(sphereMesh, material, transform);
+
+                if (distance(camera.position, star.GetPosition()) < starDrawDistance / 2)
+                {
+                    // Draw the star name above the sphere
+                    Vector3 namePosition = star.GetPosition();
+                    namePosition.y += 0.5f; // Adjust the height above the sphere
+                    Vector2 screenPos = GetWorldToScreen(namePosition, camera);
+                    int fontSize = 20; // Define the font size
+                    EndMode3D();
+                    DrawText(star.GetName().c_str(), static_cast<int>(screenPos.x), static_cast<int>(screenPos.y), fontSize, WHITE);
+                    BeginMode3D(camera);
                 }
             }
         }

@@ -3,7 +3,6 @@
 Starfield::Starfield(const int starCount, const int starDrawDistance, Vector3 position, const int chunkSize, std::mt19937& random)
     :
     stars(starCount),
-    starDrawDistance(starDrawDistance),
     size(chunkSize)
 {
     this->position.x = position.x * chunkSize;
@@ -32,48 +31,6 @@ const void Starfield::InitializeStars(const int starCount, const int starDrawDis
 		numberOfStars = i;
     }
 }
-
-const void Starfield::DrawStars(const Camera& camera) const
-{
-    Vector3 cameraForward = Vector3Subtract(camera.target, camera.position);
-    cameraForward = Vector3Normalize(cameraForward); // Get forward direction
-
-    for (auto& star : stars) {
-        Vector3 toStar = Vector3Subtract(star.GetPosition(), camera.position);
-        float dotProduct = Vector3DotProduct(cameraForward, toStar);
-
-        // Check if the star is in front of the camera
-        if (dotProduct <= 0) continue; // Skip stars behind the camera
-
-        float scale = 0.1f;
-        if (distance(camera.position, star.GetPosition()) > starDrawDistance)
-        {
-            DrawPoint3D(star.GetPosition(), star.GetColor());
-        }
-        else
-        {
-            if (scale < 0.1f) 
-            {
-                scale = 0.1f;
-            }
-
-            DrawSphereEx(star.GetPosition(), scale, 4, 5, star.GetColor());
-
-			if (distance(camera.position, star.GetPosition()) < starDrawDistance / 2)
-			{
-                // Draw the star name above the sphere
-                Vector3 namePosition = star.GetPosition();
-                namePosition.y += 0.5f; // Adjust the height above the sphere
-                Vector2 screenPos = GetWorldToScreen(namePosition, camera);
-                int fontSize = 20; // Define the font size
-                EndMode3D();
-                    DrawText(star.GetName().c_str(), static_cast<int>(screenPos.x), static_cast<int>(screenPos.y), fontSize, WHITE);
-                BeginMode3D(camera);
-			}
-        }
-    }
-}
-
 
 const Vector3 Starfield::GetPosition() const
 {
@@ -105,20 +62,16 @@ Star* Starfield::IsStarClicked(Camera& camera) const
 std::string Starfield::GenerateName(size_t length, std::mt19937& rng)
 {
     const std::string alphabet = "abcdefghijklmnopqrstuvwxyz";
-    const std::vector<std::string> sylables = {
-        "bl", "bh", "br", 
-        "cl", "ch", "cr",
-        "dl", "dh", "dr",
-        "fl", "fh", "fr",
-        "gl", "gh", "gr"};
+	const std::string vowels = "aeiouy";
 
     std::string name;
-    std::uniform_int_distribution<> dist(0, int(alphabet.size() - 1));
-    std::uniform_int_distribution<> distSyl(0, int(sylables.size() - 1));
+    std::uniform_int_distribution<> distAlphabet(0, int(alphabet.size() - 1));
+    std::uniform_int_distribution<> distSylVow(0, int(vowels.size() - 1));
     for (size_t i = 0; i < length; ++i) 
     {
-        name += sylables[distSyl(rng)];
-		name += alphabet[dist(rng)];
+        name += alphabet[distAlphabet(rng)];
+		if (rng() % 100 < 10)
+		name += vowels[distSylVow(rng)];
     }
     return name;
 }
