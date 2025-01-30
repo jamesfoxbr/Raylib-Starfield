@@ -24,7 +24,7 @@ public:
 private:
 	Vector3 position;
 	Color color;
-	std::string name;
+	std::string name = "NULL";
 	float size;
 	char spectralClass;
 };

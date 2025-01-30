@@ -10,10 +10,13 @@ Starfield::Starfield(const int starCount, const int starDrawDistance, Vector3 po
     this->position.z = position.z * chunkSize;
 
     InitializeStars(starCount, starDrawDistance, chunkSize, random);
+
+	std::cout << "starfield created\n";
 }
 
 Starfield::~Starfield()
 {
+    std::cout << "starfield destroyed\n";
 }
 
 const void Starfield::InitializeStars(const int starCount, const int starDrawDistance, const int chunkSize, std::mt19937& random)
@@ -25,7 +28,7 @@ const void Starfield::InitializeStars(const int starCount, const int starDrawDis
         stars[i].SetPosition({random() % (size)+position.x,    // x
                               random() % (size)+position.y,    // y
                               random() % (size)+position.z});  // z
-		stars[i].SetName(GenerateName(size_t(random() % 10 + 5), random)); // Generate a random name for each star
+		stars[i].SetName(GenerateName(size_t(random() % 7 + 1), random)); // Generate a random name for each star
 		stars[i].SpectralClass(random() % 100);                // Assign a spectral class for each star
 
 		numberOfStars = i;
@@ -61,17 +64,13 @@ Star* Starfield::IsStarClicked(Camera& camera) const
 
 std::string Starfield::GenerateName(size_t length, std::mt19937& rng)
 {
-    const std::string alphabet = "abcdefghijklmnopqrstuvwxyz";
-	const std::string vowels = "aeiouy";
-
     std::string name;
-    std::uniform_int_distribution<> distAlphabet(0, int(alphabet.size() - 1));
-    std::uniform_int_distribution<> distSylVow(0, int(vowels.size() - 1));
+    std::uniform_int_distribution<> distConsonants(0, int(consonants.size() - 1));
+    std::uniform_int_distribution<> distVowels(0, int(vowels.size() - 1));
     for (size_t i = 0; i < length; ++i) 
     {
-        name += alphabet[distAlphabet(rng)];
-		if (rng() % 100 < 10)
-		name += vowels[distSylVow(rng)];
+        name += consonants[distConsonants(rng)];
+        name += vowels[distVowels(rng)];
     }
     return name;
 }
