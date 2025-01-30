@@ -21,6 +21,11 @@ private:
 	std::mt19937 random;
 	std::vector<Star*> starsPtr = {0};
 
+	int starDrawDistance = 100; // how far the stars will be drawn from the camera
+	Vector3 cameraForward = Vector3Subtract(camera.target, camera.position);
+	Vector3 toStar;
+	float dotProduct;
+
 	void InstantiateStarfield();
 	void UpdateLocalStarArray();
 	void DrawStars(const Star* star);
