@@ -23,6 +23,8 @@ private:
 	void InstantiateStarfield();
 	void DrawStars();
 
+	const void StarClicked(const Starfield& starfield);
+
 	Mesh sphereMesh = GenMeshSphere(0.1f, 4, 5); // Generate a sphere mesh
 	Material material = LoadMaterialDefault(); // Load default material
 };

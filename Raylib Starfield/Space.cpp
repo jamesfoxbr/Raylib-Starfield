@@ -107,16 +107,7 @@ void Space::DrawStars()
 
     for (auto& starfield : starfields)
     {
-		
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && starfield.IsStarClicked(camera) != nullptr)
-        {
-            selectedStar = starfield.IsStarClicked(camera);
-            std::cout << "Star " << selectedStar->GetName() << " clicked!" << std::endl;
-        }
-        else
-        {
-            selectedStar = nullptr;
-        }
+        StarClicked(starfield);
 
         for (auto& star : starfield.GetStars())
         {
@@ -144,11 +135,25 @@ void Space::DrawStars()
                     Vector2 screenPos = GetWorldToScreen(namePosition, camera);
                     int fontSize = 20; // Define the font size
                     EndMode3D();
-                    DrawText(star.GetName().c_str(), static_cast<int>(screenPos.x), static_cast<int>(screenPos.y), fontSize, WHITE);
+                        DrawText(star.GetName().c_str(), static_cast<int>(screenPos.x), static_cast<int>(screenPos.y), fontSize, WHITE);
                     BeginMode3D(camera);
                 }
             }
         }
+    }
+}
+
+const void Space::StarClicked(const Starfield& starfield)
+{
+    // Check is a star is clicked
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && starfield.IsStarClicked(camera) != nullptr)
+    {
+        selectedStar = starfield.IsStarClicked(camera);
+        std::cout << "Star " << selectedStar->GetName() << " clicked!" << std::endl;
+    }
+    else
+    {
+        selectedStar = nullptr;
     }
 }
 
