@@ -167,6 +167,7 @@ const void Space::StarClicked(const Star* star)
             std::cout << "Star " << star->GetName() << " clicked!" << std::endl;
         }
     }
+
 }
 
 
