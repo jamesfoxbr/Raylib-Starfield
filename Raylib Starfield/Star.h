@@ -3,6 +3,7 @@
 
 #include "raylib.h"
 #include "Utils.h"
+#include "Globals.h"
 
 class Star
 {
@@ -22,7 +23,7 @@ public:
 	void SpectralClass(int r);
 
 private:
-	Vector3 position;
+	Vector3 position = {0.0f, 0.0f, 0.0f};
 	Color color;
 	std::string name = "NULL";
 	float size;

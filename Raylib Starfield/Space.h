@@ -2,6 +2,7 @@
 #define H_SPACE_H
 
 #include <raylib.h>
+#include <unordered_set>
 #include "Starfield.h"
 #include "Utils.h"
 
@@ -17,13 +18,14 @@ public:
 private:
 	Camera& camera;
 	std::vector<Starfield> starfields;
-	Star* selectedStar = nullptr;
 	std::mt19937 random;
+	std::vector<Star*> starsPtr = {0};
 
 	void InstantiateStarfield();
-	void DrawStars();
+	void UpdateLocalStarArray();
+	void DrawStars(const Star* star);
 
-	const void StarClicked(const Starfield& starfield);
+	const void StarClicked(const Star* star);
 
 	Mesh sphereMesh = GenMeshSphere(0.1f, 4, 5); // Generate a sphere mesh
 	Material material = LoadMaterialDefault(); // Load default material

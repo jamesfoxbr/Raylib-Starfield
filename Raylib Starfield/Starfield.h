@@ -17,14 +17,14 @@ public:
 	const void InitializeStars(const int starCount, const int starDrawDistance, const int size, std::mt19937& random);
 	const Vector3 GetPosition() const;
 	const int GetNumberOfStars() const;
-	const std::vector<Star>& GetStars() const { return stars; }
+	const std::vector<Star*>& GetStars() const { return stars; }
 
 	Star* IsStarClicked(Camera& camera) const;
 
 	std::string GenerateName(size_t length, std::mt19937& rng);
 
 private:
-	std::vector<Star> stars;
+	std::vector<Star*> stars = {0};
 	Vector3 position = {0.0f, 0.0f, 0.0f};
 	int size;
 	int numberOfStars = 0;
