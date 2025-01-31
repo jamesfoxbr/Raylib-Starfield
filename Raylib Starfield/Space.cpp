@@ -104,7 +104,7 @@ void Space::Draw3D()
         }
         else
         {
-            selectedStar = nullptr;
+            selectedStar = nullptr; 
         }
 
         for (auto& star : starfield.GetStars())
