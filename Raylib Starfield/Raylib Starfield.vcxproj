@@ -138,6 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Controls.cpp" />
+    <ClCompile Include="Gui.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="rlImGui.cpp" />
     <ClCompile Include="Space.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="dependencies\rlImGui.h" />
     <ClInclude Include="dependencies\rlImGuiColors.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="Gui.h" />
     <ClInclude Include="RandomName.h" />
     <ClInclude Include="Space.h" />
     <ClInclude Include="Star.h" />
