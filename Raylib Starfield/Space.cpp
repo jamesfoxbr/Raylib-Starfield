@@ -15,22 +15,6 @@ Space::~Space()
 void Space::Update()
 {
 	InstantiateStarfield();
-    DrawStars();
-
-	//for (auto& starfield : starfields)
-	//{
-	//	starfield.DrawStars(camera);    // Draw stars from the starfield class
-
-    //       if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && starfield.IsStarClicked(camera) != nullptr)
-     //       {
-	//		selectedStar = starfield.IsStarClicked(camera);
-	//		std::cout << "Star " << selectedStar->GetName() << " clicked!" << std::endl;
-    //       }
-    //       else
-    //       {
-	//		selectedStar = nullptr;
-    //       }
-	//}
 }
 
 int Space::GetNumberOfStars()
@@ -99,15 +83,20 @@ void Space::InstantiateStarfield()
     }
 }
 
-void Space::DrawStars()
+void Space::Draw3D()
 {
     constexpr int starDrawDistance = 100; // how far the stars will be drawn from the camera
     Vector3 cameraForward = Vector3Subtract(camera.target, camera.position);
     cameraForward = Vector3Normalize(cameraForward); // Get forward direction
 
+    transforms.clear();
+    colors.clear();
+
+    // Clear image
+    memset(image.data, 0, screenWidth * screenHeight * 4); // 4 bytes per pixel (RGBA)
+
     for (auto& starfield : starfields)
     {
-		
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && starfield.IsStarClicked(camera) != nullptr)
         {
             selectedStar = starfield.IsStarClicked(camera);
@@ -128,28 +117,45 @@ void Space::DrawStars()
 
             if (distance(camera.position, star.GetPosition()) > starDrawDistance)
             {
-                DrawPoint3D(star.GetPosition(), star.GetColor());
+                Vector3 starPosition = star.GetPosition();
+                Vector2 screenPos = GetWorldToScreen(starPosition, camera);
+                int x = static_cast<int>(screenPos.x);
+                int y = static_cast<int>(screenPos.y);
+
+                ImageDrawPixel(&image, x, y, star.GetColor());
             }
-            else
+            else // Draw closer stars
             {
                 Matrix transform = MatrixTranslate(star.GetPosition().x, star.GetPosition().y, star.GetPosition().z);
-                material.maps[MATERIAL_MAP_DIFFUSE].color = star.GetColor();
-                DrawMesh(sphereMesh, material, transform);
+                transforms.push_back(transform);
+                colors.push_back(star.GetColor());
 
                 if (distance(camera.position, star.GetPosition()) < starDrawDistance / 2)
                 {
                     // Draw the star name above the sphere
                     Vector3 namePosition = star.GetPosition();
                     namePosition.y += 0.5f; // Adjust the height above the sphere
-                    Vector2 screenPos = GetWorldToScreen(namePosition, camera);
-                    int fontSize = 20; // Define the font size
+                    const Vector2 screenPos = GetWorldToScreen(namePosition, camera);
                     EndMode3D();
                     DrawText(star.GetName().c_str(), static_cast<int>(screenPos.x), static_cast<int>(screenPos.y), fontSize, WHITE);
                     BeginMode3D(camera);
+                    //ImageDrawText(&image, star.GetName().c_str(), static_cast<int>(screenPos.x), static_cast<int>(screenPos.y), fontSize, WHITE);
                 }
             }
         }
     }
+
+    for (size_t i = 0; i < transforms.size(); ++i)
+    {
+        material.maps[MATERIAL_MAP_DIFFUSE].color = colors[i];
+        DrawMesh(sphereMesh, material, transforms[i]);
+    }
+}
+
+void Space::Draw2D()
+{
+    UpdateTexture(texture, image.data);  // Send updated image to GPU (one call)
+    DrawTexture(texture, 0, 0, WHITE);
 }
 
 

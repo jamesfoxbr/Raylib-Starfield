@@ -10,10 +10,13 @@ Starfield::Starfield(const int starCount, const int starDrawDistance, Vector3 po
     this->position.z = position.z * chunkSize;
 
     InitializeStars(starCount, starDrawDistance, chunkSize, random);
+
+    std::cout << "starfield Constructed \n";
 }
 
 Starfield::~Starfield()
 {
+    std::cout << "starfield destroyed \n";
 }
 
 const void Starfield::InitializeStars(const int starCount, const int starDrawDistance, const int chunkSize, std::mt19937& random)

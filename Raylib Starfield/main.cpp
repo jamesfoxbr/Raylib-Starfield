@@ -21,9 +21,12 @@ int main() {
             BeginMode3D(window.camera); 
 
                 space.Update();
+                space.Draw3D();
 
             // end of the 3d drawing area
             EndMode3D();
+
+            space.Draw2D();
 
             // 2D stuff fized to the screen space go in this area
                 DrawCoordinates(window.camera);
