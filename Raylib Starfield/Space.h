@@ -46,8 +46,12 @@ private:
 	void InstantiateStarfield();
 	
 
-	Mesh sphereMesh = GenMeshSphere(0.1f, 4, 5); // Generate a sphere mesh
+	Mesh sphereMesh = GenMeshSphere(0.1f, 8, 8); // Generate a sphere mesh
 	Material material = LoadMaterialDefault(); // Load default material
+	Shader shader = LoadShader(TextFormat("gloaw.vs"), TextFormat("glow.fs"));
+	// Create a basic checkerboard texture
+	Image checkerboard;
+	Texture2D checkerTexture = LoadTextureFromImage(checkerboard);
 };
 
 static std::vector<Matrix> transforms;
@@ -56,3 +60,6 @@ static std::vector<Color> colors;
 static Vector3 Position3D;
 static Vector2 screenPos;
 #endif 
+
+
+

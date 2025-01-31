@@ -24,11 +24,11 @@ void Controls::Move()
 {
 	if (IsKeyDown(KEY_LEFT_SHIFT))
 	{
-		speed = 1.0f;
+		speed = 2.0f;
 	}
 	else
 	{
-		speed = 0.2f;
+		speed = 0.5f;
 	}
 
 	if (IsKeyDown(KEY_W))

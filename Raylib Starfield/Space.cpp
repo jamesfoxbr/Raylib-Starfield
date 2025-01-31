@@ -5,11 +5,17 @@ Space::Space(Camera& camera)
 	camera(camera)
 {
     random.seed(555);
+
+    // Apply the texture to the material
+    checkerboard = GenImageChecked(2, 2, 1, 1, RED, GREEN);
+    material.maps[MATERIAL_MAP_DIFFUSE].texture = checkerTexture;
 }
 
 Space::~Space()
 {
     UnloadMesh(sphereMesh); // Unload the mesh
+    UnloadShader(shader);
+    UnloadImage(checkerboard); // Unload image from RAM, not needed anymore
 }
 
 void Space::Update()
@@ -31,9 +37,9 @@ int Space::GetNumberOfStars()
 
 void Space::InstantiateStarfield()
 {
-    int camX = int(camera.position.x / chunkSize);
-    int camY = int(camera.position.y / chunkSize);
-    int camZ = int(camera.position.z / chunkSize);
+    camX = int(camera.position.x / chunkSize);
+    camY = int(camera.position.y / chunkSize);
+    camZ = int(camera.position.z / chunkSize);
 
     for (int dx = -chunkDrawDistance + camX; dx <= chunkDrawDistance + camX; dx++)
     {
@@ -43,8 +49,7 @@ void Space::InstantiateStarfield()
             {
                 if (starfields.size() < 1)
                 {
-                    Starfield starfield(numberOfStars, starDrawDistance, Vector3{(float)dx, (float)dy, (float)dz}, chunkSize, random);
-                    starfields.push_back(starfield);
+                    starfields.emplace_back(Starfield(numberOfStars, starDrawDistance, Vector3{(float)dx, (float)dy, (float)dz}, chunkSize, random));
                 }
                 else
                 {
@@ -69,8 +74,7 @@ void Space::InstantiateStarfield()
                     }
                     if (!positionOccupied)
                     {
-                        Starfield starfield(numberOfStars, starDrawDistance, Vector3{(float)dx, (float)dy, (float)dz}, chunkSize, random);
-                        starfields.push_back(starfield);
+                        starfields.emplace_back(Starfield(numberOfStars, starDrawDistance, Vector3{(float)dx, (float)dy, (float)dz}, chunkSize, random));
                     }
                 }
             }
@@ -83,8 +87,6 @@ void Space::Draw3D()
     constexpr int starDrawDistance = 100; // how far the stars will be drawn from the camera
     Vector3 cameraForward = Vector3Subtract(camera.target, camera.position);
     cameraForward = Vector3Normalize(cameraForward); // Get forward direction
-
-   
 
     transforms.clear();
     colors.clear();
@@ -101,7 +103,6 @@ void Space::Draw3D()
             {
                 selectedStar = IsStarClicked(star);
                 gui.SetStarName(selectedStar->GetName());
-                std::cout << selectedStar->GetSpectralClass() << "\n";
                 gui.SetStarClass(selectedStar->GetSpectralClass());
             }
             else
@@ -139,7 +140,7 @@ void Space::Draw3D()
                     Position3D = star.GetPosition();
                     Position3D.y += 0.5f; // Adjust the height above the sphere
                     const Vector2 screenPos = GetWorldToScreen(Position3D, camera);
-                    const int width = star.GetName().length() * 8;
+                    const int width = int(star.GetName().length() * 8);
                     const int weight = 16;
                     const int adjustX = -4;
                     const int adjustY = -4;
@@ -152,11 +153,14 @@ void Space::Draw3D()
         }
     }
 
+    BeginShaderMode(shader);
     for (size_t i = 0; i < transforms.size(); ++i)
     {
         material.maps[MATERIAL_MAP_DIFFUSE].color = colors[i];
+        material.shader = shader;
         DrawMesh(sphereMesh, material, transforms[i]);
     }
+    EndShaderMode();
 }
 
 void Space::Draw2D()

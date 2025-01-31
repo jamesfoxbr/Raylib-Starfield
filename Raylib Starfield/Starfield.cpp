@@ -11,27 +11,28 @@ Starfield::Starfield(const int starCount, const int starDrawDistance, Vector3 po
 
     InitializeStars(starCount, starDrawDistance, chunkSize, random);
 
-    std::cout << "starfield Constructed \n";
+    //std::cout << "starfield Constructed \n";
 }
 
 Starfield::~Starfield()
 {
-    std::cout << "starfield destroyed \n";
+    //std::cout << "starfield destroyed \n";
 }
 
 const void Starfield::InitializeStars(const int starCount, const int starDrawDistance, const int chunkSize, std::mt19937& random)
 {
     // Randomly initialize the stars
 	random.seed(unsigned int(position.x + position.y + position.x));
-    for (int i = 0; i < starCount; ++i) 
+
+    for (auto& star : stars) 
     {
-        stars[i].SetPosition({random() % (size)+position.x,    // x
+        star.SetPosition({random() % (size)+position.x,    // x
                               random() % (size)+position.y,    // y
                               random() % (size)+position.z});  // z
-		stars[i].SetName(GenerateName(size_t(random() % 7 + 1), random)); // Generate a random name for each star
-		stars[i].SpectralClass(random() % 100);                // Assign a spectral class for each star
+		star.SetName(GenerateName(size_t(random() % 7 + 1), random)); // Generate a random name for each star
+		star.SpectralClass(random() % 100);                // Assign a spectral class for each star
 
-		numberOfStars = i;
+		numberOfStars++;
     }
 }
 
@@ -55,6 +56,5 @@ std::string Starfield::GenerateName(size_t length, std::mt19937& rng)
         name += consonants[distConsonants(rng)];
         name += vowels[distVowels(rng)];
     }
-    std::transform(name.begin(), name.end(), name.begin(), ::toupper);
     return name;
 }
