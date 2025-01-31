@@ -30,7 +30,7 @@ int main() {
 
             // 2D stuff fized to the screen space go in this area
                 DrawCoordinates(window.camera);
-                targetCursor();
+                //targetCursor();
 			    DrawDebugText("FPS: " + std::to_string(GetFPS()), 10, 30, 20, RAYWHITE);
 			    DrawDebugText(std::to_string(space.GetNumberOfStarfields()) + " starfields", 10, 50, 20, RAYWHITE);
 			    DrawDebugText(std::to_string(space.GetNumberOfStars()) + " stars", 10, 70, 20, RAYWHITE);

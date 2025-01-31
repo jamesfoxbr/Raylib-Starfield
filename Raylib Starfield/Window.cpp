@@ -12,8 +12,6 @@ Window::Window()
 	camera.up = Vector3{0.0f, 1.0f, 0.0f};           // Camera up direction (Y-axis)
 	camera.fovy = 45.0f;                             // Field of view (in degrees)
 	camera.projection = CAMERA_PERSPECTIVE;          // Set perspective projection
-
-	DisableCursor();
 }
 
 Window::~Window()

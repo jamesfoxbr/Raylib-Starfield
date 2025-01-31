@@ -17,6 +17,8 @@ public:
 	int GetNumberOfStars();
 	void Draw3D();
 	void Draw2D();
+
+	Star* IsStarClicked(const Star& star) const;
 	
 private:
 	Camera& camera;

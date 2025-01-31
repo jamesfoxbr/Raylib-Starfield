@@ -22,6 +22,7 @@ private:
 	float mouseSensibility = 0.1f;
 	Vector3 cameraPosition = {1.0f, 0.0f, 0.0f};
 	Vector3 cameraRotation = {0.0f, 0.0f, 0.0f};
+	bool cursorEnable = true;
 };
 
 #endif // !H_CONTROLS_H

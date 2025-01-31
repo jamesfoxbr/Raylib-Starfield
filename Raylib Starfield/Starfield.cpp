@@ -45,23 +45,6 @@ const int Starfield::GetNumberOfStars() const
     return numberOfStars;
 }
 
-Star* Starfield::IsStarClicked(Camera& camera) const
-{
-    for (auto& star : stars)
-    {
-        Vector2 screenPos = GetWorldToScreen(star.GetPosition(), camera);
-        const float starSize      = 20.0f;  // Use the star's size for collision detection
-        const float clickDistance = 100.0f; // How far the mouse can be from the star to click it
-
-        if (CheckCollisionPointCircle({screenWidth / 2, screenHeight / 2}, screenPos, starSize) && distance(star.GetPosition(), camera.position) < clickDistance)
-        {
-            DrawCube(star.GetPosition(), 1.0f, 1.0f, 1.0f, RED);
-            return const_cast<Star*>(&star);
-        }
-    }
-    return nullptr;
-}
-
 std::string Starfield::GenerateName(size_t length, std::mt19937& rng)
 {
     std::string name;

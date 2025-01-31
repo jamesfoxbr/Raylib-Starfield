@@ -19,8 +19,6 @@ public:
 	const int GetNumberOfStars() const;
 	const std::vector<Star>& GetStars() const { return stars; }
 
-	Star* IsStarClicked(Camera& camera) const;
-
 	std::string GenerateName(size_t length, std::mt19937& rng);
 
 private:

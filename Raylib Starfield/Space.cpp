@@ -94,18 +94,18 @@ void Space::Draw3D()
 
     for (auto& starfield : starfields)
     {
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && starfield.IsStarClicked(camera) != nullptr)
-        {
-            selectedStar = starfield.IsStarClicked(camera);
-            std::cout << "Star " << selectedStar->GetName() << " clicked!" << std::endl;
-        }
-        else
-        {
-            selectedStar = nullptr; 
-        }
-
         for (auto& star : starfield.GetStars())
         {
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && IsStarClicked(star) != nullptr)
+            {
+                selectedStar = IsStarClicked(star);
+                std::cout << "Star " << selectedStar->GetName() << " clicked!" << std::endl;
+            }
+            else
+            {
+                selectedStar = nullptr;
+            }
+
             Vector3 toStar = Vector3Subtract(star.GetPosition(), camera.position);
             float dotProduct = Vector3DotProduct(cameraForward, toStar);
 
@@ -158,6 +158,17 @@ void Space::Draw2D()
     DrawTexture(texture, 0, 0, WHITE);
 }
 
+Star* Space::IsStarClicked(const Star& star) const
+{
+    Vector2 screenPos = GetWorldToScreen(star.GetPosition(), camera);
+    const float starSize = 20.0f;  // Use the star's size for collision detection
+    const float clickDistance = 100.0f; // How far the mouse can be from the star to click it
 
+    if (CheckCollisionPointCircle({(float)GetMouseX(), (float)GetMouseY()}, screenPos, starSize) && distance(star.GetPosition(), camera.position) < clickDistance)
+    {
+        DrawCube(star.GetPosition(), 1.0f, 1.0f, 1.0f, RED);
+        return const_cast<Star*>(&star);
+    }
+}
 
 

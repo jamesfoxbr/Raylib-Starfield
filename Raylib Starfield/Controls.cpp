@@ -62,18 +62,32 @@ void Controls::Move()
 void Controls::MouseLook()
 {
 	CurrentMousePosition = GetMousePosition();
-	
-	if (LastMousePosition.x != CurrentMousePosition.x)
+	if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
 	{
-		cameraRotation.x = (CurrentMousePosition.x - LastMousePosition.x) * mouseSensibility;
-	}
-	if (LastMousePosition.y != CurrentMousePosition.y)
-	{
-		cameraRotation.y = (CurrentMousePosition.y - LastMousePosition.y) * mouseSensibility;
-	}
+		if (cursorEnable)
+		{
+			DisableCursor();
+			cursorEnable = false;
+		}
 
+		if (LastMousePosition.x != CurrentMousePosition.x)
+		{
+			cameraRotation.x = (CurrentMousePosition.x - LastMousePosition.x) * mouseSensibility;
+		}
+		if (LastMousePosition.y != CurrentMousePosition.y)
+		{
+			cameraRotation.y = (CurrentMousePosition.y - LastMousePosition.y) * mouseSensibility;
+		}
+	}
+	else
+	{
+		if (!cursorEnable)
+		{
+			EnableCursor();
+			cursorEnable = true;
+		}
+	}
 	LastMousePosition = CurrentMousePosition;
-	
 }
 
 Vector3 Controls::GetCameraPostion()
