@@ -23,7 +23,7 @@ private:
 	std::mt19937 random;
 
 	std::vector<Matrix> transforms;
-    std::vector<Color> colors;
+    std::vector<Color> colors; 
 
 	const int fontSize = 20; // Define the font size of star names
 	Image image = GenImageColor(screenWidth, screenHeight, BLANK);  // Empty image (all transparent)
