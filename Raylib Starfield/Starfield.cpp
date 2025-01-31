@@ -28,7 +28,7 @@ const void Starfield::InitializeStars(const int starCount, const int starDrawDis
         stars[i].SetPosition({random() % (size)+position.x,    // x
                               random() % (size)+position.y,    // y
                               random() % (size)+position.z});  // z
-		stars[i].SetName(GenerateName(size_t(random() % 10 + 5), random)); // Generate a random name for each star
+		stars[i].SetName(GenerateName(size_t(random() % 7 + 1), random)); // Generate a random name for each star
 		stars[i].SpectralClass(random() % 100);                // Assign a spectral class for each star
 
 		numberOfStars = i;

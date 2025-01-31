@@ -31,11 +31,6 @@ int Space::GetNumberOfStars()
 
 void Space::InstantiateStarfield()
 {
-    constexpr int numberOfStars     = 200; // number of stars in each chunk
-	constexpr int chunkSize         = 100; // width, height and depth of the chunk
-    constexpr int chunkDrawDistance = 2;   // how many chunks will draw in each direction from the central chunk de camera is at momenet
-	constexpr int starDrawDistance  = 100; // how far the stars will be drawn from the camera
-
     int camX = int(camera.position.x / chunkSize);
     int camY = int(camera.position.y / chunkSize);
     int camZ = int(camera.position.z / chunkSize);
@@ -63,7 +58,7 @@ void Space::InstantiateStarfield()
                         }
 
                         // Removing distant starfields
-                        if (distance(it->GetPosition(), camera.position) > chunkSize * chunkDrawDistance * 2)
+                        if (distance(it->GetPosition(), camera.position) > chunkSize * chunkDrawDistance * 2.5)
                         {
                             it = starfields.erase(it);
                         }
@@ -88,6 +83,8 @@ void Space::Draw3D()
     constexpr int starDrawDistance = 100; // how far the stars will be drawn from the camera
     Vector3 cameraForward = Vector3Subtract(camera.target, camera.position);
     cameraForward = Vector3Normalize(cameraForward); // Get forward direction
+
+   
 
     transforms.clear();
     colors.clear();
@@ -117,28 +114,31 @@ void Space::Draw3D()
 
             if (distance(camera.position, star.GetPosition()) > starDrawDistance)
             {
-                Vector3 starPosition = star.GetPosition();
-                Vector2 screenPos = GetWorldToScreen(starPosition, camera);
-                int x = static_cast<int>(screenPos.x);
-                int y = static_cast<int>(screenPos.y);
+                Position3D = star.GetPosition();
+                screenPos = GetWorldToScreen(Position3D, camera);
+                const int x = static_cast<int>(screenPos.x);
+                const int y = static_cast<int>(screenPos.y);
 
-                ImageDrawPixel(&image, x, y, star.GetColor());
+                if (x > 0 && x < screenWidth && y > 0 && y < screenHeight)
+                {
+                    ImageDrawPixel(&image, x, y, star.GetColor());
+                }
             }
             else // Draw closer stars
             {
-                Matrix transform = MatrixTranslate(star.GetPosition().x, star.GetPosition().y, star.GetPosition().z);
+                const Matrix transform = MatrixTranslate(star.GetPosition().x, star.GetPosition().y, star.GetPosition().z);
                 transforms.push_back(transform);
                 colors.push_back(star.GetColor());
 
                 if (distance(camera.position, star.GetPosition()) < starDrawDistance / 2)
                 {
                     // Draw the star name above the sphere
-                    Vector3 namePosition = star.GetPosition();
-                    namePosition.y += 0.5f; // Adjust the height above the sphere
-                    const Vector2 screenPos = GetWorldToScreen(namePosition, camera);
-                    EndMode3D();
-                    DrawText(star.GetName().c_str(), static_cast<int>(screenPos.x), static_cast<int>(screenPos.y), fontSize, WHITE);
-                    BeginMode3D(camera);
+                    Position3D = star.GetPosition();
+                    Position3D.y += 0.5f; // Adjust the height above the sphere
+                    const Vector2 screenPos = GetWorldToScreen(Position3D, camera);
+                    //EndMode3D();
+                    ImageDrawText(&image, star.GetName().c_str(), static_cast<int>(screenPos.x), static_cast<int>(screenPos.y), 10, WHITE);
+                    //BeginMode3D(camera);
                     //ImageDrawText(&image, star.GetName().c_str(), static_cast<int>(screenPos.x), static_cast<int>(screenPos.y), fontSize, WHITE);
                 }
             }

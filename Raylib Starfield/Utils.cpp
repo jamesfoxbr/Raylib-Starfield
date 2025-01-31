@@ -11,17 +11,17 @@ int diceRoller(int minimun, int maximun)
 
 double distance(const Vector3 p1, const Vector3 p2)
 {
-    double d = sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2) * 1.0);
+    const double d = sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2) + pow(p2.z - p1.z, 2) * 1.0);
     return d;
 }
 
 void DrawCoordinates(const Camera& camera)
 {
-    std::string positionX = "X: " + std::to_string(int(camera.position.x));
-    std::string positionY = " / Y: " + std::to_string(int(camera.position.y));
-    std::string positionZ = " / Z: " + std::to_string(int(camera.position.z));
+    const std::string positionX = "X: " + std::to_string(int(camera.position.x));
+    const std::string positionY = " / Y: " + std::to_string(int(camera.position.y));
+    const std::string positionZ = " / Z: " + std::to_string(int(camera.position.z));
 
-    std::string str = positionX + positionY + positionZ;  // Create the string first
+    const std::string str = positionX + positionY + positionZ;  // Create the string first
 
     const char* cstr = str.c_str(); // Then get a const char* pointer
     DrawText(cstr, 10, 10, 20, RAYWHITE);
