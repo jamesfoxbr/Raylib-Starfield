@@ -96,10 +96,13 @@ void Space::Draw3D()
     {
         for (auto& star : starfield.GetStars())
         {
+            // detects the star being clicked
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && IsStarClicked(star) != nullptr)
             {
                 selectedStar = IsStarClicked(star);
-                std::cout << "Star " << selectedStar->GetName() << " clicked!" << std::endl;
+                gui.SetStarName(selectedStar->GetName());
+                std::cout << selectedStar->GetSpectralClass() << "\n";
+                gui.SetStarClass(selectedStar->GetSpectralClass());
             }
             else
             {
@@ -136,10 +139,14 @@ void Space::Draw3D()
                     Position3D = star.GetPosition();
                     Position3D.y += 0.5f; // Adjust the height above the sphere
                     const Vector2 screenPos = GetWorldToScreen(Position3D, camera);
-                    //EndMode3D();
+                    const int width = star.GetName().length() * 8;
+                    const int weight = 16;
+                    const int adjustX = -4;
+                    const int adjustY = -4;
+                    ImageDrawRectangle(&image, static_cast<int>(screenPos.x) + adjustX, static_cast<int>(screenPos.y) + adjustY, width, weight, BLACK);
+                    ImageDrawRectangleLines(&image, {screenPos.x + adjustX, screenPos.y + adjustY, (float)width, weight}, 2, RED);
+
                     ImageDrawText(&image, star.GetName().c_str(), static_cast<int>(screenPos.x), static_cast<int>(screenPos.y), 10, WHITE);
-                    //BeginMode3D(camera);
-                    //ImageDrawText(&image, star.GetName().c_str(), static_cast<int>(screenPos.x), static_cast<int>(screenPos.y), fontSize, WHITE);
                 }
             }
         }
@@ -156,6 +163,7 @@ void Space::Draw2D()
 {
     UpdateTexture(texture, image.data);  // Send updated image to GPU (one call)
     DrawTexture(texture, 0, 0, WHITE);
+    gui.DrawInterface();
 }
 
 Star* Space::IsStarClicked(const Star& star) const
@@ -169,6 +177,7 @@ Star* Space::IsStarClicked(const Star& star) const
         DrawCube(star.GetPosition(), 1.0f, 1.0f, 1.0f, RED);
         return const_cast<Star*>(&star);
     }
+    return nullptr;
 }
 
 

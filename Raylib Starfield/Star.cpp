@@ -115,3 +115,8 @@ void Star::SpectralClass(int r)
 	
 	SetColor();
 }
+
+char Star::GetSpectralClass()
+{
+	return spectralClass;
+}

@@ -2,8 +2,11 @@
 #define H_SPACE_H
 
 #include <raylib.h>
+#include <iostream>
+#include <string>
 #include "Starfield.h"
 #include "Utils.h"
+#include "Gui.h"
 
 constexpr int NUMBER_OF_STARS = 200;
 
@@ -22,6 +25,7 @@ public:
 	
 private:
 	Camera& camera;
+	Gui gui;
 	std::vector<Starfield> starfields;
 	Star* selectedStar = nullptr;
 	std::mt19937 random;

@@ -20,6 +20,7 @@ public:
 	void SetSize(const float size);
 	const float& GetSize() const;
 	void SpectralClass(int r);
+	char GetSpectralClass();
 
 private:
 	Vector3 position;

@@ -55,5 +55,6 @@ std::string Starfield::GenerateName(size_t length, std::mt19937& rng)
         name += consonants[distConsonants(rng)];
         name += vowels[distVowels(rng)];
     }
+    std::transform(name.begin(), name.end(), name.begin(), ::toupper);
     return name;
 }
