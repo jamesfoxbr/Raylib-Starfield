@@ -64,17 +64,13 @@ Star* Starfield::IsStarClicked(Camera& camera) const
 
 std::string Starfield::GenerateName(size_t length, std::mt19937& rng)
 {
-    const std::string alphabet = "abcdefghijklmnopqrstuvwxyz";
-	const std::string vowels = "aeiouy";
-
     std::string name;
-    std::uniform_int_distribution<> distAlphabet(0, int(alphabet.size() - 1));
-    std::uniform_int_distribution<> distSylVow(0, int(vowels.size() - 1));
-    for (size_t i = 0; i < length; ++i) 
+    std::uniform_int_distribution<> distConsonants(0, int(consonants.size() - 1));
+    std::uniform_int_distribution<> distVowels(0, int(vowels.size() - 1));
+    for (size_t i = 0; i < length; ++i)
     {
-        name += alphabet[distAlphabet(rng)];
-		if (rng() % 100 < 10)
-		name += vowels[distSylVow(rng)];
+        name += consonants[distConsonants(rng)];
+        name += vowels[distVowels(rng)];
     }
     return name;
 }
