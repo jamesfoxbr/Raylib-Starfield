@@ -71,10 +71,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>D:\Onedrive\Documentos\Programming and Game Dev\C++\Projects\Raylib Starfield\Raylib Starfield\dependencies\extras;D:\Onedrive\Documentos\Programming and Game Dev\C++\Projects\Raylib Starfield\Raylib Starfield\dependencies\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>D:\Onedrive\Documentos\Programming and Game Dev\C++\Projects\Raylib Starfield\Raylib Starfield\dependencies\extras;D:\Onedrive\Documentos\Programming and Game Dev\C++\Projects\Raylib Starfield\Raylib Starfield\dependencies\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -111,6 +111,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>D:\Onedrive\Documentos\Programming and Game Dev\C++\Projects\Raylib Starfield\Raylib Starfield\dependencies\include;D:\Onedrive\Documentos\Programming and Game Dev\C++\Projects\Raylib Starfield\Raylib Starfield\dependencies\extras;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,6 +127,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>D:\Onedrive\Documentos\Programming and Game Dev\C++\Projects\Raylib Starfield\Raylib Starfield\dependencies\include;D:\Onedrive\Documentos\Programming and Game Dev\C++\Projects\Raylib Starfield\Raylib Starfield\dependencies\extras;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,6 +139,7 @@
   <ItemGroup>
     <ClCompile Include="Controls.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="rlImGui.cpp" />
     <ClCompile Include="Space.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Starfield.cpp" />
@@ -145,6 +148,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Controls.h" />
+    <ClInclude Include="dependencies\extras\FA6FreeSolidFontData.h" />
+    <ClInclude Include="dependencies\extras\IconsFontAwesome6.h" />
+    <ClInclude Include="dependencies\imgui_impl_raylib.h" />
+    <ClInclude Include="dependencies\rlImGui.h" />
+    <ClInclude Include="dependencies\rlImGuiColors.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="RandomName.h" />
     <ClInclude Include="Space.h" />

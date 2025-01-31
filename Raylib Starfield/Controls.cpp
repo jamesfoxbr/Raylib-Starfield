@@ -1,5 +1,6 @@
 #include "Controls.h"
 #include <iostream>
+
 Controls::Controls()
 {
 	cameraPosition = {0.0f, 0.0f, 0.0f};
@@ -62,11 +63,15 @@ void Controls::Move()
 void Controls::MouseLook()
 {
 	CurrentMousePosition = GetMousePosition();
+	Vector2 storeMousePosition;
 	if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
 	{
 		if (cursorEnable)
 		{
+			storeMousePosition = GetMousePosition();
 			DisableCursor();
+			SetMousePosition((int)storeMousePosition.x, (int)storeMousePosition.y);
+			CurrentMousePosition = GetMousePosition();
 			cursorEnable = false;
 		}
 

@@ -2,6 +2,7 @@
 #define H_CONTROLS_H
 
 #include <raylib.h>
+#include "Globals.h"
 
 class Controls
 {

@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "Window.h"
 #include "Controls.h"
+#include "rlImGui.h"	
 
 int main() {
     Window window;
