@@ -105,9 +105,11 @@ void Space::DrawStars()
     Vector3 cameraForward = Vector3Subtract(camera.target, camera.position);
     cameraForward = Vector3Normalize(cameraForward); // Get forward direction
 
+    std::vector<Matrix> transforms;
+    std::vector<Color> colors;
+
     for (auto& starfield : starfields)
     {
-		
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && starfield.IsStarClicked(camera) != nullptr)
         {
             selectedStar = starfield.IsStarClicked(camera);
@@ -133,8 +135,8 @@ void Space::DrawStars()
             else
             {
                 Matrix transform = MatrixTranslate(star.GetPosition().x, star.GetPosition().y, star.GetPosition().z);
-                material.maps[MATERIAL_MAP_DIFFUSE].color = star.GetColor();
-                DrawMesh(sphereMesh, material, transform);
+                transforms.push_back(transform);
+                colors.push_back(star.GetColor());
 
                 if (distance(camera.position, star.GetPosition()) < starDrawDistance / 2)
                 {
@@ -149,6 +151,13 @@ void Space::DrawStars()
                 }
             }
         }
+    }
+
+    // Draw all spheres in one draw call
+    for (size_t i = 0; i < transforms.size(); ++i)
+    {
+        material.maps[MATERIAL_MAP_DIFFUSE].color = colors[i];
+        DrawMesh(sphereMesh, material, transforms[i]);
     }
 }
 
