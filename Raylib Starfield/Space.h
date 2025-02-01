@@ -46,9 +46,11 @@ private:
 	Image image = GenImageColor(screenWidth, screenHeight, BLANK);  // Empty image (all transparent)
 	Texture2D texture = LoadTextureFromImage(image);        // Convert it into a texture
 
-	Mesh sphereMesh = GenMeshSphere(0.1f, 8, 8); // Generate a sphere mesh
+	starMesh planeMesh = GenMeshPlane(3.0f, 3.0f, 2, 2); // Generate a sphere mesh
 	Material material = LoadMaterialDefault(); // Load default material
-	Shader shader = LoadShader("fireball.vs", "fireball.fs");
+
+	Shader shader = LoadShader("fireballs.vs", "fireballs.fs");
+
 	// Create a basic checkerboard texture
 	Image checkerboard;
 	Texture2D checkerTexture;

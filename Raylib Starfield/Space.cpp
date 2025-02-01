@@ -17,7 +17,7 @@ Space::Space(Camera& camera)
 
 Space::~Space()
 {
-    UnloadMesh(sphereMesh); // Unload the mesh
+    UnloadMesh(planeMesh); // Unload the mesh
     UnloadShader(shader);
     UnloadImage(checkerboard); // Unload image from RAM, not needed anymore
 }
@@ -175,7 +175,7 @@ void Space::Draw3D()
         //material.maps[MATERIAL_MAP_DIFFUSE].texture = checkerTexture;
 
         material.shader = shader;
-        DrawMesh(sphereMesh, material, transforms[i]);
+        DrawMesh(planeMesh, material, transforms[i]);
     }
     EndShaderMode();
 }
