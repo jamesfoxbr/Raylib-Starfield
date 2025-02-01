@@ -6,9 +6,19 @@ Space::Space(Camera& camera)
 {
     random.seed(555);
 
-    // Apply the texture to the material
     checkerboard = GenImageChecked(2, 2, 1, 1, RED, GREEN);
-    material.maps[MATERIAL_MAP_DIFFUSE].texture = checkerTexture;
+    checkerTexture = LoadTextureFromImage(checkerboard);
+
+    Vector3 lightPos = {0.0f, 10.0f, 0.0f};
+    Color glowCol = WHITE;
+    float glowInt = 1.0f;
+
+    SetShaderValue(shader, GetShaderLocation(shader, "lightPosition"), &lightPos, SHADER_UNIFORM_VEC3);
+    SetShaderValue(shader, GetShaderLocation(shader, "glowColor"), &glowCol, SHADER_UNIFORM_VEC4);
+    SetShaderValue(shader, GetShaderLocation(shader, "glowIntensity"), &glowInt, SHADER_UNIFORM_FLOAT);
+
+   
+    
 }
 
 Space::~Space()
@@ -157,6 +167,8 @@ void Space::Draw3D()
     for (size_t i = 0; i < transforms.size(); ++i)
     {
         material.maps[MATERIAL_MAP_DIFFUSE].color = colors[i];
+        //material.maps[MATERIAL_MAP_DIFFUSE].texture = checkerTexture;
+
         material.shader = shader;
         DrawMesh(sphereMesh, material, transforms[i]);
     }

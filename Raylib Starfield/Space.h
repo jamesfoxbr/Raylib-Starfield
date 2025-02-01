@@ -51,7 +51,7 @@ private:
 	Shader shader = LoadShader(TextFormat("gloaw.vs"), TextFormat("glow.fs"));
 	// Create a basic checkerboard texture
 	Image checkerboard;
-	Texture2D checkerTexture = LoadTextureFromImage(checkerboard);
+	Texture2D checkerTexture;
 };
 
 static std::vector<Matrix> transforms;

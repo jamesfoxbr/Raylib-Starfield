@@ -8,13 +8,24 @@ uniform vec4 colDiffuse;
 
 out vec4 finalColor;
 
+const vec2 size = vec2(800, 450); // Framebuffer size
+const float samples = 5.0;        // Pixels per axis; higher = bigger glow, worse performance
+const float quality = 2.5;        // Lower = smaller glow, better quality
+
 void main()
 {
-    vec4 texelColor = texture(texture0, fragTexCoord);
-    float glow = 1.0; // Adjust this value for more or less glow
-    vec4 glowColor = vec4(1.0, 1.0, 0.0, 1.0); // Yellow glow
+    vec4 sum = vec4(0.0);
+    vec2 sizeFactor = vec2(1.0) / size * quality;
+    vec4 source = texture(texture0, fragTexCoord);
 
-    // Increase the intensity of the glow
-    vec4 emission = glowColor * glow * 20.0; // Adjust the multiplier for more intensity
-    finalColor = mix(texelColor, emission, glow) * colDiffuse * fragColor;
+    int range = int((samples - 1.0) / 2.0);
+    for (int x = -range; x <= range; x++)
+    {
+        for (int y = -range; y <= range; y++)
+        {
+            sum += texture(texture0, fragTexCoord + vec2(float(x), float(y)) * sizeFactor);
+        }
+    }
+
+    finalColor = ((sum / (samples * samples)) + source) * colDiffuse;
 }
