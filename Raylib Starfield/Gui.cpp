@@ -12,28 +12,41 @@ Gui::~Gui()
     rlImGuiShutdown();		// cleans up ImGui
 }
 
-Color Gui::GetClearColor()
-{
-	return Color{(unsigned char)(clear_color.x * 255), (unsigned char)(clear_color.y * 255), (unsigned char)(clear_color.z * 255), (unsigned char)(clear_color.w * 255)};
-}
-
 void Gui::DrawInterface()
 {
     rlImGuiBegin();			// starts the ImGui content mode. Make all ImGui calls after this
-    
-    static float f = 0.0f;
-    static int counter = 0;
+   
+    // Debug Window
+    ImGui::Begin("DEBUG INFORMATION");
+    ImGui::Text(("FPS: " + std::to_string(GetFPS())).c_str());
+    ImGui::End();
 
-    ImGui::Begin("COORDINATES");  // Create a window called "STAR INFORMATION" and append into it.
+    // Coordinates window
+    float windowSize = 200;
+    ImGui::SetNextWindowSize({400, 72});
+    ImGui::SetNextWindowPos({(screenWidth / 2) - windowSize, 4});
+    ImGui::Begin("COORDINATES", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
     ImGui::Text(("Coordinates: X " + std::to_string((int)camera.position.x) +
         " / Y " + std::to_string((int)camera.position.y)
         + " / Z " + std::to_string((int)camera.position.z)).c_str());
+
+    int coordinates[3] = {(int)camera.position.x, (int)camera.position.y, (int)camera.position.z};
+    if (ImGui::InputInt3("Input Coordinates", coordinates))
+        if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_KP_ENTER))
+        {
+            camera.position.x = coordinates[0];
+            camera.position.y = coordinates[1];
+            camera.position.z = coordinates[2];
+            camera.target     = Vector3{0.0f, 0.0f, 0.0f};
+        }
+
     ImGui::End();
 
+    // Star System Information Window
     if (windowOpen)
     {
-        ImGui::Begin("STAR INFORMATION", &windowOpen);  // Create a window called "STAR INFORMATION" and append into it.
-        
+        ImGui::SetWindowSize({200, 100});
+        ImGui::Begin("STAR INFORMATION", &windowOpen, ImGuiWindowFlags_NoResize);  
         ImGui::Text(("Star Name: " + selectedStar).c_str());   
 
         char s[23] = "Star Spectral Class: ";

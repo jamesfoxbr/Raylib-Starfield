@@ -15,26 +15,22 @@ int main() {
         control.Update();
 
         BeginDrawing(); 
+        {
             ClearBackground(BLACK);
 
             space.Draw2D();
 
-            // 3D stuff go inside this area
-            BeginMode3D(window.camera); 
+            BeginMode3D(window.camera);
+            {
 
                 space.Update();
                 space.Draw3D();
-
-            // end of the 3d drawing area
+            }
             EndMode3D();
-            // 2D stuff fixed to the screen space go in this area
-            
-                DrawCoordinates(window.camera);
-                //targetCursor();
-			    DrawDebugText("FPS: " + std::to_string(GetFPS()), 10, 30, 20, RAYWHITE);
-			    DrawDebugText(std::to_string(space.GetNumberOfStarfields()) + " starfields", 10, 50, 20, RAYWHITE);
-			    DrawDebugText(std::to_string(space.GetNumberOfStars()) + " stars", 10, 70, 20, RAYWHITE);
 
+            DrawDebugText(std::to_string(space.GetNumberOfStarfields()) + " starfields", 10, 50, 20, RAYWHITE);
+            DrawDebugText(std::to_string(space.GetNumberOfStars()) + " stars", 10, 70, 20, RAYWHITE);
+        }
         EndDrawing(); 
     }
     return 0;

@@ -192,10 +192,11 @@ Star* Space::IsStarClicked(const Star& star)
     Vector2 screenPos = GetWorldToScreen(star.GetPosition(), camera);
     const float starSize = 20.0f;  // Use the star's size for collision detection
     const float clickDistance = 100.0f; // How far the mouse can be from the star to click it
-    gui.SetWindowOpen();
+    
 
     if (CheckCollisionPointCircle({(float)GetMouseX(), (float)GetMouseY()}, screenPos, starSize) && distance(star.GetPosition(), camera.position) < clickDistance)
     {
+        gui.SetWindowOpen();
         return const_cast<Star*>(&star);
     }
     return nullptr;
