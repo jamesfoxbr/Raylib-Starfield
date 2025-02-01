@@ -102,7 +102,8 @@ void Space::Draw3D()
     colors.clear();
 
     // Clear image
-    memset(image.data, 0, screenWidth * screenHeight * 4); // 4 bytes per pixel (RGBA)
+    ImageClearBackground(&image, {0, 0, 0, 0});
+    //memset(image.data, 0, screenWidth * screenHeight * 4); // 4 bytes per pixel (RGBA)
 
     for (auto& starfield : starfields)
     {
