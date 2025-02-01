@@ -21,7 +21,7 @@ public:
 	void Draw3D();
 	void Draw2D();
 
-	Star* IsStarClicked(const Star& star) const;
+	Star* IsStarClicked(const Star& star);
 	
 private:
 	Camera& camera;
@@ -39,17 +39,21 @@ private:
 	int camY = 0;
 	int camZ = 0;
 
+	int cubeSelectTimer = 0;
+	Vector3 cubePos = {0};
+
 	const int fontSize = 20; // Define the font size of star names
 	Image image = GenImageColor(screenWidth, screenHeight, BLANK);  // Empty image (all transparent)
 	Texture2D texture = LoadTextureFromImage(image);        // Convert it into a texture
 
 	Mesh sphereMesh = GenMeshSphere(0.1f, 8, 8); // Generate a sphere mesh
 	Material material = LoadMaterialDefault(); // Load default material
-	Shader shader = LoadShader(TextFormat("fireball.vs"), TextFormat("fireball.fs"));
+	Shader shader = LoadShader("fireball.vs", "fireball.fs");
 	// Create a basic checkerboard texture
 	Image checkerboard;
 	Texture2D checkerTexture;
 
+	// Functions
 	void InstantiateStarfield();
 	const void DrawStarNames(const Star& star);
 };

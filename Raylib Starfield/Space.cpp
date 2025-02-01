@@ -2,7 +2,8 @@
 
 Space::Space(Camera& camera)
 	:
-	camera(camera)
+	camera(camera),
+    gui(camera)
 {
     random.seed(555);
 
@@ -12,13 +13,6 @@ Space::Space(Camera& camera)
     Vector3 lightPos = {0.0f, 10.0f, 0.0f};
     Color glowCol = WHITE;
     float glowInt = 1.0f;
-
-    SetShaderValue(shader, GetShaderLocation(shader, "lightPosition"), &lightPos, SHADER_UNIFORM_VEC3);
-    SetShaderValue(shader, GetShaderLocation(shader, "glowColor"), &glowCol, SHADER_UNIFORM_VEC4);
-    SetShaderValue(shader, GetShaderLocation(shader, "glowIntensity"), &glowInt, SHADER_UNIFORM_FLOAT);
-
-   
-    
 }
 
 Space::~Space()
@@ -130,6 +124,8 @@ void Space::Draw3D()
             // detects the star being clicked
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && IsStarClicked(star) != nullptr)
             {
+                cubePos = star.GetPosition();
+                
                 selectedStar = IsStarClicked(star);
                 gui.SetStarName(selectedStar->GetName());
                 gui.SetStarClass(selectedStar->GetSpectralClass());
@@ -167,6 +163,11 @@ void Space::Draw3D()
         }
     }
 
+    if (!(cubePos.x == 0 && cubePos.y == 0 && cubePos.z == 0))
+    {
+        DrawCubeWires(cubePos, 1.0f, 1.0f, 1.0f, SKYBLUE);
+    }
+
     BeginShaderMode(shader);
     for (size_t i = 0; i < transforms.size(); ++i)
     {
@@ -186,15 +187,15 @@ void Space::Draw2D()
     gui.DrawInterface();
 }
 
-Star* Space::IsStarClicked(const Star& star) const
+Star* Space::IsStarClicked(const Star& star) 
 {
     Vector2 screenPos = GetWorldToScreen(star.GetPosition(), camera);
     const float starSize = 20.0f;  // Use the star's size for collision detection
     const float clickDistance = 100.0f; // How far the mouse can be from the star to click it
+    gui.SetWindowOpen();
 
     if (CheckCollisionPointCircle({(float)GetMouseX(), (float)GetMouseY()}, screenPos, starSize) && distance(star.GetPosition(), camera.position) < clickDistance)
     {
-        DrawCube(star.GetPosition(), 1.0f, 1.0f, 1.0f, RED);
         return const_cast<Star*>(&star);
     }
     return nullptr;

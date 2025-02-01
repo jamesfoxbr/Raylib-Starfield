@@ -9,18 +9,21 @@
 class Gui
 {
 public:
-	Gui();
+	Gui(Camera& camera);
 	~Gui();
 	Color GetClearColor();
 	void DrawInterface();
 	void SetStarName(std::string name);
 	void SetStarClass(char Sclass); // Change parameter type to std::string
+	void SetWindowOpen();
 
 private:
+	Camera& camera;
 	// Our state
 	bool show_demo_window = true;
 	bool show_another_window = false;
 	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
+	bool windowOpen = false;
 
 	std::string selectedStar = "";
 	char starClass[1] = "";
