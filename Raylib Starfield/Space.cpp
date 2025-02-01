@@ -169,7 +169,6 @@ void Space::Draw3D()
 
     // Clear image
     ImageClearBackground(&image, {0, 0, 0, 0});
-    //memset(image.data, 0, screenWidth * screenHeight * 4); // 4 bytes per pixel (RGBA)
 
     BeginShaderMode(shader);
     for (auto& starfield : starfields)
@@ -216,7 +215,7 @@ void Space::Draw3D()
                 DrawStarNames(star);
 
                 // Draw billboard at star position and apply shader
-                Draw3DBillboard(camera,checkerTexture, star.GetPosition(), 2, WHITE);
+                Draw3DBillboard(camera,checkerTexture, star.GetPosition(), 4.0f, star.GetColor());
             }
         }
     }
@@ -235,8 +234,8 @@ void Space::Draw3D()
 
     //    // Pass the color to the shader
     //    //SetShaderValue(shader, GetShaderLocation(shader, "uColor"), &colors[i], SHADER_UNIFORM_VEC4);
-
-    //    material.shader = shader;
+    //    Draw3DBillboard(camera, checkerTexture, star.GetPosition(), 4.0f, star.GetColor());
+    //    //material.shader = shader;
     //    //DrawMesh(planeMesh, material, transforms[i]);
     //}
     //EndShaderMode();
