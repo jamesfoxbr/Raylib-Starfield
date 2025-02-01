@@ -117,6 +117,7 @@ void Space::Draw3D()
     ImageClearBackground(&image, {0, 0, 0, 0});
     //memset(image.data, 0, screenWidth * screenHeight * 4); // 4 bytes per pixel (RGBA)
 
+    BeginShaderMode(shader);
     for (auto& starfield : starfields)
     {
         for (auto& star : starfield.GetStars())
@@ -159,25 +160,34 @@ void Space::Draw3D()
                 colors.push_back(star.GetColor());
 
                 DrawStarNames(star);
+
+                // Draw billboard at star position and apply shader
+                
+                DrawBillboard(camera, checkerTexture, star.GetPosition(), 3.0f, star.GetColor());
+                
             }
         }
     }
+    EndShaderMode();
 
     if (!(cubePos.x == 0 && cubePos.y == 0 && cubePos.z == 0))
     {
         DrawCubeWires(cubePos, 1.0f, 1.0f, 1.0f, SKYBLUE);
     }
 
-    BeginShaderMode(shader);
-    for (size_t i = 0; i < transforms.size(); ++i)
-    {
-        material.maps[MATERIAL_MAP_DIFFUSE].color = colors[i];
-        //material.maps[MATERIAL_MAP_DIFFUSE].texture = checkerTexture;
+    //BeginShaderMode(shader);
+    //for (size_t i = 0; i < transforms.size(); ++i)
+    //{
+    //    material.maps[MATERIAL_MAP_DIFFUSE].color = colors[i];
+    //    //material.maps[MATERIAL_MAP_DIFFUSE].texture = checkerTexture;
 
-        material.shader = shader;
-        DrawMesh(planeMesh, material, transforms[i]);
-    }
-    EndShaderMode();
+    //    // Pass the color to the shader
+    //    //SetShaderValue(shader, GetShaderLocation(shader, "uColor"), &colors[i], SHADER_UNIFORM_VEC4);
+
+    //    material.shader = shader;
+    //    //DrawMesh(planeMesh, material, transforms[i]);
+    //}
+    //EndShaderMode();
 }
 
 void Space::Draw2D()

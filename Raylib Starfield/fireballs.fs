@@ -14,3 +14,5 @@ void main()
     float alpha = (1.0/(fromcentre*50.0))-0.07;
     finalColor = vec4(fragColor.r, fragColor.g, fragColor.b, alpha);
 }
+
+
