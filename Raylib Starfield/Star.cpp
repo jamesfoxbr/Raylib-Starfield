@@ -120,3 +120,7 @@ char Star::GetSpectralClass()
 {
 	return spectralClass;
 }
+
+Matrix Star::GetTransform() const {
+	return MatrixTranslate(GetPosition().x, GetPosition().y, GetPosition().z);
+}

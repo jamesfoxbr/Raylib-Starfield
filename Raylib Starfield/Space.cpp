@@ -92,9 +92,27 @@ void Space::InstantiateStarfield()
     }
 }
 
+const void Space::DrawStarNames(const Star& star)
+{
+    if (distance(camera.position, star.GetPosition()) < starDrawDistance / 2)
+    {
+        // Draw the star name above the sphere
+        Position3D = star.GetPosition();
+        Position3D.y += 0.5f; // Adjust the height above the sphere
+        const Vector2 screenPos = GetWorldToScreen(Position3D, camera);
+        const int width = int(star.GetName().length() * 8);
+        const int weight = 16;
+        const int adjustX = -4;
+        const int adjustY = -4;
+        ImageDrawRectangle(&image, static_cast<int>(screenPos.x) + adjustX, static_cast<int>(screenPos.y) + adjustY, width, weight, BLACK);
+        ImageDrawRectangleLines(&image, {screenPos.x + adjustX, screenPos.y + adjustY, (float)width, weight}, 2, RED);
+
+        ImageDrawText(&image, star.GetName().c_str(), static_cast<int>(screenPos.x), static_cast<int>(screenPos.y), 10, WHITE);
+    }
+}
+
 void Space::Draw3D()
 {
-    constexpr int starDrawDistance = 100; // how far the stars will be drawn from the camera
     Vector3 cameraForward = Vector3Subtract(camera.target, camera.position);
     cameraForward = Vector3Normalize(cameraForward); // Get forward direction
 
@@ -141,25 +159,10 @@ void Space::Draw3D()
             }
             else // Draw closer stars
             {
-                const Matrix transform = MatrixTranslate(star.GetPosition().x, star.GetPosition().y, star.GetPosition().z);
-                transforms.push_back(transform);
+                transforms.push_back(star.GetTransform());
                 colors.push_back(star.GetColor());
 
-                if (distance(camera.position, star.GetPosition()) < starDrawDistance / 2)
-                {
-                    // Draw the star name above the sphere
-                    Position3D = star.GetPosition();
-                    Position3D.y += 0.5f; // Adjust the height above the sphere
-                    const Vector2 screenPos = GetWorldToScreen(Position3D, camera);
-                    const int width = int(star.GetName().length() * 8);
-                    const int weight = 16;
-                    const int adjustX = -4;
-                    const int adjustY = -4;
-                    ImageDrawRectangle(&image, static_cast<int>(screenPos.x) + adjustX, static_cast<int>(screenPos.y) + adjustY, width, weight, BLACK);
-                    ImageDrawRectangleLines(&image, {screenPos.x + adjustX, screenPos.y + adjustY, (float)width, weight}, 2, RED);
-
-                    ImageDrawText(&image, star.GetName().c_str(), static_cast<int>(screenPos.x), static_cast<int>(screenPos.y), 10, WHITE);
-                }
+                DrawStarNames(star);
             }
         }
     }

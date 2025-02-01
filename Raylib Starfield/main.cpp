@@ -17,6 +17,8 @@ int main() {
         BeginDrawing(); 
             ClearBackground(BLACK);
 
+            space.Draw2D();
+
             // 3D stuff go inside this area
             BeginMode3D(window.camera); 
 
@@ -27,7 +29,6 @@ int main() {
             EndMode3D();
             // 2D stuff fixed to the screen space go in this area
             
-                space.Draw2D();
                 DrawCoordinates(window.camera);
                 //targetCursor();
 			    DrawDebugText("FPS: " + std::to_string(GetFPS()), 10, 30, 20, RAYWHITE);

@@ -2,6 +2,7 @@
 #define H_STAR_H
 
 #include "raylib.h"
+#include "raymath.h"
 #include "Utils.h"
 
 class Star
@@ -21,6 +22,7 @@ public:
 	const float& GetSize() const;
 	void SpectralClass(int r);
 	char GetSpectralClass();
+    Matrix GetTransform() const;
 
 private:
 	Vector3 position;
