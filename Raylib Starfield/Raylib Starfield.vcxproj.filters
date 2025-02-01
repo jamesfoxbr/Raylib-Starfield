@@ -88,12 +88,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="glow.fs">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="glow.vs">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="fireballs.fs">
       <Filter>Resource Files</Filter>
     </None>
