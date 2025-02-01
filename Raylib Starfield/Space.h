@@ -35,9 +35,9 @@ private:
 	int chunkDrawDistance = 2;   // how many chunks will draw in each direction from the central chunk de camera is at momenet
 	int starDrawDistance = 100; // how far the stars will be drawn from the camera
 
-	int camX;
-	int camY;
-	int camZ;
+	int camX = 0;
+	int camY = 0;
+	int camZ = 0;
 
 	const int fontSize = 20; // Define the font size of star names
 	Image image = GenImageColor(screenWidth, screenHeight, BLANK);  // Empty image (all transparent)
@@ -48,7 +48,7 @@ private:
 
 	Mesh sphereMesh = GenMeshSphere(0.1f, 8, 8); // Generate a sphere mesh
 	Material material = LoadMaterialDefault(); // Load default material
-	Shader shader = LoadShader(TextFormat("gloaw.vs"), TextFormat("glow.fs"));
+	Shader shader = LoadShader(TextFormat("fireball.vs"), TextFormat("fireball.fs"));
 	// Create a basic checkerboard texture
 	Image checkerboard;
 	Texture2D checkerTexture;

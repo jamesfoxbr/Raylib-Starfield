@@ -164,6 +164,8 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="fireballs.fs" />
+    <None Include="fireballs.vs" />
     <None Include="glow.fs" />
     <None Include="glow.vs" />
   </ItemGroup>

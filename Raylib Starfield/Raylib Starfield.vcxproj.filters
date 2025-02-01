@@ -94,5 +94,11 @@
     <None Include="glow.vs">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="fireballs.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="fireballs.vs">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
