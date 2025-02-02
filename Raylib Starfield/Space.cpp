@@ -70,6 +70,7 @@ Space::~Space()
     UnloadMesh(planeMesh); // Unload the mesh
     UnloadShader(shader);
     UnloadImage(checkerboard); // Unload image from RAM, not needed anymore
+    UnloadTexture(checkerTexture);
 }
 
 void Space::Update()
