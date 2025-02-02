@@ -63,13 +63,13 @@ Space::Space(Camera& camera)
 
     checkerboard = GenImageChecked(2, 2, 1, 1, RED, GREEN);
     checkerTexture = LoadTextureFromImage(checkerboard);
+    UnloadImage(checkerboard); // Unload image from RAM, not needed anymore
 }
 
 Space::~Space()
 {
     UnloadMesh(planeMesh); // Unload the mesh
     UnloadShader(shader);
-    UnloadImage(checkerboard); // Unload image from RAM, not needed anymore
     UnloadTexture(checkerTexture);
 }
 

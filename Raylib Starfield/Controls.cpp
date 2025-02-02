@@ -1,5 +1,5 @@
 #include "Controls.h"
-#include <iostream>
+
 
 Controls::Controls()
 {
@@ -22,6 +22,11 @@ void Controls::Update()
 
 void Controls::Move()
 {
+	auto& io = ImGui::GetIO();
+	if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
+		return;
+	}
+
 	if (IsKeyDown(KEY_LEFT_SHIFT))
 	{
 		speed = 2.0f;
@@ -62,6 +67,11 @@ void Controls::Move()
 
 void Controls::MouseLook()
 {
+	auto& io = ImGui::GetIO();
+	if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
+		return;
+	}
+
 	CurrentMousePosition = GetMousePosition();
 	Vector2 storeMousePosition;
 	if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))

@@ -2,6 +2,8 @@
 #define H_CONTROLS_H
 
 #include <raylib.h>
+#include <iostream>
+#include <imgui.h>
 #include "Globals.h"
 
 class Controls
