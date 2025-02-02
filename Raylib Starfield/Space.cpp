@@ -154,8 +154,8 @@ const void Space::DrawStarNames(const Star& star)
         Position3D = star.GetPosition();
         Position3D.y += 0.5f; // Adjust the height above the sphere
         const Vector2 screenPos = GetWorldToScreen(Position3D, camera);
-        const int width = int(star.GetName().length() * 8);
-        const int weight = 16;
+        const int width   = int(star.GetName().length() * 8);
+        const int weight  = 16;
         const int adjustX = -4;
         const int adjustY = -4;
         ImageDrawRectangle(&image, static_cast<int>(screenPos.x) + adjustX, static_cast<int>(screenPos.y) + adjustY, width, weight, BLACK);
@@ -202,10 +202,10 @@ void Space::Draw3D()
                 selectedStar = nullptr;
             }
 
+            // Check if the star is in front of the camera
             Vector3 toStar = Vector3Subtract(starPosition, camera.position);
             float dotProduct = Vector3DotProduct(cameraForward, toStar);
 
-            // Check if the star is in front of the camera
             if (dotProduct <= 0) continue; // Skip stars behind the camera
 
             if (distance(camera.position, starPosition) > starDrawDistance)
@@ -222,7 +222,6 @@ void Space::Draw3D()
             }
             else // Draw closer stars
             {
-
                 DrawStarNames(star);
 
                 // Draw billboard at star position and apply shader

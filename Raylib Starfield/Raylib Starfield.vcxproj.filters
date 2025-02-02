@@ -94,5 +94,40 @@
     <None Include="fireballs.vs">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="skybox.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="skybox.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="cubemap.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="cubemap.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\cubemap\back.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\cubemap\down.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\cubemap\front.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\cubemap\left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\cubemap\right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\cubemap\top.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="skybox.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
