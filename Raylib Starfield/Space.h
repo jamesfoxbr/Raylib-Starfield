@@ -4,12 +4,23 @@
 #include <raylib.h>
 #include "rlgl.h"
 #include <stddef.h>
+#include <unordered_set>
 
 #include <iostream>
 #include <string>
 #include "Starfield.h"
 #include "Utils.h"
 #include "Gui.h"
+
+// Hash function for Vector3
+struct Vector3Hash {
+	std::size_t operator()(const Vector3& v) const noexcept {
+		std::size_t hx = std::hash<float>{}(v.x);
+		std::size_t hy = std::hash<float>{}(v.y);
+		std::size_t hz = std::hash<float>{}(v.z);
+		return hx ^ (hy << 1) ^ (hz << 2); // Combine hashes
+	}
+};
 
 constexpr int NUMBER_OF_STARS = 200;
 

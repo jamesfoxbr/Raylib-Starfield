@@ -95,46 +95,55 @@ void Space::InstantiateStarfield()
     camY = static_cast<int>(camera.position.y / chunkSize);
     camZ = static_cast<int>(camera.position.z / chunkSize);
 
+    std::unordered_set<Vector3, Vector3Hash> activeChunks;
+
     for (int dx = -chunkDrawDistance + camX; dx <= chunkDrawDistance + camX; dx++)
     {
         for (int dy = -chunkDrawDistance + camY; dy <= chunkDrawDistance + camY; dy++)
         {
             for (int dz = -chunkDrawDistance + camZ; dz <= chunkDrawDistance + camZ; dz++)
             {
-                if (starfields.size() < 1)
-                {
-                    starfields.emplace_back(Starfield(numberOfStars, starDrawDistance, Vector3{static_cast<float>(dx), static_cast<float>(dy), static_cast<float>(dz)}, chunkSize, random));
-                }
-                else
-                {
-                    bool positionOccupied = false;
-                    for (auto it = starfields.begin(); it != starfields.end();)
-                    {
-                        if (floor(it->GetPosition().x / chunkSize) == dx && floor(it->GetPosition().y / chunkSize) == dy && floor(it->GetPosition().z / chunkSize) == dz)
-                        {
-                            positionOccupied = true;
-                            break;
-                        }
-
-                        // Removing distant starfields
-                        if (distance(const_cast<Vector3&>(it->GetPosition()), camera.position) > chunkSize * chunkDrawDistance * 2.0f)
-                        {
-                            it = starfields.erase(it);
-                        }
-                        else
-                        {
-                            ++it;
-                        }
-                    }
-                    if (!positionOccupied)
-                    {
-                        starfields.emplace_back(Starfield(numberOfStars, starDrawDistance, Vector3{(float)dx, (float)dy, (float)dz}, chunkSize, random));
-                    }
-                }
+                activeChunks.insert(Vector3{(float)dx, (float)dy, (float)dz});
             }
         }
     }
+
+    // Remove starfields that are outside the active chunk range
+    auto it = starfields.begin();
+    while (it != starfields.end())
+    {
+        Vector3 pos = it->GetPosition();
+        int starX = static_cast<int>(pos.x / chunkSize);
+        int starY = static_cast<int>(pos.y / chunkSize);
+        int starZ = static_cast<int>(pos.z / chunkSize);
+
+        if (activeChunks.find(Vector3{(float)starX, (float)starY, (float)starZ}) == activeChunks.end())
+        {
+            it = starfields.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    // Add new starfields in missing chunks
+    for (const auto& chunk : activeChunks)
+    {
+        bool exists = std::any_of(starfields.begin(), starfields.end(), [&](const Starfield& s) {
+            Vector3 pos = s.GetPosition();
+            return static_cast<int>(pos.x / chunkSize) == static_cast<int>(chunk.x) &&
+                static_cast<int>(pos.y / chunkSize) == static_cast<int>(chunk.y) &&
+                static_cast<int>(pos.z / chunkSize) == static_cast<int>(chunk.z);
+            });
+
+        if (!exists)
+        {
+            starfields.emplace_back(Starfield(random() % numberOfStars, starDrawDistance, chunk, chunkSize, random));
+        }
+    }
 }
+
 
 const void Space::DrawStarNames(const Star& star)
 {
