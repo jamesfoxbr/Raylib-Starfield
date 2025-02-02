@@ -1,6 +1,6 @@
 #include "Space.h"
 
-void Space::Draw3DBillboardRec(Camera camera, Texture2D texture, Rectangle source, Vector3 position, Vector2 size, Color tint)
+void Space::Draw3DBillboardRec(Camera& camera, Texture2D& texture, Rectangle source, Vector3 position, Vector2 size, Color tint)
 {
     rlPushMatrix();
 
@@ -48,9 +48,9 @@ void Space::Draw3DBillboardRec(Camera camera, Texture2D texture, Rectangle sourc
     rlPopMatrix();
 }
 
-void Space::Draw3DBillboard(Camera camera, Texture2D texture, Vector3 position, float size, Color tint)
+void Space::Draw3DBillboard(Camera& camera, Texture2D& texture, Vector3 position, float size, Color tint)
 {
-    Draw3DBillboardRec(camera, texture, { 0, 0, (float)texture.width, (float)texture.height }, position, { size, size }, tint);
+    Draw3DBillboardRec(camera, texture, {0, 0, static_cast<float>(texture.width), static_cast<float>(texture.height)}, position, {size, size}, tint);
 }
 
 
@@ -63,10 +63,6 @@ Space::Space(Camera& camera)
 
     checkerboard = GenImageChecked(2, 2, 1, 1, RED, GREEN);
     checkerTexture = LoadTextureFromImage(checkerboard);
-
-    Vector3 lightPos = {0.0f, 10.0f, 0.0f};
-    Color glowCol = WHITE;
-    float glowInt = 1.0f;
 }
 
 Space::~Space()
@@ -95,9 +91,9 @@ int Space::GetNumberOfStars()
 
 void Space::InstantiateStarfield()
 {
-    camX = int(camera.position.x / chunkSize);
-    camY = int(camera.position.y / chunkSize);
-    camZ = int(camera.position.z / chunkSize);
+    camX = static_cast<int>(camera.position.x / chunkSize);
+    camY = static_cast<int>(camera.position.y / chunkSize);
+    camZ = static_cast<int>(camera.position.z / chunkSize);
 
     for (int dx = -chunkDrawDistance + camX; dx <= chunkDrawDistance + camX; dx++)
     {
@@ -107,7 +103,7 @@ void Space::InstantiateStarfield()
             {
                 if (starfields.size() < 1)
                 {
-                    starfields.emplace_back(Starfield(numberOfStars, starDrawDistance, Vector3{(float)dx, (float)dy, (float)dz}, chunkSize, random));
+                    starfields.emplace_back(Starfield(numberOfStars, starDrawDistance, Vector3{static_cast<float>(dx), static_cast<float>(dy), static_cast<float>(dz)}, chunkSize, random));
                 }
                 else
                 {
@@ -121,7 +117,7 @@ void Space::InstantiateStarfield()
                         }
 
                         // Removing distant starfields
-                        if (distance(it->GetPosition(), camera.position) > chunkSize * chunkDrawDistance * 2.5)
+                        if (distance(const_cast<Vector3&>(it->GetPosition()), camera.position) > chunkSize * chunkDrawDistance * 2.0f)
                         {
                             it = starfields.erase(it);
                         }
@@ -142,7 +138,7 @@ void Space::InstantiateStarfield()
 
 const void Space::DrawStarNames(const Star& star)
 {
-    if (distance(camera.position, star.GetPosition()) < starDrawDistance / 2)
+    if (distance(camera.position, const_cast<Vector3&>(star.GetPosition())) < starDrawDistance / 4)
     {
         // Draw the star name above the sphere
         Position3D = star.GetPosition();
@@ -164,17 +160,24 @@ void Space::Draw3D()
     Vector3 cameraForward = Vector3Subtract(camera.target, camera.position);
     cameraForward = Vector3Normalize(cameraForward); // Get forward direction
 
-    transforms.clear();
-    colors.clear();
+    BillColors.clear();
+    BillPositions.clear();
+
+    std::string starName;
+    Vector3 starPosition;
 
     // Clear image
     ImageClearBackground(&image, {0, 0, 0, 0});
-
-    BeginShaderMode(shader);
-    for (auto& starfield : starfields)
+        
+    for (const auto& starfield : starfields)
     {
-        for (auto& star : starfield.GetStars())
+        for (const auto& star : starfield.GetStars())
         {
+            starName = star.GetName();
+            starPosition = star.GetPosition();
+
+            if (distance(camera.position, starPosition) > starDrawDistance * 3) continue;
+
             // detects the star being clicked
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && IsStarClicked(star) != nullptr)
             {
@@ -189,15 +192,15 @@ void Space::Draw3D()
                 selectedStar = nullptr;
             }
 
-            Vector3 toStar = Vector3Subtract(star.GetPosition(), camera.position);
+            Vector3 toStar = Vector3Subtract(starPosition, camera.position);
             float dotProduct = Vector3DotProduct(cameraForward, toStar);
 
             // Check if the star is in front of the camera
             if (dotProduct <= 0) continue; // Skip stars behind the camera
 
-            if (distance(camera.position, star.GetPosition()) > starDrawDistance)
+            if (distance(camera.position, starPosition) > starDrawDistance)
             {
-                Position3D = star.GetPosition();
+                Position3D = starPosition;
                 screenPos = GetWorldToScreen(Position3D, camera);
                 const int x = static_cast<int>(screenPos.x);
                 const int y = static_cast<int>(screenPos.y);
@@ -209,36 +212,28 @@ void Space::Draw3D()
             }
             else // Draw closer stars
             {
-                transforms.push_back(star.GetTransform());
-                colors.push_back(star.GetColor());
 
                 DrawStarNames(star);
 
                 // Draw billboard at star position and apply shader
-                Draw3DBillboard(camera,checkerTexture, star.GetPosition(), 4.0f, star.GetColor());
+                BillColors.push_back(star.GetColor());
+                BillPositions.push_back(starPosition);
             }
         }
     }
-    EndShaderMode();
+    
 
     if (!(cubePos.x == 0 && cubePos.y == 0 && cubePos.z == 0))
     {
         DrawCubeWires(cubePos, 1.0f, 1.0f, 1.0f, SKYBLUE);
     }
 
-    //BeginShaderMode(shader);
-    //for (size_t i = 0; i < transforms.size(); ++i)
-    //{
-    //    material.maps[MATERIAL_MAP_DIFFUSE].color = colors[i];
-    //    //material.maps[MATERIAL_MAP_DIFFUSE].texture = checkerTexture;
-
-    //    // Pass the color to the shader
-    //    //SetShaderValue(shader, GetShaderLocation(shader, "uColor"), &colors[i], SHADER_UNIFORM_VEC4);
-    //    Draw3DBillboard(camera, checkerTexture, star.GetPosition(), 4.0f, star.GetColor());
-    //    //material.shader = shader;
-    //    //DrawMesh(planeMesh, material, transforms[i]);
-    //}
-    //EndShaderMode();
+    BeginShaderMode(shader);
+    for (size_t i = 0; i < BillPositions.size(); ++i)
+    {
+        Draw3DBillboard(camera, checkerTexture, BillPositions[i], 4.0f, BillColors[i]);
+    }
+    EndShaderMode();
 }
 
 void Space::Draw2D()
@@ -255,7 +250,7 @@ Star* Space::IsStarClicked(const Star& star)
     const float clickDistance = 100.0f; // How far the mouse can be from the star to click it
     
 
-    if (CheckCollisionPointCircle({(float)GetMouseX(), (float)GetMouseY()}, screenPos, starSize) && distance(star.GetPosition(), camera.position) < clickDistance)
+    if (CheckCollisionPointCircle({(float)GetMouseX(), (float)GetMouseY()}, screenPos, starSize) && distance(const_cast<Vector3&>(star.GetPosition()), camera.position) < clickDistance)
     {
         gui.SetWindowOpen();
         return const_cast<Star*>(&star);

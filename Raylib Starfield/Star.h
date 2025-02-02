@@ -12,7 +12,7 @@ public:
 	Star();
 	~Star();
 
-	void SetPosition(const Vector3 position);
+	void SetPosition(const Vector3& position);
 	void SetColor();
 	void SetName(const std::string& name);
 	const Vector3& GetPosition() const;
@@ -21,7 +21,7 @@ public:
 	void SetSize(const float size);
 	const float& GetSize() const;
 	void SpectralClass(int r);
-	char GetSpectralClass();
+	const char GetSpectralClass() const;
     Matrix GetTransform() const;
 
 private:

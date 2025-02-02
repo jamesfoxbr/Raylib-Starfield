@@ -18,12 +18,11 @@ int main() {
         {
             ClearBackground(BLACK);
 
+            space.Update();
             space.Draw2D();
 
             BeginMode3D(window.camera);
             {
-
-                space.Update();
                 space.Draw3D();
             }
             EndMode3D();

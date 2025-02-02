@@ -10,7 +10,7 @@ Star::~Star()
 {
 }
 
-void Star::SetPosition(const Vector3 position)
+void Star::SetPosition(const Vector3& position)
 {
 	this->position = position;
 }
@@ -116,7 +116,7 @@ void Star::SpectralClass(int r)
 	SetColor();
 }
 
-char Star::GetSpectralClass()
+const char Star::GetSpectralClass() const
 {
 	return spectralClass;
 }

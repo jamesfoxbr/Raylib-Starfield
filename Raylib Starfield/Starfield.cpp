@@ -11,12 +11,12 @@ Starfield::Starfield(const int starCount, const int starDrawDistance, Vector3 po
 
     InitializeStars(starCount, starDrawDistance, chunkSize, random);
 
-    //std::cout << "starfield Constructed \n";
+    std::cout << "starfield Constructed \n";
 }
 
 Starfield::~Starfield()
 {
-    //std::cout << "starfield destroyed \n";
+    std::cout << "starfield destroyed \n";
 }
 
 const void Starfield::InitializeStars(const int starCount, const int starDrawDistance, const int chunkSize, std::mt19937& random)
@@ -36,7 +36,7 @@ const void Starfield::InitializeStars(const int starCount, const int starDrawDis
     }
 }
 
-const Vector3 Starfield::GetPosition() const
+const Vector3& Starfield::GetPosition() const
 {
     return position;
 }

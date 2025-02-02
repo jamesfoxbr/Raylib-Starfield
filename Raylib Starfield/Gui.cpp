@@ -34,9 +34,9 @@ void Gui::DrawInterface()
     if (ImGui::InputInt3("Input Coordinates", coordinates))
         if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_KP_ENTER))
         {
-            camera.position.x = coordinates[0];
-            camera.position.y = coordinates[1];
-            camera.position.z = coordinates[2];
+            camera.position.x = (float)coordinates[0];
+            camera.position.y = (float)coordinates[1];
+            camera.position.z = (float)coordinates[2];
             camera.target     = Vector3{0.0f, 0.0f, 0.0f};
         }
 

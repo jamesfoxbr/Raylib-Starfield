@@ -15,7 +15,7 @@ public:
 	Starfield(const int starCount, const int starDrawDistance, const Vector3 position, const int chunkSize, std::mt19937& random);
 	~Starfield();
 	const void InitializeStars(const int starCount, const int starDrawDistance, const int size, std::mt19937& random);
-	const Vector3 GetPosition() const;
+	const Vector3& GetPosition() const;
 	const int GetNumberOfStars() const;
 	const std::vector<Star>& GetStars() const { return stars; }
 
