@@ -7,11 +7,13 @@ in vec3 vertPos;
 
 out vec4 finalColor;
 
+uniform float myAlpha;
+
 void main()
 {
     float dcurve = 1.0-abs((fragTexCoord.y)-(sin(fragTexCoord.x)/10.0));
     float fromcentre = length(fragTexCoord-0.5); 
-    float alpha = (1.0/(fromcentre*50.0))-0.1;
+    float alpha = (myAlpha/(fromcentre*50.0))-0.1;
     finalColor = vec4(fragColor.r, fragColor.g, fragColor.b, alpha);
 }
 

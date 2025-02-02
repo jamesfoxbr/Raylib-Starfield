@@ -240,6 +240,9 @@ void Space::Draw3D()
     BeginShaderMode(shader);
     for (size_t i = 0; i < BillPositions.size(); ++i)
     {
+        int loc = GetShaderLocation(shader, "myAlpha");
+        const float alpha = 1.0f;
+        SetShaderValue(shader, loc, &alpha, RL_SHADER_ATTRIB_FLOAT);
         Draw3DBillboard(camera, checkerTexture, BillPositions[i], 4.0f, BillColors[i]);
     }
     EndShaderMode();
