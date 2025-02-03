@@ -70,6 +70,10 @@ private:
 	Image checkerboard;
 	Texture2D checkerTexture;
 
+	// skybox
+	Model skybox;
+	Texture2D skyTexture;
+
 	// Functions
 	void InstantiateStarfield();
 	const void DrawStarNames(const Star& star);

@@ -64,11 +64,24 @@ Space::Space(Camera& camera)
     checkerboard = GenImageChecked(2, 2, 1, 1, RED, GREEN);
     checkerTexture = LoadTextureFromImage(checkerboard);
     UnloadImage(checkerboard); // Unload image from RAM, not needed anymore
+
+    // Load skybox model    
+    skybox = LoadModel("cube.obj");
+    skyTexture = LoadTexture("skybox.png");
+    SetMaterialTexture(&skybox.materials[0], MATERIAL_MAP_DIFFUSE, skyTexture);
+
+    // Rotate the skybox 90 degrees around the Y-axis
+    Matrix rotation = MatrixRotateX(PI / 2);
+    skybox.transform = MatrixMultiply(skybox.transform, rotation);
+
 }
 
 Space::~Space()
 {
-    UnloadMesh(planeMesh); // Unload the mesh
+    // De-Initialization
+    //--------------------------------------------------------------------------------------
+    UnloadModel(skybox);        // Unload skybox model
+    UnloadMesh(planeMesh);      // Unload the mesh
     UnloadShader(shader);
     UnloadTexture(checkerTexture);
 }
@@ -167,6 +180,14 @@ const void Space::DrawStarNames(const Star& star)
 
 void Space::Draw3D()
 {
+    // We are inside the cube, we need to disable backface culling!
+    rlDisableBackfaceCulling();
+    rlDisableDepthMask();
+    DrawModel(skybox, camera.position, 100.0f, WHITE);
+    rlEnableBackfaceCulling();
+    rlEnableDepthMask();
+
+
     Vector3 cameraForward = Vector3Subtract(camera.target, camera.position);
     cameraForward = Vector3Normalize(cameraForward); // Get forward direction
 
