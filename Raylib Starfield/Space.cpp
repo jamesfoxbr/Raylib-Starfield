@@ -65,7 +65,7 @@ Space::Space(Camera& camera)
     checkerTexture = LoadTextureFromImage(checkerboard);
     UnloadImage(checkerboard); // Unload image from RAM, not needed anymore
 
-    // Load skybox model    
+    // Load skybox model and texture
     skybox = LoadModel("cube.obj");
     skyTexture = LoadTexture("skybox.png");
     SetMaterialTexture(&skybox.materials[0], MATERIAL_MAP_DIFFUSE, skyTexture);
@@ -184,8 +184,7 @@ void Space::Draw3D()
     rlDisableBackfaceCulling();
     rlDisableDepthMask();
     DrawModel(skybox, camera.position, 100.0f, WHITE);
-    rlEnableBackfaceCulling();
-    rlEnableDepthMask();
+    
 
 
     Vector3 cameraForward = Vector3Subtract(camera.target, camera.position);
@@ -194,9 +193,6 @@ void Space::Draw3D()
     BillColors.clear();
     BillPositions.clear();
 
-    std::string starName;
-    Vector3 starPosition;
-
     // Clear image
     ImageClearBackground(&image, {0, 0, 0, 0});
         
@@ -204,10 +200,10 @@ void Space::Draw3D()
     {
         for (const auto& star : starfield.GetStars())
         {
-            starName = star.GetName();
-            starPosition = star.GetPosition();
+            const std::string starName = star.GetName();
+            const Vector3 starPosition = star.GetPosition();
 
-            if (distance(camera.position, starPosition) > starDrawDistance * 3) continue;
+            //if (distance(camera.position, starPosition) > starDrawDistance * 3) continue;
 
             // detects the star being clicked
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && IsStarClicked(star) != nullptr)
@@ -231,15 +227,19 @@ void Space::Draw3D()
 
             if (distance(camera.position, starPosition) > starDrawDistance)
             {
-                Position3D = starPosition;
+                /*Position3D = starPosition;
                 screenPos = GetWorldToScreen(Position3D, camera);
                 const int x = static_cast<int>(screenPos.x);
                 const int y = static_cast<int>(screenPos.y);
 
-                if (x > 0 && x < screenWidth && y > 0 && y < screenHeight)
+                if (x > 0 && x < GetScreenWidth() && y > 0 && y < GetScreenHeight())
                 {
                     ImageDrawPixel(&image, x, y, star.GetColor());
-                }
+                }*/
+
+                // Draw billboard at star position and apply shader
+                BillColors.push_back(star.GetColor());
+                BillPositions.push_back(starPosition);
             }
             else // Draw closer stars
             {
@@ -267,12 +267,15 @@ void Space::Draw3D()
         Draw3DBillboard(camera, checkerTexture, BillPositions[i], 4.0f, BillColors[i]);
     }
     EndShaderMode();
+
+    rlEnableBackfaceCulling();
+    rlEnableDepthMask();
 }
 
 void Space::Draw2D()
 {
-    UpdateTexture(texture, image.data);  // Send updated image to GPU (one call)
-    DrawTexture(texture, 0, 0, WHITE);
+    //UpdateTexture(texture, image.data);  // Send updated image to GPU (one call)
+    //DrawTexture(texture, 0, 0, WHITE);
     gui.DrawInterface();
 }
 
