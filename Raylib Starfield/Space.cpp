@@ -204,10 +204,9 @@ void Space::Draw3D()
             const std::string starName = star.GetName();
             const Vector3 starPosition = star.GetPosition();
 
-            
-
             // detects the star being clicked
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && IsStarClicked(star) != nullptr)
+            auto& io = ImGui::GetIO();
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && IsStarClicked(star) != nullptr && !(io.WantCaptureMouse))
             {
                 cubePos = star.GetPosition();
                 

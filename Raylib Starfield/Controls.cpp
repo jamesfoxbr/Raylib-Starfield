@@ -121,10 +121,10 @@ void Controls::Move()
 
 void Controls::MouseLook()
 {
-	/*auto& io = ImGui::GetIO();
+	auto& io = ImGui::GetIO();
 	if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
 		return;
-	}*/
+	}
 
 	CurrentMousePosition = GetMousePosition();
 	Vector2 storeMousePosition;
