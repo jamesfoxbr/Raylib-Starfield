@@ -1,4 +1,10 @@
-#pragma once
-constexpr int screenWidth  = 1600;
-constexpr int screenHeight = 900;
+#ifndef H_GLOBALS_H
+#define H_GLOBALS_H
+
+static int screenWidth = 900;
+static int screenHeight = 600;
+
+#endif // !H_GLOBALS_H
+
+
 

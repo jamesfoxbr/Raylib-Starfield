@@ -24,7 +24,7 @@ void Gui::DrawInterface()
     // Coordinates window
     float windowSize = 200;
     ImGui::SetNextWindowSize({400, 72});
-    ImGui::SetNextWindowPos({(screenWidth / 2) - windowSize, 4});
+    ImGui::SetNextWindowPos({(GetScreenWidth() / 2) - windowSize, 4});
     ImGui::Begin("COORDINATES", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
     ImGui::Text(("Coordinates: X " + std::to_string((int)camera.position.x) +
         " / Y " + std::to_string((int)camera.position.y)

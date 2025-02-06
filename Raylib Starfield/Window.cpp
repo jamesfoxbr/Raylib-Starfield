@@ -3,7 +3,9 @@
 Window::Window()
 {
 	// Initialization
+	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(screenWidth, screenHeight, "FPS-like 3D Star Field");
+	
 	SetTargetFPS(60);
 
 	// Camera setup

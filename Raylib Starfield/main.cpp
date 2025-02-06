@@ -1,10 +1,10 @@
 #include "Space.h"
-#include "Globals.h"
 #include "Window.h"
 #include "Controls.h"	
 
 
-int main() {
+int main() 
+{
     Window window;
     Controls control;
     Space space(window.camera);
@@ -12,6 +12,33 @@ int main() {
     // Main game loop
     while (!WindowShouldClose()) 
     {
+        if (IsWindowResized() && !IsWindowFullscreen())
+        {
+            screenWidth = GetScreenWidth();
+            screenHeight = GetScreenHeight();
+        }
+        // check for alt + enter
+        if (IsKeyPressed(KEY_ENTER) && (IsKeyDown(KEY_LEFT_ALT) || IsKeyDown(KEY_RIGHT_ALT)))
+        {
+            // see what display we are on right now
+            int display = GetCurrentMonitor();
+
+
+            if (IsWindowFullscreen())
+            {
+                // if we are full screen, then go back to the windowed size
+                SetWindowSize(screenWidth, screenHeight);
+            }
+            else
+            {
+                // if we are not full screen, set the window size to match the monitor we are on
+                SetWindowSize(GetMonitorWidth(display), GetMonitorHeight(display));
+            }
+
+            // toggle the state
+            ToggleFullscreen();
+        }
+
         UpdateCameraPro(&window.camera, control.GetCameraPostion(), control.GetCameraRotation(), 0.0f);
         control.Update();
 

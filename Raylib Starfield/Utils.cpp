@@ -30,8 +30,8 @@ void DrawCoordinates(const Camera& camera)
 void targetCursor()
 {
     // Draw a simple crosshair in the center
-    constexpr Vector2 center = {static_cast<float>(screenWidth / 2), static_cast<float>(screenHeight / 2)};
-    constexpr int size = 20;
+    Vector2 center = {static_cast<float>(screenWidth / 2), static_cast<float>(screenHeight / 2)};
+    int size = 20;
 
     // Draw horizontal and vertical lines to form the target cursor
     DrawLine((int)center.x - size, (int)center.y, (int)center.x + size, (int)center.y, RAYWHITE);  // Horizontal line
