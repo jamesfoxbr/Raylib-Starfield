@@ -53,7 +53,6 @@ void Space::Draw3DBillboard(Camera& camera, Texture2D& texture, Vector3 position
     Draw3DBillboardRec(camera, texture, {0, 0, static_cast<float>(texture.width), static_cast<float>(texture.height)}, position, {size, size}, tint);
 }
 
-
 Space::Space(Camera& camera)
 	:
 	camera(camera),
@@ -183,6 +182,7 @@ void Space::Draw3D()
     // We are inside the cube, we need to disable backface culling!
     rlDisableBackfaceCulling();
     rlDisableDepthMask();
+    BeginBlendMode(BLEND_ADDITIVE);
 
     DrawModel(skybox, camera.position, 100.0f, WHITE);
     
@@ -254,6 +254,8 @@ void Space::Draw3D()
     }
 
     EndShaderMode();
+
+    EndBlendMode();
     rlEnableDepthMask();
     rlEnableBackfaceCulling();
 
