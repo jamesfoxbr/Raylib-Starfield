@@ -46,10 +46,10 @@ private:
 	Star* selectedStar = nullptr;
 	std::mt19937 random;
 
-	static constexpr int starDrawDistance = 250;          // how far the stars will be drawn from the camera
+	static constexpr int starDrawDistance = 150;          // how far the stars will be drawn from the camera
 	static constexpr int numberOfStars = NUMBER_OF_STARS; // number of stars in each chunk
 	static constexpr int chunkSize = 100;                 // width, height and depth of the chunk
-	static constexpr int chunkDrawDistance = 2;                 // how many chunks will draw in each direction from the central chunk de camera is at momenet
+	static constexpr int chunkDrawDistance = 2;           // how many chunks will draw in each direction from the central chunk de camera is at momenet
 
 	int camX = 0;
 	int camY = 0;
