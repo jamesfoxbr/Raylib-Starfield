@@ -183,16 +183,14 @@ void Space::Draw3D()
     // We are inside the cube, we need to disable backface culling!
     rlDisableBackfaceCulling();
     rlDisableDepthMask();
+
     DrawModel(skybox, camera.position, 100.0f, WHITE);
-    rlEnableDepthMask();
-    rlEnableBackfaceCulling();
-
-
-    BeginShaderMode(shader);
-
+    
+    // --------------------------------------------------------------------------------------
     Vector3 cameraForward = Vector3Subtract(camera.target, camera.position);
     cameraForward = Vector3Normalize(cameraForward); // Get forward direction
 
+    // --------------------------------------------------------------------------------------
     BillColors.clear();
     BillPositions.clear();
 
@@ -206,7 +204,7 @@ void Space::Draw3D()
             const std::string starName = star.GetName();
             const Vector3 starPosition = star.GetPosition();
 
-            if (distance(camera.position, starPosition) > starDrawDistance * 3) continue;
+            
 
             // detects the star being clicked
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && IsStarClicked(star) != nullptr)
@@ -230,16 +228,6 @@ void Space::Draw3D()
 
             if (distance(camera.position, starPosition) > starDrawDistance)
             {
-                /*Position3D = starPosition;
-                screenPos = GetWorldToScreen(Position3D, camera);
-                const int x = static_cast<int>(screenPos.x);
-                const int y = static_cast<int>(screenPos.y);
-
-                if (x > 0 && x < GetScreenWidth() && y > 0 && y < GetScreenHeight())
-                {
-                    ImageDrawPixel(&image, x, y, star.GetColor());
-                }*/
-
                 // Draw billboard at star position and apply shader
                 BillColors.push_back(star.GetColor());
                 BillPositions.push_back(starPosition);
@@ -255,7 +243,9 @@ void Space::Draw3D()
         }
     }
     
-    // Draw the billboard to apply the star shader to make it shiny
+    // --------------------------------------------------------------------------------------
+    // Draw the billboard to apply the star shader to make it shiny    
+    BeginShaderMode(shader);
     for (size_t i = 0; i < BillPositions.size(); ++i)
     {
         int loc = GetShaderLocation(shader, "myAlpha");
@@ -265,7 +255,10 @@ void Space::Draw3D()
     }
 
     EndShaderMode();
+    rlEnableDepthMask();
+    rlEnableBackfaceCulling();
 
+    // --------------------------------------------------------------------------------------
     // Draw the selection cube
     if (!(cubePos.x == 0 && cubePos.y == 0 && cubePos.z == 0))
     {

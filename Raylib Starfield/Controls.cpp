@@ -23,10 +23,14 @@ void Controls::Update()
 
 void Controls::Move()
 {
-	/*auto& io = ImGui::GetIO();
+	float speed = 0.2f;
+	float maxVelocity = 2.0f;
+	float deceleration = 0.3f;
+
+	auto& io = ImGui::GetIO();
 	if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
 		return;
-	}*/
+	}
 
 	// Set movement speed
 	if (IsKeyDown(KEY_LEFT_SHIFT))
@@ -41,66 +45,78 @@ void Controls::Move()
 	// Check buttons pressed
 	if (IsKeyDown(KEY_W))
 	{
-		Accelleration.x += speed;
+		velocity.x += speed;
 	}
 	if (IsKeyDown(KEY_S))
 	{
-		Accelleration.x += -speed;
+		velocity.x += -speed;
 	}
 	if (IsKeyDown(KEY_D))
 	{
-		Accelleration.y += speed;
+		velocity.y += speed;
 	}
 	if (IsKeyDown(KEY_A))
 	{
-		Accelleration.y += -speed;
+		velocity.y += -speed;
 	}
 	if (IsKeyDown(KEY_SPACE))
 	{
-		Accelleration.z += speed;
+		velocity.z += speed;
 	}
 	if (IsKeyDown(KEY_LEFT_CONTROL))
 	{
-		Accelleration.z += -speed;
+		velocity.z += -speed;
+	}
+
+	// Control maximum velocity
+	if (velocity.x > maxVelocity)
+	{
+		velocity.x = maxVelocity;
+	}
+	if (velocity.y > maxVelocity)
+	{
+		velocity.y = maxVelocity;
+	}
+	if (velocity.z > maxVelocity)
+	{
+		velocity.z = maxVelocity;
 	}
 	
 	// Reduce acceleration until it reaches zero
-	float deceleration = 0.1f;
-	if (Accelleration.x > 0 && !IsKeyDown(KEY_W))
+	if (velocity.x > 0 && !IsKeyDown(KEY_W))
 	{
-		Accelleration.x -= deceleration;
-		if (Accelleration.x < 0) Accelleration.x = 0;
+		velocity.x -= deceleration;
+		if (velocity.x < 0) velocity.x = 0;
 	}
-	else if (Accelleration.x < 0 && !IsKeyDown(KEY_S))
+	else if (velocity.x < 0 && !IsKeyDown(KEY_S))
 	{
-		Accelleration.x += deceleration;
-		if (Accelleration.x > 0) Accelleration.x = 0;
-	}
-
-	if (Accelleration.y > 0 && !IsKeyDown(KEY_D))
-	{
-		Accelleration.y -= deceleration;
-		if (Accelleration.y < 0) Accelleration.y = 0;
-	}
-	else if (Accelleration.y < 0 && !IsKeyDown(KEY_A))
-	{
-		Accelleration.y += deceleration;
-		if (Accelleration.y > 0) Accelleration.y = 0;
+		velocity.x += deceleration;
+		if (velocity.x > 0) velocity.x = 0;
 	}
 
-	if (Accelleration.z > 0 && !IsKeyDown(KEY_SPACE))
+	if (velocity.y > 0 && !IsKeyDown(KEY_D))
 	{
-		Accelleration.z -= deceleration;
-		if (Accelleration.z < 0) Accelleration.z = 0;
+		velocity.y -= deceleration;
+		if (velocity.y < 0) velocity.y = 0;
 	}
-	else if (Accelleration.z < 0 && !IsKeyDown(KEY_LEFT_CONTROL))
+	else if (velocity.y < 0 && !IsKeyDown(KEY_A))
 	{
-		Accelleration.z += deceleration;
-		if (Accelleration.z > 0) Accelleration.z = 0;
+		velocity.y += deceleration;
+		if (velocity.y > 0) velocity.y = 0;
+	}
+
+	if (velocity.z > 0 && !IsKeyDown(KEY_SPACE))
+	{
+		velocity.z -= deceleration;
+		if (velocity.z < 0) velocity.z = 0;
+	}
+	else if (velocity.z < 0 && !IsKeyDown(KEY_LEFT_CONTROL))
+	{
+		velocity.z += deceleration;
+		if (velocity.z > 0) velocity.z = 0;
 	}
 	
-
-	cameraPosition = Accelleration;
+	cameraPosition = velocity;
 }
 
 void Controls::MouseLook()
