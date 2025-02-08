@@ -35,11 +35,11 @@ void Controls::Move()
 	// Set movement speed
 	if (IsKeyDown(KEY_LEFT_SHIFT))
 	{
-		speed = 0.2f;
+		maxVelocity = 8.0f;
 	}
 	else
 	{
-		speed = 0.05f;
+		maxVelocity = 2.0f;
 	}
 
 	// Check buttons pressed

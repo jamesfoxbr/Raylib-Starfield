@@ -1,13 +1,21 @@
 #include "Space.h"
 #include "Window.h"
 #include "Controls.h"	
+#include "SceneManager.h"
+#include "Title.h"
 
+enum currentScene
+{
+    TITLE,
+    SPACE
+};
 
 int main() 
 {
-    Window window;
-    Controls control(window.camera);
-    Space space(window.camera);
+    Window window;    
+
+    // Start with the title scene
+    SceneManager::ChangeScene(new Title());
 
     // Main game loop
     while (!WindowShouldClose()) 
@@ -39,29 +47,46 @@ int main()
             ToggleFullscreen();
         }
 
-        UpdateCameraPro(&window.camera, control.GetCameraPostion(), control.GetCameraRotation(), 0.0f);
-        control.Update();
+        // --------------------------------------------------------------------------------------------
+        if (IsKeyPressed(KEY_ENTER))
+        {
+            SceneManager::ChangeScene(new Space(window.camera));
+        }
+        if (IsKeyPressed(KEY_T))
+        {
+            SceneManager::ChangeScene(new Title());
+        }
+
+
+        // --------------------------------------------------------------------------------------------
 
         BeginDrawing(); 
         {
             ClearBackground(BLACK);
 
-            space.Update();
+            SceneManager::currentScene->Update();
             
             BeginMode3D(window.camera);
             {
-                space.Draw3D();
+                SceneManager::currentScene->Draw3D();
             }
             EndMode3D();
             
             // Start 2D mode in front of the 3D image
-            space.Draw2D();
+            SceneManager::currentScene->Draw2D();
 
             //DrawDebugText(std::to_string(space.GetNumberOfStarfields()) + " starfields", 10, 50, 20, RAYWHITE);
             //DrawDebugText(std::to_string(space.GetNumberOfStars()) + " stars", 10, 70, 20, RAYWHITE);
         }
         EndDrawing(); 
     }
+
+    // Cleanup before exit
+    if (SceneManager::currentScene) {
+        SceneManager::currentScene->Unload();
+        delete SceneManager::currentScene;
+    }
+
     return 0;
 }
 

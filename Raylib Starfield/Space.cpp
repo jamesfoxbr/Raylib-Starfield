@@ -53,48 +53,68 @@ void Space::Draw3DBillboard(Camera& camera, Texture2D& texture, Vector3 position
     Draw3DBillboardRec(camera, texture, {0, 0, static_cast<float>(texture.width), static_cast<float>(texture.height)}, position, {size, size}, tint);
 }
 
-Space::Space(Camera& camera)
-	:
-	camera(camera),
-    gui(camera)
-{
-    random.seed(555);
+Space::Space(Camera& camera)  
+   :  
+   camera(camera)  
+{  
+   control = new Controls(camera);  
+   gui = new Gui(camera);  
+   starfields = new std::vector<Starfield>();  // Initialize starfields as a vector
 
-    checkerboard = GenImageChecked(2, 2, 1, 1, RED, GREEN);
-    checkerTexture = LoadTextureFromImage(checkerboard);
-    UnloadImage(checkerboard); // Unload image from RAM, not needed anymore
+   random.seed(555);
 
-    // Load skybox model and texture
-    skybox = LoadModel("cube.obj");
-    skyTexture = LoadTexture("skybox.png");
-    SetMaterialTexture(&skybox.materials[0], MATERIAL_MAP_DIFFUSE, skyTexture);
+   checkerboard = GenImageChecked(2, 2, 1, 1, RED, GREEN);
+   checkerTexture = LoadTextureFromImage(checkerboard);
+   UnloadImage(checkerboard); // Unload image from RAM, not needed anymore
 
-    // Rotate the skybox 90 degrees around the Y-axis
-    Matrix rotation = MatrixRotateX(PI / 2);
-    skybox.transform = MatrixMultiply(skybox.transform, rotation);
+   // Load skybox model and texture
+   skybox = LoadModel("cube.obj");
+   skyTexture = LoadTexture("skybox.png");
+   SetMaterialTexture(&skybox.materials[0], MATERIAL_MAP_DIFFUSE, skyTexture);
 
+   // Rotate the skybox 90 degrees around the Y-axis
+   Matrix rotation = MatrixRotateX(PI / 2);
+   skybox.transform = MatrixMultiply(skybox.transform, rotation);
 }
 
-Space::~Space()
+Space::~Space()  
+{  
+}
+
+void Space::Init()
 {
-    // De-Initialization
-    //--------------------------------------------------------------------------------------
-    UnloadModel(skybox);        // Unload skybox model
-    UnloadMesh(planeMesh);      // Unload the mesh
+}
+
+void Space::Unload()
+{
+    // De-Initialization  
+   //--------------------------------------------------------------------------------------  
+    UnloadModel(skybox);        // Unload skybox model  
+    UnloadMesh(planeMesh);      // Unload the mesh  
     UnloadShader(shader);
     UnloadTexture(checkerTexture);
+    UnloadTexture(skyTexture);
+
+    selectedStar = nullptr;
+    delete control;
+    delete gui;
+    starfields->clear();
+    delete starfields;  // Correctly delete the vector
 }
 
 void Space::Update()
 {
 	InstantiateStarfield();
+
+    UpdateCameraPro(&camera, control->GetCameraPostion(), control->GetCameraRotation(), 0.0f);
+    control->Update();
 }
 
 int Space::GetNumberOfStars()
 {
     int n = 0;
 
-    for (auto& starfield : starfields)
+    for (auto& starfield : *starfields)
     {
         n += starfield.GetNumberOfStars();
     }
@@ -122,8 +142,8 @@ void Space::InstantiateStarfield()
     }
 
     // Remove starfields that are outside the active chunk range
-    auto it = starfields.begin();
-    while (it != starfields.end())
+    auto it = starfields->begin();
+    while (it != starfields->end())
     {
         Vector3 pos = it->GetPosition();
         int starX = static_cast<int>(pos.x / chunkSize);
@@ -132,7 +152,8 @@ void Space::InstantiateStarfield()
 
         if (activeChunks.find(Vector3{(float)starX, (float)starY, (float)starZ}) == activeChunks.end())
         {
-            it = starfields.erase(it);
+            it->GetStars().clear();
+            it = starfields->erase(it);
         }
         else
         {
@@ -143,7 +164,7 @@ void Space::InstantiateStarfield()
     // Add new starfields in missing chunks
     for (const auto& chunk : activeChunks)
     {
-        bool exists = std::any_of(starfields.begin(), starfields.end(), [&](const Starfield& s) {
+        bool exists = std::any_of(starfields->begin(), starfields->end(), [&](const Starfield& s) {
             Vector3 pos = s.GetPosition();
             return static_cast<int>(pos.x / chunkSize) == static_cast<int>(chunk.x) &&
                 static_cast<int>(pos.y / chunkSize) == static_cast<int>(chunk.y) &&
@@ -152,7 +173,7 @@ void Space::InstantiateStarfield()
 
         if (!exists)
         {
-            starfields.emplace_back(Starfield(random() % numberOfStars, starDrawDistance, chunk, chunkSize, random));
+            starfields->emplace_back(Starfield(random() % numberOfStars, starDrawDistance, chunk, chunkSize, random));
         }
     }
 }
@@ -197,7 +218,7 @@ void Space::Draw3D()
     // Clear image
     ImageClearBackground(&image, {0, 0, 0, 0});
         
-    for (const auto& starfield : starfields)
+    for (const auto& starfield : *starfields)
     {
         for (const auto& star : starfield.GetStars())
         {
@@ -211,8 +232,8 @@ void Space::Draw3D()
                 cubePos = star.GetPosition();
                 
                 selectedStar = IsStarClicked(star);
-                gui.SetStarName(selectedStar->GetName());
-                gui.SetStarClass(selectedStar->GetSpectralClass());
+                gui->SetStarName(selectedStar->GetName());
+                gui->SetStarClass(selectedStar->GetSpectralClass());
             }
             else
             {
@@ -271,7 +292,7 @@ void Space::Draw2D()
 {
     //UpdateTexture(texture, image.data);  // Send updated image to GPU (one call)
     //DrawTexture(texture, 0, 0, WHITE);
-    gui.DrawInterface();
+    gui->DrawInterface();
 }
 
 Star* Space::IsStarClicked(const Star& star) 
@@ -283,7 +304,7 @@ Star* Space::IsStarClicked(const Star& star)
 
     if (CheckCollisionPointCircle({(float)GetMouseX(), (float)GetMouseY()}, screenPos, starSize) && distance(const_cast<Vector3&>(star.GetPosition()), camera.position) < clickDistance)
     {
-        gui.SetWindowOpen();
+        gui->SetWindowOpen();
         return const_cast<Star*>(&star);
     }
     return nullptr;

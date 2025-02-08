@@ -147,6 +147,7 @@
     <ClCompile Include="Space.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="Starfield.cpp" />
+    <ClCompile Include="Title.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -160,9 +161,12 @@
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Gui.h" />
     <ClInclude Include="RandomName.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Space.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="Starfield.h" />
+    <ClInclude Include="Title.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

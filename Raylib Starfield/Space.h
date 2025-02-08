@@ -11,6 +11,8 @@
 #include "Starfield.h"
 #include "Utils.h"
 #include "Gui.h"
+#include "Scene.h"
+#include "Controls.h"
 
 // Hash function for Vector3
 struct Vector3Hash {
@@ -24,25 +26,31 @@ struct Vector3Hash {
 
 constexpr int NUMBER_OF_STARS = 200;
 
-class Space
+class Space : public Scene
 {
 public:
-	void Draw3DBillboardRec(Camera& camera, Texture2D& texture, Rectangle source, Vector3 position, Vector2 size, Color tint);
-	void Draw3DBillboard(Camera& camera, Texture2D& texture, Vector3 position, float size, Color tint);
 	Space(Camera& camera);
 	~Space();
-	void Update();
-	size_t GetNumberOfStarfields()  { return starfields.size(); }
+
+	void Draw3DBillboardRec(Camera& camera, Texture2D& texture, Rectangle source, Vector3 position, Vector2 size, Color tint);
+	void Draw3DBillboard(Camera& camera, Texture2D& texture, Vector3 position, float size, Color tint);
+
+	void Init() override;
+	void Update() override;
+	void Draw3D() override;
+	void Draw2D() override;
+	void Unload() override;
+
+	size_t GetNumberOfStarfields()  { return starfields->size(); }
 	int GetNumberOfStars();
-	void Draw3D();
-	void Draw2D();
 
 	Star* IsStarClicked(const Star& star);
 	
 private:
 	Camera& camera;
-	Gui gui;
-	std::vector<Starfield> starfields;
+	Controls* control = nullptr;
+	Gui* gui = nullptr;
+	std::vector<Starfield>* starfields;
 	Star* selectedStar = nullptr;
 	std::mt19937 random;
 
