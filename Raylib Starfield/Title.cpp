@@ -1,4 +1,13 @@
+#include "raylib.h"
 #include "Title.h"
+#include <vector>
+#include <cmath>
+
+struct Star {
+    float x, y, z;
+};
+
+std::vector<Star> stars;
 
 Title::Title()
 {
@@ -10,15 +19,40 @@ Title::~Title()
 
 void Title::Init()
 {
+    const int numStars = 1000;
+    stars.resize(numStars);
+    for (auto& star : stars) {
+        star.x = static_cast<float>(GetRandomValue(-GetScreenWidth() / 2, GetScreenWidth() / 2));
+        star.y = static_cast<float>(GetRandomValue(-GetScreenHeight() / 2, GetScreenHeight() / 2));
+        star.z = static_cast<float>(GetRandomValue(1, GetScreenWidth()));
+    }
 }
 
 void Title::Update()
 {
+    for (auto& star : stars) {
+        star.z -= 10;
+        if (star.z <= 0) {
+            star.x = static_cast<float>(GetRandomValue(-GetScreenWidth() / 2, GetScreenWidth() / 2));
+            star.y = static_cast<float>(GetRandomValue(-GetScreenHeight() / 2, GetScreenHeight() / 2));
+            star.z = static_cast<float>(GetScreenWidth());
+        }
+    }
 }
 
 void Title::Draw2D()
 {
-	DrawText("TITLE SCREEN", 200, 200, 40, WHITE);
+    for (const auto& star : stars) {
+        float sx = star.x / star.z * GetScreenWidth() / 2 + GetScreenWidth() / 2;
+        float sy = star.y / star.z * GetScreenHeight() / 2 + GetScreenHeight() / 2;
+        float brightness = .0f - star.z / GetScreenWidth();
+        Color color = { 255, 255, 255, static_cast<unsigned char>(brightness * 255) };
+        DrawPixel(static_cast<int>(sx), static_cast<int>(sy), color);
+    }
+
+    DrawText("GALAXY MAP", 50, 50, 50, WHITE);
+    DrawLine(50, 100, GetScreenWidth() - 50, 100, WHITE);
+    DrawText("TESSERACT UNIVERSE", 50, 110, 20, WHITE);
 }
 
 void Title::Draw3D()
@@ -27,4 +61,5 @@ void Title::Draw3D()
 
 void Title::Unload()
 {
+    stars.clear();
 }

@@ -138,7 +138,7 @@
     <Image Include="resources\cubemap\top.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="skybox.png">
+    <Image Include="resources\images\skybox.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

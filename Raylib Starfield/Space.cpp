@@ -68,8 +68,8 @@ Space::Space(Camera& camera)
    UnloadImage(checkerboard); // Unload image from RAM, not needed anymore
 
    // Load skybox model and texture
-   skybox = LoadModel("cube.obj");
-   skyTexture = LoadTexture("skybox.png");
+   skybox = LoadModel("resources/models/cube.obj");
+   skyTexture = LoadTexture("resources/images/skybox.png");
    SetMaterialTexture(&skybox.materials[0], MATERIAL_MAP_DIFFUSE, skyTexture);
 
    // Rotate the skybox 90 degrees around the Y-axis
