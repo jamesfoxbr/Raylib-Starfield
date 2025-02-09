@@ -6,9 +6,9 @@
 
 class SceneManager {
 public:
-    static Scene* currentScene;
+    Scene* currentScene = nullptr;
 
-    static void ChangeScene(Scene* newScene) {
+    void ChangeScene(Scene* newScene) {
         if (currentScene) {
             currentScene->Unload();
             delete currentScene;
@@ -18,7 +18,7 @@ public:
     }
 };
 
-Scene* SceneManager::currentScene = nullptr; // Initialize to nullptr
+//Scene* SceneManager::currentScene = nullptr; // Initialize to nullptr
 
 
 #endif // !H_SCENE_MANAGER_H

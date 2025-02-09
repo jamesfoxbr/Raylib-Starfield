@@ -1,15 +1,7 @@
-#include "raylib.h"
 #include "Title.h"
-#include <vector>
-#include <cmath>
 
-struct Star {
-    float x, y, z;
-};
-
-std::vector<Star> stars;
-
-Title::Title()
+Title::Title(SceneManager* sceneManager, Camera& camera)
+        : sceneManager(*sceneManager), camera(camera)
 {
 }
 
@@ -38,6 +30,28 @@ void Title::Update()
             star.z = static_cast<float>(GetScreenWidth());
         }
     }
+
+    if (IsKeyPressed(KEY_DOWN)) {
+        selectedOption = (selectedOption + 1) % menuOptionsCount;
+    }
+    if (IsKeyPressed(KEY_UP)) {
+        selectedOption = (selectedOption - 1 + menuOptionsCount) % menuOptionsCount;
+    }
+    if (IsKeyPressed(KEY_ENTER)) {
+        switch (selectedOption) {
+        case 0:
+            // Start game
+            sceneManager.ChangeScene(new Space(camera));
+            break;
+        case 1:
+            // Options
+            break;
+        case 2:
+            // Exit
+            CloseWindow();
+            break;
+        }
+    }
 }
 
 void Title::Draw2D()
@@ -53,6 +67,17 @@ void Title::Draw2D()
     DrawText("GALAXY MAP", 50, 50, 50, WHITE);
     DrawLine(50, 100, GetScreenWidth() - 50, 100, WHITE);
     DrawText("TESSERACT UNIVERSE", 50, 110, 20, WHITE);
+    DrawText("By Jamesfoxbr", GetScreenWidth() - 200, 110, 20, WHITE);
+
+    for (int i = 0; i < menuOptionsCount; i++) {
+        Color color = (i == selectedOption) ? YELLOW : WHITE;
+        DrawText(menuOptions[i], GetScreenWidth() / 2 - MeasureText(menuOptions[i], 20) / 2, GetScreenHeight() / 2 + i * 30, 20, color);
+    }
+}
+
+void Title::Menu()
+{
+
 }
 
 void Title::Draw3D()
