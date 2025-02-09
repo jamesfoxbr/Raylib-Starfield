@@ -4,6 +4,8 @@
 static int screenWidth = 900;
 static int screenHeight = 600;
 
+extern bool global_exitGame;
+
 #endif // !H_GLOBALS_H
 
 

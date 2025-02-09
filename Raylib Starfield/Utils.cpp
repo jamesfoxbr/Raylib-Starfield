@@ -1,5 +1,6 @@
 #include "Utils.h"
 
+
 int diceRoller(int minimun, int maximun)
 {
     std::random_device rd;

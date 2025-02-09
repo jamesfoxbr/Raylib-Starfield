@@ -48,7 +48,7 @@ void Title::Update()
             break;
         case 2:
             // Exit
-            CloseWindow();
+			global_exitGame = true;
             break;
         }
     }

@@ -18,7 +18,7 @@ void Gui::DrawInterface()
    
     // Debug Window
     ImGui::Begin("DEBUG INFORMATION");
-    ImGui::Text(("FPS: " + std::to_string(GetFPS())).c_str());
+    //ImGui::Text(("ExitGame: " + std::to_string(exitGame)).c_str());
     ImGui::End();
 
     // Coordinates window

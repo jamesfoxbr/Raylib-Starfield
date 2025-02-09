@@ -3,11 +3,15 @@
 #include "Controls.h"	
 #include "SceneManager.h"
 #include "Title.h"
+#include "Globals.h"
 
 
 // Function prototypes
 void windowSize();
 //void menu(int& currentScene, Window& window);
+
+// Global variables
+bool global_exitGame = false;
 
 
 //enum sceneEnum
@@ -29,8 +33,10 @@ int main()
 	//int currentScene = TITLE;
 
     // Main game loop
-    while (!WindowShouldClose()) 
+    while (!global_exitGame) 
     {
+        if (IsKeyPressed(KEY_ESCAPE) || WindowShouldClose()) global_exitGame = true;
+
 		windowSize();
 		//menu(currentScene, window);
 
