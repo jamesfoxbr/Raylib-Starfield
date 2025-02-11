@@ -4,6 +4,7 @@
 #include "SceneManager.h"
 #include "Title.h"
 #include "Globals.h"
+#include "StarSystem.h"
 
 
 // Function prototypes
@@ -12,13 +13,7 @@ void windowSize();
 
 // Global variables
 bool global_exitGame = false;
-
-
-//enum sceneEnum
-//{
-//    TITLE,
-//    SPACE
-//};
+LoadedScene loadedScene = TITLE;
 
 int main() 
 {
@@ -26,11 +21,7 @@ int main()
 
 	SceneManager sceneManager;
 	sceneManager.ChangeScene(new Title(&sceneManager, window.camera));
-
-    // Start with the title scene
-    //SceneManager::ChangeScene(new Title(&sceneManager, window.camera));
-
-	//int currentScene = TITLE;
+	//sceneManager.ChangeScene(new StarSystem(window.camera));
 
     // Main game loop
     while (!global_exitGame) 
@@ -64,12 +55,6 @@ int main()
         EndDrawing(); 
     }
 
-    // Cleanup before exit
-    /*if (SceneManager::currentScene) {
-        SceneManager::currentScene->Unload();
-        delete SceneManager::currentScene;
-    }*/
-
     return 0;
 }
 
@@ -102,17 +87,3 @@ void windowSize()
         ToggleFullscreen();
     }
 }
-
-//void menu(int& currentScene, Window& window)
-//{
-//    if (IsKeyPressed(KEY_ENTER) && currentScene == TITLE)
-//    {
-//        currentScene = SPACE;
-//        SceneManager::ChangeScene(new Space(window.camera));
-//    }
-//    if (IsKeyPressed(KEY_T) && currentScene == SPACE)
-//    {
-//        currentScene = TITLE;
-//        SceneManager::ChangeScene(new Title());
-//    }
-//}

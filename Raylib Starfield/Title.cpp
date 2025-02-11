@@ -31,17 +31,22 @@ void Title::Update()
         }
     }
 
-    if (IsKeyPressed(KEY_DOWN)) {
+    if (IsKeyPressed(KEY_DOWN)) 
+    {
         selectedOption = (selectedOption + 1) % menuOptionsCount;
     }
-    if (IsKeyPressed(KEY_UP)) {
+    if (IsKeyPressed(KEY_UP)) 
+    {
         selectedOption = (selectedOption - 1 + menuOptionsCount) % menuOptionsCount;
     }
-    if (IsKeyPressed(KEY_ENTER)) {
-        switch (selectedOption) {
+    if (IsKeyPressed(KEY_ENTER)) 
+    {
+        switch (selectedOption) 
+        {
         case 0:
             // Start game
-            sceneManager.ChangeScene(new Space(camera));
+			loadedScene = SPACE;
+            sceneManager.ChangeScene(new Space(camera, sceneManager));
             break;
         case 1:
             // Options

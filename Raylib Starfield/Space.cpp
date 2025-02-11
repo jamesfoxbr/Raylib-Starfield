@@ -53,9 +53,10 @@ void Space::Draw3DBillboard(Camera& camera, Texture2D& texture, Vector3 position
     Draw3DBillboardRec(camera, texture, {0, 0, static_cast<float>(texture.width), static_cast<float>(texture.height)}, position, {size, size}, tint);
 }
 
-Space::Space(Camera& camera)  
+Space::Space(Camera& camera, SceneManager& sceneManager)
    :  
-   camera(camera)  
+	camera(camera), 
+    sceneManager(sceneManager)
 {  
    control = new Controls(camera);  
    gui = new Gui(camera);  
@@ -108,6 +109,12 @@ void Space::Update()
 
     UpdateCameraPro(&camera, control->GetCameraPostion(), control->GetCameraRotation(), 0.0f);
     control->Update();
+
+	if (IsKeyPressed(KEY_O) && selectedStar != nullptr)
+	{
+		sceneManager.ChangeScene(new StarSystem(camera));
+		loadedScene = STARSYSTEM;
+	}
 }
 
 int Space::GetNumberOfStars()
@@ -234,10 +241,6 @@ void Space::Draw3D()
                 selectedStar = IsStarClicked(star);
                 gui->SetStarName(selectedStar->GetName());
                 gui->SetStarClass(selectedStar->GetSpectralClass());
-            }
-            else
-            {
-                selectedStar = nullptr;
             }
 
             // Check if the star is in front of the camera

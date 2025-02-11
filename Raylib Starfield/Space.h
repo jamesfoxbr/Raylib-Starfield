@@ -13,6 +13,8 @@
 #include "Gui.h"
 #include "Scene.h"
 #include "Controls.h"
+#include "SceneManager.h"
+#include "StarSystem.h"
 
 // Hash function for Vector3
 struct Vector3Hash {
@@ -29,7 +31,7 @@ constexpr int NUMBER_OF_STARS = 200;
 class Space : public Scene
 {
 public:
-	Space(Camera& camera);
+	Space(Camera& camera, SceneManager& sceneManager);
 	~Space();
 
 	void Draw3DBillboardRec(Camera& camera, Texture2D& texture, Rectangle source, Vector3 position, Vector2 size, Color tint);
@@ -48,6 +50,7 @@ public:
 	
 private:
 	Camera& camera;
+	SceneManager& sceneManager;
 	Controls* control = nullptr;
 	Gui* gui = nullptr;
 	std::vector<Starfield>* starfields;
