@@ -33,32 +33,32 @@ void Title::Update()
     }
 
 	// Menu navigation 
-    if (IsKeyPressed(KEY_DOWN)) 
-    {
-        selectedOption = (selectedOption + 1) % menuOptionsCount;
-    }
-    if (IsKeyPressed(KEY_UP)) 
-    {
-        selectedOption = (selectedOption - 1 + menuOptionsCount) % menuOptionsCount;
-    }
-    if (IsKeyPressed(KEY_ENTER)) 
-    {
-        switch (selectedOption) 
-        {
-        case 0:
-			// Start game (Space scene)
-			loadedScene = SPACE;
-            sceneManager_ref.ChangeScene(new Space());
-            break;
-        case 1:
-			// Options (not implemented)
-            break;
-        case 2:
-			// Exit game
-			exitGame_g = true;
-            break;
-        }
-    }
+   // if (IsKeyPressed(KEY_DOWN)) 
+   // {
+   //     selectedOption = (selectedOption + 1) % menuOptionsCount;
+   // }
+   // if (IsKeyPressed(KEY_UP)) 
+   // {
+   //     selectedOption = (selectedOption - 1 + menuOptionsCount) % menuOptionsCount;
+   // }
+   // if (IsKeyPressed(KEY_ENTER)) 
+   // {
+   //     switch (selectedOption) 
+   //     {
+   //     case 0:
+			//// Start game (Space scene)
+			//loadedScene = SPACE;
+   //         sceneManager_ref.ChangeScene(new Space());
+   //         break;
+   //     case 1:
+			//// Options (not implemented)
+   //         break;
+   //     case 2:
+			//// Exit game
+			//exitGame_g = true;
+   //         break;
+   //     }
+   // }
 }
 
 void Title::Draw2D()
@@ -79,10 +79,10 @@ void Title::Draw2D()
     DrawText("By Jamesfoxbr", GetScreenWidth() - 200, 110, 20, WHITE);
 
 	// Draw menu options on the title screen
-    for (int i = 0; i < menuOptionsCount; i++) {
+   /* for (int i = 0; i < menuOptionsCount; i++) {
         Color color = (i == selectedOption) ? YELLOW : WHITE;
         DrawText(menuOptions[i], GetScreenWidth() / 2 - MeasureText(menuOptions[i], 20) / 2, GetScreenHeight() / 2 + i * 30, 20, color);
-    }
+    }*/
 }
 
 void Title::Menu()

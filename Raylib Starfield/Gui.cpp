@@ -1,5 +1,6 @@
 #include "Gui.h"
 #include "Globals.h"
+#include "Space.h"
 
 Gui::Gui()
 {
@@ -15,24 +16,56 @@ Gui::~Gui()
 
 void Gui::DrawInterface()
 {
+    // starts the ImGui content mode. Make all ImGui calls after this
+    rlImGuiBegin();
+
+    #ifdef _DEBUG
+
+    // ---------- DEBUG INFORMATION ---------- //
+    ImGui::Begin("DEBUG INFORMATION");
+    ImGui::Text(("FPS: " + std::to_string(GetFPS())).c_str());
+    ImGui::End();
+
+    #else
+        
+    #endif
+   
     switch (loadedScene)
     {
     case TITLE:
+    {
+        const float windowWidth  = 200;
+        const float windowHeight = 200;
+        // ---------- SELECTION MENU ---------- //
+        ImGui::SetNextWindowSize({windowWidth, windowHeight});
+        ImGui::SetNextWindowPos({(GetScreenWidth() / 2) - windowWidth / 2, (GetScreenHeight() / 2) - windowHeight / 2});
 
+        ImGui::Begin("Menu", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+		
+        if (ImGui::Button("START", {windowWidth - 16, 20}))
+        {
+            // Start game (Space scene)
+            loadedScene = SPACE;
+            sceneManager_ref.ChangeScene(new Space());
+        }
+        if (ImGui::Button("OPTION", {windowWidth - 16, 20}))
+        {
+            // Handle OPTION button click
+        }
+        if (ImGui::Button("EXIT", {windowWidth - 16, 20}))
+        {
+            // Handle EXIT button click
+            exitGame_g = true;
+        }
+        ImGui::End();
+    }
         break;
     case SPACE:
     {
-        // starts the ImGui content mode. Make all ImGui calls after this
-        rlImGuiBegin();
-
-        // ---------- DEBUG INFORMATION ---------- //
-        ImGui::Begin("DEBUG INFORMATION");
-        ImGui::Text(("FPS: " + std::to_string(GetFPS())).c_str());
-        ImGui::End();
-
         // ---------- COORDINATES INFORMATION ---------- //
         // Coordinates window
         float windowSize = 200;
+
         ImGui::SetNextWindowSize({400, 72});
         ImGui::SetNextWindowPos({(GetScreenWidth() / 2) - windowSize, 4});
         ImGui::Begin("COORDINATES", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
@@ -79,8 +112,7 @@ void Gui::DrawInterface()
             ImGui::End();
         }
 
-        // ends the ImGui content mode. Make all ImGui calls before this
-        rlImGuiEnd();
+        
     }
         break;
     case STARSYSTEM:
@@ -90,7 +122,9 @@ void Gui::DrawInterface()
 
         break;
     }
-    			
+    		
+    // ends the ImGui content mode. Make all ImGui calls before this
+    rlImGuiEnd();
 }
 
 void Gui::SetStarName(std::string name)

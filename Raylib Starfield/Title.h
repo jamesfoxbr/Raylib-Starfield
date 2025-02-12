@@ -28,11 +28,11 @@ public:
     void Menu();
 
 private:
-    Scene* previousScene;
+    //Scene* previousScene;
     std::vector<StarPixels> stars;
-    int selectedOption = 0;
-    const int menuOptionsCount = sizeof(menuOptions) / sizeof(menuOptions[0]);
-    static constexpr const char* menuOptions[] = {"Start", "Options", "Exit"};
+    //int selectedOption = 0;
+    //const int menuOptionsCount = sizeof(menuOptions) / sizeof(menuOptions[0]);
+    //static constexpr const char* menuOptions[] = {"Start", "Options", "Exit"};
 };
 
 #endif // !H_TITLE_H
