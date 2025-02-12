@@ -1,7 +1,6 @@
 #include "Title.h"
 
-Title::Title(SceneManager* sceneManager, Camera& camera)
-        : sceneManager(*sceneManager), camera(camera)
+Title::Title()
 {
 }
 
@@ -46,14 +45,14 @@ void Title::Update()
         case 0:
             // Start game
 			loadedScene = SPACE;
-            sceneManager.ChangeScene(new Space(camera, sceneManager));
+            sceneManager_ref.ChangeScene(new Space());
             break;
         case 1:
             // Options
             break;
         case 2:
             // Exit
-			global_exitGame = true;
+			exitGame_g = true;
             break;
         }
     }

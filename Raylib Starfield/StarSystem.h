@@ -11,7 +11,7 @@
 class StarSystem : public Scene
 {
 public:
-	StarSystem(Camera& camera);
+	StarSystem();
 	~StarSystem();
 	void Init() override;
 	void Update() override;
@@ -20,7 +20,6 @@ public:
 	void Unload() override;
 
 private:
-	Camera& camera;
 	Controls* control = nullptr;
 };
 

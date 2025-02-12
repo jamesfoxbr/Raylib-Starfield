@@ -9,24 +9,25 @@
 
 // Function prototypes
 void windowSize();
-//void menu(int& currentScene, Window& window);
 
 // Global variables
-bool global_exitGame = false;
+bool exitGame_g = false;
 LoadedScene loadedScene = TITLE;
+
+SceneManager sceneManager;
+SceneManager& sceneManager_ref = sceneManager;
+
+Window window;
+Camera& camera_ref = window.camera;
 
 int main() 
 {
-    Window window;    
-
-	SceneManager sceneManager;
-	sceneManager.ChangeScene(new Title(&sceneManager, window.camera));
-	//sceneManager.ChangeScene(new StarSystem(window.camera));
+	sceneManager.ChangeScene(new Title());
 
     // Main game loop
-    while (!global_exitGame) 
+    while (!exitGame_g) 
     {
-        if (IsKeyPressed(KEY_ESCAPE) || WindowShouldClose()) global_exitGame = true;
+        if (IsKeyPressed(KEY_ESCAPE) || WindowShouldClose()) exitGame_g = true;
 
 		windowSize();
 		//menu(currentScene, window);

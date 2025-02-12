@@ -1,9 +1,8 @@
 #include "StarSystem.h"
 
-StarSystem::StarSystem(Camera& camera)
-	: camera(camera)
+StarSystem::StarSystem()
 {
-	control = new Controls(camera);
+	control = new Controls(camera_ref);
 }
 
 StarSystem::~StarSystem()
@@ -16,7 +15,7 @@ void StarSystem::Init()
 
 void StarSystem::Update()
 {
-	UpdateCameraPro(&camera, control->GetCameraPostion(), control->GetCameraRotation(), 0.0f);
+	UpdateCameraPro(&camera_ref, control->GetCameraPostion(), control->GetCameraRotation(), 0.0f);
 	control->Update();
 }
 

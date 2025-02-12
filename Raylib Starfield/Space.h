@@ -31,11 +31,11 @@ constexpr int NUMBER_OF_STARS = 200;
 class Space : public Scene
 {
 public:
-	Space(Camera& camera, SceneManager& sceneManager);
+	Space();
 	~Space();
 
-	void Draw3DBillboardRec(Camera& camera, Texture2D& texture, Rectangle source, Vector3 position, Vector2 size, Color tint);
-	void Draw3DBillboard(Camera& camera, Texture2D& texture, Vector3 position, float size, Color tint);
+	void Draw3DBillboardRec(Texture2D& texture, Rectangle source, Vector3 position, Vector2 size, Color tint);
+	void Draw3DBillboard( Texture2D& texture, Vector3 position, float size, Color tint);
 
 	void Init() override;
 	void Update() override;
@@ -49,8 +49,6 @@ public:
 	Star* IsStarClicked(const Star& star);
 	
 private:
-	Camera& camera;
-	SceneManager& sceneManager;
 	Controls* control = nullptr;
 	Gui* gui = nullptr;
 	std::vector<Starfield>* starfields;

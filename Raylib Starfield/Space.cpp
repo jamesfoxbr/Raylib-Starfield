@@ -1,11 +1,11 @@
 #include "Space.h"
 
-void Space::Draw3DBillboardRec(Camera& camera, Texture2D& texture, Rectangle source, Vector3 position, Vector2 size, Color tint)
+void Space::Draw3DBillboardRec(Texture2D& texture, Rectangle source, Vector3 position, Vector2 size, Color tint)
 {
     rlPushMatrix();
 
     // get the camera view matrix
-    Matrix mat = MatrixInvert(MatrixLookAt(camera.position, camera.target, camera.up));
+    Matrix mat = MatrixInvert(MatrixLookAt(camera_ref.position, camera_ref.target, camera_ref.up));
     // peel off just the rotation
     Quaternion quat = QuaternionFromMatrix(mat);
     mat = QuaternionToMatrix(quat);
@@ -48,18 +48,15 @@ void Space::Draw3DBillboardRec(Camera& camera, Texture2D& texture, Rectangle sou
     rlPopMatrix();
 }
 
-void Space::Draw3DBillboard(Camera& camera, Texture2D& texture, Vector3 position, float size, Color tint)
+void Space::Draw3DBillboard(Texture2D& texture, Vector3 position, float size, Color tint)
 {
-    Draw3DBillboardRec(camera, texture, {0, 0, static_cast<float>(texture.width), static_cast<float>(texture.height)}, position, {size, size}, tint);
+    Draw3DBillboardRec(texture, {0, 0, static_cast<float>(texture.width), static_cast<float>(texture.height)}, position, {size, size}, tint);
 }
 
-Space::Space(Camera& camera, SceneManager& sceneManager)
-   :  
-	camera(camera), 
-    sceneManager(sceneManager)
+Space::Space()
 {  
-   control = new Controls(camera);  
-   gui = new Gui(camera);  
+   control = new Controls(camera_ref);
+   gui = new Gui(camera_ref);
    starfields = new std::vector<Starfield>();  // Initialize starfields as a vector
 
    random.seed(555);
@@ -107,12 +104,12 @@ void Space::Update()
 {
 	InstantiateStarfield();
 
-    UpdateCameraPro(&camera, control->GetCameraPostion(), control->GetCameraRotation(), 0.0f);
+    UpdateCameraPro(&camera_ref, control->GetCameraPostion(), control->GetCameraRotation(), 0.0f);
     control->Update();
 
 	if (IsKeyPressed(KEY_O) && selectedStar != nullptr)
 	{
-		sceneManager.ChangeScene(new StarSystem(camera));
+		sceneManager_ref.ChangeScene(new StarSystem());
 		loadedScene = STARSYSTEM;
 	}
 }
@@ -131,9 +128,9 @@ int Space::GetNumberOfStars()
 
 void Space::InstantiateStarfield()
 {
-    camX = static_cast<int>(camera.position.x / chunkSize);
-    camY = static_cast<int>(camera.position.y / chunkSize);
-    camZ = static_cast<int>(camera.position.z / chunkSize);
+    camX = static_cast<int>(camera_ref.position.x / chunkSize);
+    camY = static_cast<int>(camera_ref.position.y / chunkSize);
+    camZ = static_cast<int>(camera_ref.position.z / chunkSize);
 
     std::unordered_set<Vector3, Vector3Hash> activeChunks;
 
@@ -188,12 +185,12 @@ void Space::InstantiateStarfield()
 
 const void Space::DrawStarNames(const Star& star)
 {
-    if (distance(camera.position, const_cast<Vector3&>(star.GetPosition())) < starDrawDistance / 4)
+    if (distance(camera_ref.position, const_cast<Vector3&>(star.GetPosition())) < starDrawDistance / 4)
     {
         // Draw the star name above the sphere
         Position3D = star.GetPosition();
         Position3D.y += 0.5f; // Adjust the height above the sphere
-        const Vector2 screenPos = GetWorldToScreen(Position3D, camera);
+        const Vector2 screenPos = GetWorldToScreen(Position3D, camera_ref);
         const int width   = int(star.GetName().length() * 8);
         const int weight  = 16;
         const int adjustX = -4;
@@ -212,10 +209,10 @@ void Space::Draw3D()
     rlDisableDepthMask();
     BeginBlendMode(BLEND_ADDITIVE);
 
-    DrawModel(skybox, camera.position, 100.0f, WHITE);
+    DrawModel(skybox, camera_ref.position, 100.0f, WHITE);
     
     // --------------------------------------------------------------------------------------
-    Vector3 cameraForward = Vector3Subtract(camera.target, camera.position);
+    Vector3 cameraForward = Vector3Subtract(camera_ref.target, camera_ref.position);
     cameraForward = Vector3Normalize(cameraForward); // Get forward direction
 
     // --------------------------------------------------------------------------------------
@@ -244,12 +241,12 @@ void Space::Draw3D()
             }
 
             // Check if the star is in front of the camera
-            Vector3 toStar = Vector3Subtract(starPosition, camera.position);
+            Vector3 toStar = Vector3Subtract(starPosition, camera_ref.position);
             float dotProduct = Vector3DotProduct(cameraForward, toStar);
 
             if (dotProduct <= 0) continue; // Skip stars behind the camera
 
-            if (distance(camera.position, starPosition) > starDrawDistance)
+            if (distance(camera_ref.position, starPosition) > starDrawDistance)
             {
                 // Draw billboard at star position and apply shader
                 BillColors.push_back(star.GetColor());
@@ -274,7 +271,7 @@ void Space::Draw3D()
         int loc = GetShaderLocation(shader, "myAlpha");
         const float alpha = 1.0f;
         SetShaderValue(shader, loc, &alpha, RL_SHADER_ATTRIB_FLOAT);
-        Draw3DBillboard(camera, checkerTexture, BillPositions[i], 4.0f, BillColors[i]);
+        Draw3DBillboard(checkerTexture, BillPositions[i], 4.0f, BillColors[i]);
     }
 
     EndShaderMode();
@@ -300,12 +297,12 @@ void Space::Draw2D()
 
 Star* Space::IsStarClicked(const Star& star) 
 {
-    Vector2 screenPos = GetWorldToScreen(star.GetPosition(), camera);
+    Vector2 screenPos = GetWorldToScreen(star.GetPosition(), camera_ref);
     const float starSize = 20.0f;  // Use the star's size for collision detection
     const float clickDistance = 100.0f; // How far the mouse can be from the star to click it
     
 
-    if (CheckCollisionPointCircle({(float)GetMouseX(), (float)GetMouseY()}, screenPos, starSize) && distance(const_cast<Vector3&>(star.GetPosition()), camera.position) < clickDistance)
+    if (CheckCollisionPointCircle({(float)GetMouseX(), (float)GetMouseY()}, screenPos, starSize) && distance(const_cast<Vector3&>(star.GetPosition()), camera_ref.position) < clickDistance)
     {
         gui->SetWindowOpen();
         return const_cast<Star*>(&star);

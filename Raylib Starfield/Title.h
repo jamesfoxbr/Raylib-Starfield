@@ -16,7 +16,7 @@ struct StarPixels {
 class Title : public Scene
 {
 public:
-    Title(SceneManager* sceneManager, Camera& camera);
+    Title();
     ~Title();
 
     void Init() override;
@@ -29,8 +29,6 @@ public:
 
 private:
     Scene* previousScene;
-	SceneManager& sceneManager;
-    Camera& camera;
     std::vector<StarPixels> stars;
     int selectedOption = 0;
     const int menuOptionsCount = sizeof(menuOptions) / sizeof(menuOptions[0]);
