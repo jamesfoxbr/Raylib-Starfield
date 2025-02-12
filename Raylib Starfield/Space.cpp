@@ -2,7 +2,6 @@
 
 Space::Space()
 {  
-   gui = new Gui();
    starfields = new std::vector<Starfield>();  // Initialize starfields as a vector
 
    random.seed(555);                                       // Seed the random number generator
@@ -40,7 +39,6 @@ void Space::Unload()
     UnloadTexture(skyTexture);
 
 	selectedStar = nullptr; // Clear the selected star pointer
-    delete gui;
     starfields->clear();
     delete starfields;  // Correctly delete the vector
 }
@@ -176,14 +174,14 @@ void Space::Draw3D()
             const Vector3 starPosition = star.GetPosition();
 
             // detects the star being clicked
-            auto& io = ImGui::GetIO();
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && IsStarClicked(star) != nullptr && !(io.WantCaptureMouse))
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && IsStarClicked(star) != nullptr)
             {
                 cubePos = star.GetPosition();
                 
                 selectedStar = IsStarClicked(star);
-                gui->SetStarName(selectedStar->GetName());
-                gui->SetStarClass(selectedStar->GetSpectralClass());
+				gui_ptr->SetStarName(selectedStar->GetName());
+				gui_ptr->SetStarClass(selectedStar->GetSpectralClass());
+                gui_ptr->SetWindowOpen();
             }
 
             // Check if the star is in front of the camera
@@ -238,7 +236,6 @@ void Space::Draw2D()
 {
     //UpdateTexture(texture, image.data);  // Send updated image to GPU (one call)
     //DrawTexture(texture, 0, 0, WHITE);
-    gui->DrawInterface();
 }
 
 Star* Space::IsStarClicked(const Star& star) 
@@ -250,7 +247,6 @@ Star* Space::IsStarClicked(const Star& star)
 
     if (CheckCollisionPointCircle({(float)GetMouseX(), (float)GetMouseY()}, screenPos, starSize) && distance(const_cast<Vector3&>(star.GetPosition()), camera_ref.position) < clickDistance)
     {
-        gui->SetWindowOpen();
         return const_cast<Star*>(&star);
     }
     return nullptr;

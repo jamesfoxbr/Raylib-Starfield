@@ -1,5 +1,5 @@
 #include "Utils.h"
-
+#include "Globals.h"
 
 int diceRoller(int minimun, int maximun)
 {

@@ -6,7 +6,6 @@
 #include <string>
 #include <random>
 #include "raylib.h"
-#include "Globals.h"
 
 int diceRoller(int minimun, int maximun);
 double distance(const Vector3& p1, const Vector3& p2);

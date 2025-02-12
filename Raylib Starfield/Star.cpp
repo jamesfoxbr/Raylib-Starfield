@@ -1,6 +1,5 @@
 #include "Star.h"
-
-
+#include "Utils.h"
 
 Star::Star()
 {

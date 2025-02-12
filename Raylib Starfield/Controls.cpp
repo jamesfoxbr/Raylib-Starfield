@@ -26,16 +26,7 @@ void Controls::Move()
 	float speed = 0.2f;
 	float maxVelocity = 2.0f;
 	float deceleration = 0.3f;
-
-	if (loadedScene == SPACE)
-	{
-		auto& io = ImGui::GetIO();
-		if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
-			return;
-		}
-	}
 	
-
 	// Set movement speed
 	if (IsKeyDown(KEY_LEFT_SHIFT))
 	{
@@ -125,14 +116,6 @@ void Controls::Move()
 
 void Controls::MouseLook()
 {
-	if (loadedScene == SPACE)
-	{
-		auto& io = ImGui::GetIO();
-		if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
-			return;
-		}
-	}
-
 	CurrentMousePosition = GetMousePosition();
 	Vector2 storeMousePosition;
 	if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))

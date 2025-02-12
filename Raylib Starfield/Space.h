@@ -10,11 +10,11 @@
 #include <string>
 #include "Starfield.h"
 #include "Utils.h"
-#include "Gui.h"
 #include "Scene.h"
 #include "Controls.h"
 #include "SceneManager.h"
 #include "StarSystem.h"
+#include "Globals.h"
 
 // Hash function for Vector3 type (used by std::unordered_map) 
 struct Vector3Hash {
@@ -50,9 +50,7 @@ public:
 	Star* IsStarClicked(const Star& star);
 	
 private:
-	Gui* gui = nullptr;
 	std::vector<Starfield>* starfields;
-	Star* selectedStar = nullptr;
 	std::mt19937 random;
 
 	static constexpr int starDrawDistance = 150;          // how far the stars will be drawn from the camera

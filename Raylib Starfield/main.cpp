@@ -50,11 +50,19 @@ Camera& camera_ref = window.camera;             // Camera reference
 Controls control;                               // Controls instance
 Controls& control_ref = control;                // Controls reference
 
+Star* selectedStar = nullptr;                   // Pointer to the selected star
+
+                                     // Gui instance
+Gui* gui_ptr = nullptr;                             // Gui reference
+
 // --------------------------------------------------------------------------------------------
 // MAIN FUNCTION
 // --------------------------------------------------------------------------------------------
 int main() 
 {
+    Gui gui;
+	gui_ptr = &gui;
+
 	sceneManager.ChangeScene(new Title());
 
     // Main game loop
@@ -93,6 +101,7 @@ int main()
             
             // Start 2D mode in front of the 3D image
             sceneManager.currentScene->Draw2D();
+            gui_ptr->DrawInterface();
         }
         EndDrawing(); 
     }

@@ -22,6 +22,7 @@
 // --------------------------------------------------------------------------------------------
 
 #include "StarSystem.h"
+#include "Globals.h"
 
 StarSystem::StarSystem()
 {

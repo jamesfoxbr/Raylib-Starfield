@@ -8,7 +8,7 @@
 #include <array>
 #include <thread>
 #include "Star.h"
-#include "Utils.h"
+#include <random>
 
 class Starfield
 {
@@ -31,20 +31,20 @@ private:
 
 static const std::array consonants = std::to_array<std::string>({
 	// Letter Singles
-"b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "qu" "r", "s", "t", "v", "w", "x", "y", "z", "sc",
-// Blends
-"ch", "gh", "ph", "sh", "th", "wh", "ck", "nk", "rk", "sk", "wk", "cl", "fl", "gl", "kl", "ll", "pl", "sl", "br", "cr", "dr",
-"fr", "gr", "kr", "pr", "sr", "tr", "ss", "st", "str",
-// More copies to increase frequency
-"b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "v", "w", "b", "c", "d", "f", "g", "h", "j", "k", "l", "m",
-"n", "p", "r", "s", "t", "v", "w", "br", "dr", "fr", "gr", "kr",});
+	"b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "qu" "r", "s", "t", "v", "w", "x", "y", "z", "sc",
+	// Blends
+	"ch", "gh", "ph", "sh", "th", "wh", "ck", "nk", "rk", "sk", "wk", "cl", "fl", "gl", "kl", "ll", "pl", "sl", "br", "cr", "dr",
+	"fr", "gr", "kr", "pr", "sr", "tr", "ss", "st", "str",
+	// More copies to increase frequency
+	"b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "v", "w", "b", "c", "d", "f", "g", "h", "j", "k", "l", "m",
+	"n", "p", "r", "s", "t", "v", "w", "br", "dr", "fr", "gr", "kr",});
 
 static const std::array vowels = std::to_array<std::string>({
-"a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a",
-"e", "i","o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e",
-"i","o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u",
-// Vowel Blends
-"aa","ae", "ai", "ao", "au", "ea", "ee", "ei", "eo", "eu", "ia", "ie", "ii", "io", "iu", "oa", "oe", "oi", "oo", "ou", "eau", "'", "y"});
+	"a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a",
+	"e", "i","o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e",
+	"i","o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u", "a", "e", "i", "o", "u",
+	// Vowel Blends
+	"aa","ae", "ai", "ao", "au", "ea", "ee", "ei", "eo", "eu", "ia", "ie", "ii", "io", "iu", "oa", "oe", "oi", "oo", "ou", "eau", "'", "y"});
 
 #endif // !H_STARFIELD
 

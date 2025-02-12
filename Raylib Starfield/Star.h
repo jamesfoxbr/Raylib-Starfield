@@ -3,7 +3,7 @@
 
 #include "raylib.h"
 #include "raymath.h"
-#include "Utils.h"
+#include <string>
 
 class Star
 {
