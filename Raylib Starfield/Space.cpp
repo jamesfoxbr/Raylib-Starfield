@@ -47,11 +47,11 @@ void Space::Update()
 {
 	InstantiateStarfield();
 
-	if (IsKeyPressed(KEY_O) && selectedStar != nullptr)
+	/*if (IsKeyPressed(KEY_O) && selectedStar != nullptr)
 	{
 		sceneManager_ref.ChangeScene(new StarSystem());
 		loadedScene = STARSYSTEM;
-	}
+	}*/
 }
 
 int Space::GetNumberOfStars()

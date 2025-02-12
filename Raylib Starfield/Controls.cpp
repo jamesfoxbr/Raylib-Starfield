@@ -23,10 +23,6 @@ void Controls::Update()
 
 void Controls::Move()
 {
-	float speed = 0.2f;
-	float maxVelocity = 2.0f;
-	float deceleration = 0.3f;
-	
 	// Set movement speed
 	if (IsKeyDown(KEY_LEFT_SHIFT))
 	{

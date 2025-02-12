@@ -68,7 +68,7 @@ int main()
     // Main game loop
     while (!exitGame_g) 
     {
-        if (IsKeyPressed(KEY_ESCAPE) || WindowShouldClose()) exitGame_g = true;
+        //if (IsKeyPressed(KEY_ESCAPE) || WindowShouldClose()) exitGame_g = true;
 
 		windowSize();
 

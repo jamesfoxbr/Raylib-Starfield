@@ -43,11 +43,15 @@ public:
 private:
 	Vector2 CurrentMousePosition; 
 	Vector2 LastMousePosition;
-	float mouseSensibility = 0.1f; 
+	float   mouseSensibility = 0.1f; 
 	Vector3 velocity = {0.0f, 0.0f, 0.0f};       // Current camera velocity
 	Vector3 cameraPosition = {1.0f, 0.0f, 0.0f}; // Current camera position
 	Vector3 cameraRotation = {0.0f, 0.0f, 0.0f}; // Current camera rotation
-	bool cursorEnable = true;
+	bool    cursorEnable = true;
+
+	float speed = 0.2f;
+	float maxVelocity = 2.0f;
+	float deceleration = 0.3f;
 };
 
 #endif // !H_CONTROLS_H
