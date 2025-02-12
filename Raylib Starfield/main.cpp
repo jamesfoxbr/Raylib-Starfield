@@ -6,20 +6,30 @@
 #include "Globals.h"
 #include "StarSystem.h"
 
-
-// Function prototypes
+// --------------------------------------------------------------------------------------------
+// FUNCTION DECLARATIONS
+// --------------------------------------------------------------------------------------------
 void windowSize();
 
-// Global variables
-bool exitGame_g = false;
-LoadedScene loadedScene = TITLE;
+// --------------------------------------------------------------------------------------------
+// GLOBAL VARIABLES
+// --------------------------------------------------------------------------------------------
 
-SceneManager sceneManager;
-SceneManager& sceneManager_ref = sceneManager;
+bool exitGame_g = false;                        // Exit game flag
+LoadedScene loadedScene = TITLE;                // Current loaded scene
 
-Window window;
-Camera& camera_ref = window.camera;
+SceneManager sceneManager;                      // SceneManager instance
+SceneManager& sceneManager_ref = sceneManager;  // SceneManager reference
 
+Window window;                                  // Window instance
+Camera& camera_ref = window.camera;             // Camera reference
+
+Controls control;                               // Controls instance
+Controls& control_ref = control;                // Controls reference
+
+// --------------------------------------------------------------------------------------------
+// MAIN FUNCTION
+// --------------------------------------------------------------------------------------------
 int main() 
 {
 	sceneManager.ChangeScene(new Title());
@@ -30,28 +40,36 @@ int main()
         if (IsKeyPressed(KEY_ESCAPE) || WindowShouldClose()) exitGame_g = true;
 
 		windowSize();
-		//menu(currentScene, window);
 
         // --------------------------------------------------------------------------------------------
+		// UPDATE - INPUT
+		// --------------------------------------------------------------------------------------------
+		control.Update();
+
+		// --------------------------------------------------------------------------------------------
+		// UPDATE - SCENE
+		// --------------------------------------------------------------------------------------------
+        sceneManager.currentScene->Update();
+
         // --------------------------------------------------------------------------------------------
+		// DRAW - SCENE 
+		// --------------------------------------------------------------------------------------------
 
         BeginDrawing(); 
         {
             ClearBackground(BLACK);
 
-            sceneManager.currentScene->Update();
+			
             
             BeginMode3D(window.camera);
             {
+				// Draw the 3D scene
                 sceneManager.currentScene->Draw3D();
             }
             EndMode3D();
             
             // Start 2D mode in front of the 3D image
             sceneManager.currentScene->Draw2D();
-
-            //DrawDebugText(std::to_string(space.GetNumberOfStarfields()) + " starfields", 10, 50, 20, RAYWHITE);
-            //DrawDebugText(std::to_string(space.GetNumberOfStars()) + " stars", 10, 70, 20, RAYWHITE);
         }
         EndDrawing(); 
     }
@@ -59,6 +77,11 @@ int main()
     return 0;
 }
 
+// --------------------------------------------------------------------------------------------
+// FUNCTION DEFINITIONS
+// --------------------------------------------------------------------------------------------
+
+// This function will check if the window has been resized and adjust the screen size accordingly
 void windowSize()
 {
     if (IsWindowResized() && !IsWindowFullscreen())

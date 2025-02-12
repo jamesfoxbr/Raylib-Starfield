@@ -19,11 +19,11 @@ public:
     Title();
     ~Title();
 
-    void Init() override;
-    void Update() override;
-    void Draw2D() override;
-    void Draw3D() override;
-    void Unload() override;
+    void Init() override;    // Called when the scene is loaded
+    void Update() override;  // Called every frame
+    void Draw2D() override;  // Called every frame to draw 2D elements
+    void Draw3D() override;  // Called every frame to draw 3D elements
+    void Unload() override;  // Called when the scene is unloaded
 
     void Menu();
 

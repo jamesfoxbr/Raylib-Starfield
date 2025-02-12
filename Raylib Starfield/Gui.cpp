@@ -1,48 +1,50 @@
 #include "Gui.h"
 
-Gui::Gui(Camera& camera)
-    :
-    camera(camera)
+Gui::Gui()
 {
-	rlImGuiSetup(true); 	// sets up ImGui with ether a dark or light default theme
+    // sets up ImGui with ether a dark or light default theme
+	rlImGuiSetup(true); 	
 }
 
 Gui::~Gui()
 {
-    rlImGuiShutdown();		// cleans up ImGui
+    // cleans up ImGui
+    rlImGuiShutdown();		
 }
 
 void Gui::DrawInterface()
 {
-    rlImGuiBegin();			// starts the ImGui content mode. Make all ImGui calls after this
+    // starts the ImGui content mode. Make all ImGui calls after this
+    rlImGuiBegin();			
    
-    // Debug Window
+	// ---------- DEBUG INFORMATION ---------- //
     ImGui::Begin("DEBUG INFORMATION");
     //ImGui::Text(("ExitGame: " + std::to_string(exitGame)).c_str());
     ImGui::End();
 
+	// ---------- COORDINATES INFORMATION ---------- //
     // Coordinates window
     float windowSize = 200;
     ImGui::SetNextWindowSize({400, 72});
     ImGui::SetNextWindowPos({(GetScreenWidth() / 2) - windowSize, 4});
     ImGui::Begin("COORDINATES", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
-    ImGui::Text(("Coordinates: X " + std::to_string((int)camera.position.x) +
-        " / Y " + std::to_string((int)camera.position.y)
-        + " / Z " + std::to_string((int)camera.position.z)).c_str());
+    ImGui::Text(("Coordinates: X " + std::to_string((int)camera_ref.position.x) +
+        " / Y " + std::to_string((int)camera_ref.position.y)
+        + " / Z " + std::to_string((int)camera_ref.position.z)).c_str());
 
-    int coordinates[3] = {(int)camera.position.x, (int)camera.position.y, (int)camera.position.z};
+    int coordinates[3] = {(int)camera_ref.position.x, (int)camera_ref.position.y, (int)camera_ref.position.z};
     if (ImGui::InputInt3("Input Coordinates", coordinates))
         if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_KP_ENTER))
         {
-            camera.position.x = (float)coordinates[0];
-            camera.position.y = (float)coordinates[1];
-            camera.position.z = (float)coordinates[2];
-            camera.target     = Vector3{0.0f, 0.0f, 0.0f};
+            camera_ref.position.x = (float)coordinates[0];
+            camera_ref.position.y = (float)coordinates[1];
+            camera_ref.position.z = (float)coordinates[2];
+            camera_ref.target     = Vector3{0.0f, 0.0f, 0.0f};
         }
 
     ImGui::End();
 
-    // Star System Information Window
+	// ---------- STAR INFORMATION ---------- //
     if (windowOpen)
     {
         ImGui::SetWindowSize({200, 100});
@@ -69,7 +71,8 @@ void Gui::DrawInterface()
         ImGui::End();
     }
     
-    rlImGuiEnd();			// ends the ImGui content mode. Make all ImGui calls before this
+    // ends the ImGui content mode. Make all ImGui calls before this
+    rlImGuiEnd();			
 }
 
 void Gui::SetStarName(std::string name)

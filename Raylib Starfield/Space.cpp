@@ -1,69 +1,15 @@
 #include "Space.h"
 
-void Space::Draw3DBillboardRec(Texture2D& texture, Rectangle source, Vector3 position, Vector2 size, Color tint)
-{
-    rlPushMatrix();
-
-    // get the camera view matrix
-    Matrix mat = MatrixInvert(MatrixLookAt(camera_ref.position, camera_ref.target, camera_ref.up));
-    // peel off just the rotation
-    Quaternion quat = QuaternionFromMatrix(mat);
-    mat = QuaternionToMatrix(quat);
-
-    // apply just the rotation
-    rlMultMatrixf(MatrixToFloat(mat));
-
-    // translate backwards in the inverse rotated matrix to put the item where it goes in world space
-    position = Vector3Transform(position, MatrixInvert(mat));
-    rlTranslatef(position.x, position.y, position.z);
-
-    // draw the billboard
-    float width = size.x / 2;
-    float height = size.y / 2;
-
-    rlCheckRenderBatchLimit(6);
-
-    rlSetTexture(texture.id);
-
-    // draw quad
-    rlBegin(RL_QUADS);
-    rlColor4ub(tint.r, tint.g, tint.b, tint.a);
-    // Front Face
-    rlNormal3f(0.0f, 0.0f, 1.0f);                  // Normal Pointing Towards Viewer
-
-    rlTexCoord2f((float)source.x / texture.width, (float)(source.y + source.height) / texture.height);
-    rlVertex3f(-width, -height, 0);  // Bottom Left Of The Texture and Quad
-
-    rlTexCoord2f((float)(source.x + source.width) / texture.width, (float)(source.y + source.height) / texture.height);
-    rlVertex3f(+width, -height, 0);  // Bottom Right Of The Texture and Quad
-
-    rlTexCoord2f((float)(source.x + source.width) / texture.width, (float)source.y / texture.height);
-    rlVertex3f(+width, +height, 0);  // Top Right Of The Texture and Quad
-
-    rlTexCoord2f((float)source.x / texture.width, (float)source.y / texture.height);
-    rlVertex3f(-width, +height, 0);  // Top Left Of The Texture and Quad
-
-    rlEnd();
-    rlSetTexture(0);
-    rlPopMatrix();
-}
-
-void Space::Draw3DBillboard(Texture2D& texture, Vector3 position, float size, Color tint)
-{
-    Draw3DBillboardRec(texture, {0, 0, static_cast<float>(texture.width), static_cast<float>(texture.height)}, position, {size, size}, tint);
-}
-
 Space::Space()
 {  
-   control = new Controls(camera_ref);
-   gui = new Gui(camera_ref);
+   gui = new Gui();
    starfields = new std::vector<Starfield>();  // Initialize starfields as a vector
 
-   random.seed(555);
+   random.seed(555);                                       // Seed the random number generator
 
-   checkerboard = GenImageChecked(2, 2, 1, 1, RED, GREEN);
-   checkerTexture = LoadTextureFromImage(checkerboard);
-   UnloadImage(checkerboard); // Unload image from RAM, not needed anymore
+   checkerboard = GenImageChecked(2, 2, 1, 1, RED, GREEN); // Create a 2x2 image: red and green colors
+   checkerTexture = LoadTextureFromImage(checkerboard);    // Load texture from image data
+   UnloadImage(checkerboard);                              // Unload image from RAM, not needed anymore
 
    // Load skybox model and texture
    skybox = LoadModel("resources/models/cube.obj");
@@ -93,8 +39,7 @@ void Space::Unload()
     UnloadTexture(checkerTexture);
     UnloadTexture(skyTexture);
 
-    selectedStar = nullptr;
-    delete control;
+	selectedStar = nullptr; // Clear the selected star pointer
     delete gui;
     starfields->clear();
     delete starfields;  // Correctly delete the vector
@@ -103,9 +48,6 @@ void Space::Unload()
 void Space::Update()
 {
 	InstantiateStarfield();
-
-    UpdateCameraPro(&camera_ref, control->GetCameraPostion(), control->GetCameraRotation(), 0.0f);
-    control->Update();
 
 	if (IsKeyPressed(KEY_O) && selectedStar != nullptr)
 	{
@@ -149,12 +91,12 @@ void Space::InstantiateStarfield()
     auto it = starfields->begin();
     while (it != starfields->end())
     {
-        Vector3 pos = it->GetPosition();
-        int starX = static_cast<int>(pos.x / chunkSize);
-        int starY = static_cast<int>(pos.y / chunkSize);
-        int starZ = static_cast<int>(pos.z / chunkSize);
+		Vector3 pos = it->GetPosition();                 // Get the position of the starfield
+		int starX = static_cast<int>(pos.x / chunkSize); // Get the chunk x position
+		int starY = static_cast<int>(pos.y / chunkSize); // Get the chunk y position
+		int starZ = static_cast<int>(pos.z / chunkSize); // Get the chunk z position
 
-        if (activeChunks.find(Vector3{(float)starX, (float)starY, (float)starZ}) == activeChunks.end())
+        if (activeChunks.find(Vector3{(float)starX, (float)starY, (float)starZ}) == activeChunks.end()) 
         {
             it->GetStars().clear();
             it = starfields->erase(it);
@@ -177,6 +119,7 @@ void Space::InstantiateStarfield()
 
         if (!exists)
         {
+			// Add a new starfield chunk if it doesn't exist
             starfields->emplace_back(Starfield(random() % numberOfStars, starDrawDistance, chunk, chunkSize, random));
         }
     }
@@ -195,9 +138,12 @@ const void Space::DrawStarNames(const Star& star)
         const int weight  = 16;
         const int adjustX = -4;
         const int adjustY = -4;
-        ImageDrawRectangle(&image, static_cast<int>(screenPos.x) + adjustX, static_cast<int>(screenPos.y) + adjustY, width, weight, BLACK);
-        ImageDrawRectangleLines(&image, {screenPos.x + adjustX, screenPos.y + adjustY, (float)width, weight}, 2, RED);
 
+		// Draw a rectangle behind the text
+        ImageDrawRectangle(&image, static_cast<int>(screenPos.x) + adjustX, static_cast<int>(screenPos.y) + adjustY, width, weight, BLACK);
+		// Draw a border around the rectangle
+        ImageDrawRectangleLines(&image, {screenPos.x + adjustX, screenPos.y + adjustY, (float)width, weight}, 2, RED);
+		// Draw the star name
         ImageDrawText(&image, star.GetName().c_str(), static_cast<int>(screenPos.x), static_cast<int>(screenPos.y), 10, WHITE);
     }
 }
@@ -205,9 +151,9 @@ const void Space::DrawStarNames(const Star& star)
 void Space::Draw3D()
 {
     // We are inside the cube, we need to disable backface culling!
-    rlDisableBackfaceCulling();
-    rlDisableDepthMask();
-    BeginBlendMode(BLEND_ADDITIVE);
+	rlDisableBackfaceCulling();     // Disable backface culling to see the inside of the cube
+	rlDisableDepthMask();	        // Disable depth writing to see the inside of the cube
+	BeginBlendMode(BLEND_ADDITIVE); // Enable additive blending for the stars
 
     DrawModel(skybox, camera_ref.position, 100.0f, WHITE);
     
@@ -216,10 +162,10 @@ void Space::Draw3D()
     cameraForward = Vector3Normalize(cameraForward); // Get forward direction
 
     // --------------------------------------------------------------------------------------
-    BillColors.clear();
-    BillPositions.clear();
+	BillColors.clear();    // Clear the billboard colors vector
+	BillPositions.clear(); // Clear the billboard positions vector
 
-    // Clear image
+	// Clear image to draw the star names
     ImageClearBackground(&image, {0, 0, 0, 0});
         
     for (const auto& starfield : *starfields)
@@ -274,11 +220,11 @@ void Space::Draw3D()
         Draw3DBillboard(checkerTexture, BillPositions[i], 4.0f, BillColors[i]);
     }
 
-    EndShaderMode();
+	EndShaderMode();           // End the shader mode
 
-    EndBlendMode();
-    rlEnableDepthMask();
-    rlEnableBackfaceCulling();
+	EndBlendMode();            // Disable additive blending for the stars
+	rlEnableDepthMask();       // Enable depth writing to not see the inside of the cube
+	rlEnableBackfaceCulling(); // Enable backface culling to not see the inside of the cube
 
     // --------------------------------------------------------------------------------------
     // Draw the selection cube
@@ -298,7 +244,7 @@ void Space::Draw2D()
 Star* Space::IsStarClicked(const Star& star) 
 {
     Vector2 screenPos = GetWorldToScreen(star.GetPosition(), camera_ref);
-    const float starSize = 20.0f;  // Use the star's size for collision detection
+    const float starSize = 20.0f;       // Use the star's size for collision detection
     const float clickDistance = 100.0f; // How far the mouse can be from the star to click it
     
 
@@ -310,4 +256,55 @@ Star* Space::IsStarClicked(const Star& star)
     return nullptr;
 }
 
+void Space::Draw3DBillboardRec(Texture2D& texture, Rectangle source, Vector3 position, Vector2 size, Color tint)
+{
+    rlPushMatrix();
 
+    // get the camera view matrix
+    Matrix mat = MatrixInvert(MatrixLookAt(camera_ref.position, camera_ref.target, camera_ref.up));
+    // peel off just the rotation
+    Quaternion quat = QuaternionFromMatrix(mat);
+    mat = QuaternionToMatrix(quat);
+
+    // apply just the rotation
+    rlMultMatrixf(MatrixToFloat(mat));
+
+    // translate backwards in the inverse rotated matrix to put the item where it goes in world space
+    position = Vector3Transform(position, MatrixInvert(mat));
+    rlTranslatef(position.x, position.y, position.z);
+
+    // draw the billboard
+    float width = size.x / 2;
+    float height = size.y / 2;
+
+    rlCheckRenderBatchLimit(6);
+
+    rlSetTexture(texture.id);
+
+    // draw quad
+    rlBegin(RL_QUADS);
+    rlColor4ub(tint.r, tint.g, tint.b, tint.a);
+    // Front Face
+    rlNormal3f(0.0f, 0.0f, 1.0f);                  // Normal Pointing Towards Viewer
+
+    rlTexCoord2f((float)source.x / texture.width, (float)(source.y + source.height) / texture.height);
+    rlVertex3f(-width, -height, 0);  // Bottom Left Of The Texture and Quad
+
+    rlTexCoord2f((float)(source.x + source.width) / texture.width, (float)(source.y + source.height) / texture.height);
+    rlVertex3f(+width, -height, 0);  // Bottom Right Of The Texture and Quad
+
+    rlTexCoord2f((float)(source.x + source.width) / texture.width, (float)source.y / texture.height);
+    rlVertex3f(+width, +height, 0);  // Top Right Of The Texture and Quad
+
+    rlTexCoord2f((float)source.x / texture.width, (float)source.y / texture.height);
+    rlVertex3f(-width, +height, 0);  // Top Left Of The Texture and Quad
+
+    rlEnd();
+    rlSetTexture(0);
+    rlPopMatrix();
+}
+
+void Space::Draw3DBillboard(Texture2D& texture, Vector3 position, float size, Color tint)
+{
+    Draw3DBillboardRec(texture, {0, 0, static_cast<float>(texture.width), static_cast<float>(texture.height)}, position, {size, size}, tint);
+}

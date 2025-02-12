@@ -8,7 +8,9 @@ class SceneManager {
 public:
     Scene* currentScene = nullptr;
 
-    void ChangeScene(Scene* newScene) {
+	// Change the current scene to a new scene and delete the old scene
+    void ChangeScene(Scene* newScene) 
+    {
         if (currentScene) {
             currentScene->Unload();
             delete currentScene;
@@ -17,9 +19,6 @@ public:
         currentScene->Init();
     }
 };
-
-//Scene* SceneManager::currentScene = nullptr; // Initialize to nullptr
-
 
 #endif // !H_SCENE_MANAGER_H
 

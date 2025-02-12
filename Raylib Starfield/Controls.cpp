@@ -1,8 +1,7 @@
 #include "Controls.h"
+#include "Globals.h"
 
-
-Controls::Controls(Camera& camera)
-	: camera(camera)
+Controls::Controls()
 {
 	cameraPosition = {0.0f, 0.0f, 0.0f};
 	CurrentMousePosition = GetMousePosition();
@@ -19,6 +18,7 @@ void Controls::Update()
 	cameraRotation = {0.0f, 0.0f, 0.0f};
 	Move();
 	MouseLook();
+	UpdateCameraPro(&camera_ref, GetCameraPostion(), GetCameraRotation(), 0.0f);
 }
 
 void Controls::Move()

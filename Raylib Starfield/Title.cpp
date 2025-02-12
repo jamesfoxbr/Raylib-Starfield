@@ -10,6 +10,7 @@ Title::~Title()
 
 void Title::Init()
 {
+	// Initialize stars in the background for the title screen
     const int numStars = 1000;
     stars.resize(numStars);
     for (auto& star : stars) {
@@ -21,6 +22,7 @@ void Title::Init()
 
 void Title::Update()
 {
+	// Update stars in the background for the title screen
     for (auto& star : stars) {
         star.z -= 10;
         if (star.z <= 0) {
@@ -30,6 +32,7 @@ void Title::Update()
         }
     }
 
+	// Menu navigation 
     if (IsKeyPressed(KEY_DOWN)) 
     {
         selectedOption = (selectedOption + 1) % menuOptionsCount;
@@ -43,15 +46,15 @@ void Title::Update()
         switch (selectedOption) 
         {
         case 0:
-            // Start game
+			// Start game (Space scene)
 			loadedScene = SPACE;
             sceneManager_ref.ChangeScene(new Space());
             break;
         case 1:
-            // Options
+			// Options (not implemented)
             break;
         case 2:
-            // Exit
+			// Exit game
 			exitGame_g = true;
             break;
         }
@@ -60,6 +63,7 @@ void Title::Update()
 
 void Title::Draw2D()
 {
+	// Draw stars in the background for the title screen
     for (const auto& star : stars) {
         float sx = star.x / star.z * GetScreenWidth() / 2 + GetScreenWidth() / 2;
         float sy = star.y / star.z * GetScreenHeight() / 2 + GetScreenHeight() / 2;
@@ -68,11 +72,13 @@ void Title::Draw2D()
         DrawPixel(static_cast<int>(sx), static_cast<int>(sy), color);
     }
 
+	// Draw title screen text
     DrawText("GALAXY MAP", 50, 50, 50, WHITE);
     DrawLine(50, 100, GetScreenWidth() - 50, 100, WHITE);
     DrawText("TESSERACT UNIVERSE", 50, 110, 20, WHITE);
     DrawText("By Jamesfoxbr", GetScreenWidth() - 200, 110, 20, WHITE);
 
+	// Draw menu options on the title screen
     for (int i = 0; i < menuOptionsCount; i++) {
         Color color = (i == selectedOption) ? YELLOW : WHITE;
         DrawText(menuOptions[i], GetScreenWidth() / 2 - MeasureText(menuOptions[i], 20) / 2, GetScreenHeight() / 2 + i * 30, 20, color);
@@ -90,5 +96,6 @@ void Title::Draw3D()
 
 void Title::Unload()
 {
+	// Clear stars in the background for the title screen before unloading
     stars.clear();
 }

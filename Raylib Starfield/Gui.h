@@ -10,7 +10,7 @@
 class Gui
 {
 public:
-	Gui(Camera& camera);
+	Gui();
 	~Gui();
 	void DrawInterface();
 	void SetStarName(std::string name);
@@ -18,7 +18,6 @@ public:
 	void SetWindowOpen();
 
 private:
-	Camera& camera;
 	std::string selectedStar = "";
 	bool show_demo_window = true;
 	bool show_another_window = false;
