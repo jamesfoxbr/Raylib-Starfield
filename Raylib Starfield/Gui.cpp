@@ -19,7 +19,7 @@ void Gui::DrawInterface()
    
 	// ---------- DEBUG INFORMATION ---------- //
     ImGui::Begin("DEBUG INFORMATION");
-    //ImGui::Text(("ExitGame: " + std::to_string(exitGame)).c_str());
+	ImGui::Text(("FPS: " + std::to_string(GetFPS())).c_str());
     ImGui::End();
 
 	// ---------- COORDINATES INFORMATION ---------- //
