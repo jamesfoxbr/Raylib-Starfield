@@ -3,6 +3,7 @@
 
 Star::Star()
 {
+	size = 1.0f;
 }
 
 Star::~Star()

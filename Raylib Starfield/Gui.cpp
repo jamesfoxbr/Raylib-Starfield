@@ -1,6 +1,8 @@
 #include "Gui.h"
 #include "Globals.h"
 #include "Space.h"
+#include "StarSystem.h"
+#include "Title.h"
 
 Gui::Gui()
 {
@@ -30,30 +32,15 @@ void Gui::DrawInterface()
         
     #endif
 
-    // ---------- EXIT CONFIRMATION ---------- //
-    if (IsKeyPressed(KEY_ESCAPE) || WindowShouldClose())
-    {
-        ImGui::OpenPopup("Exit Confirmation");
-    }
-
-    ImGui::SetNextWindowPos(ImVec2((GetScreenWidth() - 300) / 2, (GetScreenHeight() - 100) / 2), ImGuiCond_Always);
-    ImGui::SetNextWindowSize(ImVec2(300, 100), ImGuiCond_Always);
-
-    if (ImGui::BeginPopupModal("Exit Confirmation", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize))
-    {
-        ImGui::Text("Are you sure you want to exit the game?");
-        if (ImGui::Button("Yes", ImVec2(120, 0)))
-        {
-            exitGame_g = true;
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("No", ImVec2(120, 0)))
-        {
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndPopup();
-    }
+	if (loadedScene == SPACE)
+	{
+		ReturnToTitle();
+	}
+	if (loadedScene == TITLE)
+	{
+        SetExitConfirmationOpen();
+	}
+    
    
     switch (loadedScene)
     {
@@ -83,7 +70,7 @@ void Gui::DrawInterface()
         if (ImGui::Button("EXIT", {windowWidth - 16, buttonHeight}))
         {
             // Handle EXIT button click
-            exitGame_g = true;
+			exitConfirmation = true;
         }
         ImGui::End();
     }
@@ -202,4 +189,60 @@ void Gui::SetWindowOpen()
     windowOpen = true;
 }
 
+void Gui::SetExitConfirmationOpen()
+{
+    // ---------- EXIT CONFIRMATION ---------- //
+	if (IsKeyPressed(KEY_ESCAPE) || WindowShouldClose() || exitConfirmation)
+    {
+        ImGui::OpenPopup("Exit Confirmation");
+    }
 
+    ImGui::SetNextWindowPos(ImVec2((GetScreenWidth() - 300.0f) / 2.0f, (GetScreenHeight() - 100.0f) / 2.0f), ImGuiCond_Always);
+    ImGui::SetNextWindowSize(ImVec2(300, 100), ImGuiCond_Always);
+
+    if (ImGui::BeginPopupModal("Exit Confirmation", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        ImGui::Text("Are you sure you want to exit the game?");
+        if (ImGui::Button("Yes", ImVec2(120, 0)))
+        {
+            exitGame_g = true;
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine(15.0f, 155.0f);
+        if (ImGui::Button("No", ImVec2(120, 0)))
+        {
+			exitConfirmation = false;
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+}
+
+void Gui::ReturnToTitle()
+{
+    // ---------- EXIT CONFIRMATION ---------- //
+    if (IsKeyPressed(KEY_ESCAPE) || WindowShouldClose())
+    {
+        ImGui::OpenPopup("Return to title");
+    }
+
+    ImGui::SetNextWindowPos(ImVec2((GetScreenWidth() - 300.0f) / 2.0f, (GetScreenHeight() - 100.0f) / 2.0f), ImGuiCond_Always);
+    ImGui::SetNextWindowSize(ImVec2(300, 100), ImGuiCond_Always);
+
+    if (ImGui::BeginPopupModal("Return to title", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        ImGui::Text("Are you sure you want return to title?");
+        if (ImGui::Button("Yes", ImVec2(120, 0)))
+        {
+			loadedScene = TITLE;
+			sceneManager_ref.ChangeScene(new Title());
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine(15.0f, 155.0f);
+        if (ImGui::Button("No", ImVec2(120, 0)))
+        {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+}
