@@ -2,7 +2,12 @@
 
 Space::Space()
 {  
-   starfields = new std::vector<Starfield>();  // Initialize starfields as a vector
+	loadedScene = SPACE;								   // Set the loaded scene to SPACE
+
+	camera_ref.position = savedCameraPosition;             // Set the camera position to the saved position
+	camera_ref.target = savedCameraTarget;                 // Set the camera target to the saved target
+
+   starfields = new std::vector<Starfield>();              // Initialize starfields as a vector
 
    random.seed(555);                                       // Seed the random number generator
 
@@ -46,12 +51,6 @@ void Space::Unload()
 void Space::Update()
 {
 	InstantiateStarfield();
-
-	/*if (IsKeyPressed(KEY_O) && selectedStar != nullptr)
-	{
-		sceneManager_ref.ChangeScene(new StarSystem());
-		loadedScene = STARSYSTEM;
-	}*/
 }
 
 int Space::GetNumberOfStars()

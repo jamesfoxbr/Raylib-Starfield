@@ -26,22 +26,14 @@ void Gui::DrawInterface()
     // ---------- DEBUG INFORMATION ---------- //
     ImGui::Begin("DEBUG INFORMATION");
     ImGui::Text(("FPS: " + std::to_string(GetFPS())).c_str());
+    ImGui::Text(("SCENE: " + std::to_string(loadedScene)).c_str());
     ImGui::End();
 
     #else
-        
     #endif
 
-	if (loadedScene == SPACE)
-	{
-		ReturnToTitle();
-	}
-	if (loadedScene == TITLE)
-	{
-        SetExitConfirmationOpen();
-	}
-    
-   
+    SetExitConfirmationOpen();
+	
     switch (loadedScene)
     {
 		// ---------- TITLE ---------- //
@@ -60,7 +52,6 @@ void Gui::DrawInterface()
         if (ImGui::Button("START", {windowWidth - 16, buttonHeight}))
         {
             // Start game (Space scene)
-            loadedScene = SPACE;
             sceneManager_ref.ChangeScene(new Space());
         }
         if (ImGui::Button("OPTION", {windowWidth - 16, buttonHeight}))
@@ -76,7 +67,8 @@ void Gui::DrawInterface()
     }
         break;
 
-		// ---------- SPACE ---------- //
+        // --------------------------------------------------------------------//
+		// ------------------------------ SPACE ------------------------------ //
     case SPACE:
     {
         // ---------- COORDINATES INFORMATION ---------- //
@@ -123,7 +115,8 @@ void Gui::DrawInterface()
             if (ImGui::Button("ENTER", {windowWidth - 16, buttonHeight}) && !selectedStar.empty())
             {
                 // Start game (Space scene)
-                loadedScene = STARSYSTEM;
+				savedCameraPosition = camera_ref.position;
+				savedCameraTarget = camera_ref.target;
                 sceneManager_ref.ChangeScene(new StarSystem());
             }
 
@@ -158,8 +151,6 @@ void Gui::DrawInterface()
 
         if (ImGui::Button("RETURN", {windowWidth - 16, buttonHeight}))
         {
-            // Start game (Space scene)
-            loadedScene = SPACE;
             sceneManager_ref.ChangeScene(new Space());
         }
         ImGui::End();
@@ -234,7 +225,6 @@ void Gui::ReturnToTitle()
         ImGui::Text("Are you sure you want return to title?");
         if (ImGui::Button("Yes", ImVec2(120, 0)))
         {
-			loadedScene = TITLE;
 			sceneManager_ref.ChangeScene(new Title());
             ImGui::CloseCurrentPopup();
         }

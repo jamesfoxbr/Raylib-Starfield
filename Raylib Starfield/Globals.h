@@ -17,6 +17,9 @@ enum LoadedScene
 static int screenWidth = 900; 
 static int screenHeight = 600;
 
+extern Vector3 savedCameraPosition;    // Saved camera position for return space scene
+extern Vector3 savedCameraTarget;    // Saved camera rotation for return space scene
+
 extern SceneManager& sceneManager_ref; // Reference to the scene manager
 extern Camera& camera_ref;             // Reference to the camera
 extern Controls& control_ref;          // Reference to the controls

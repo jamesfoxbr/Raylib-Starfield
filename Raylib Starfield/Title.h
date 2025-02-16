@@ -7,7 +7,6 @@
 #include "Scene.h"
 #include "Space.h" 
 #include "SceneManager.h"
-#include "Globals.h"
 
 struct StarPixels {
     float x, y, z;

@@ -1,7 +1,9 @@
 #include "Title.h"
+#include "Globals.h"
 
 Title::Title()
 {
+	loadedScene = TITLE; // Set the loaded scene to TITLE
 }
 
 Title::~Title()

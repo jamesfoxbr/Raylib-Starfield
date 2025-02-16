@@ -26,7 +26,12 @@
 
 StarSystem::StarSystem()
 {
+	loadedScene = STARSYSTEM;
+
 	this->position = camera_ref.position;
+
+	camera_ref.position.y += 15.0f;	
+	camera_ref.position.z += 15.0f;
 }
 
 StarSystem::~StarSystem()

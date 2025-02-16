@@ -1,5 +1,6 @@
 #include "Starfield.h"
 #include "Utils.h"
+#include "Globals.h"
 
 Starfield::Starfield(const int starCount, const int starDrawDistance, Vector3 position, const int chunkSize, std::mt19937& random)
     :

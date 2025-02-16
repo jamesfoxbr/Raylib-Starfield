@@ -38,22 +38,24 @@ void windowSize();
 // GLOBAL VARIABLES
 // --------------------------------------------------------------------------------------------
 
-bool exitGame_g = false;                        // Exit game flag
-LoadedScene loadedScene = TITLE;                // Current loaded scene
+bool exitGame_g = false;                          // Exit game flag
+LoadedScene loadedScene = TITLE;                  // Current loaded scene
+                                                  
+SceneManager sceneManager;                        // SceneManager instance
+SceneManager& sceneManager_ref = sceneManager;    // SceneManager reference
+                                                  
+Window window;                                    // Window instance
+Camera& camera_ref = window.camera;               // Camera reference
+                                                  
+Controls control;                                 // Controls instance
+Controls& control_ref = control;                  // Controls reference
+                                                  
+Star* selectedStar = nullptr;                     // Pointer to the selected star
+                                                  
+Gui* gui_ptr = nullptr;                           // Gui reference
 
-SceneManager sceneManager;                      // SceneManager instance
-SceneManager& sceneManager_ref = sceneManager;  // SceneManager reference
-
-Window window;                                  // Window instance
-Camera& camera_ref = window.camera;             // Camera reference
-
-Controls control;                               // Controls instance
-Controls& control_ref = control;                // Controls reference
-
-Star* selectedStar = nullptr;                   // Pointer to the selected star
-
-                                     // Gui instance
-Gui* gui_ptr = nullptr;                             // Gui reference
+Vector3 savedCameraPosition = {0.0f, 0.0f, 10.0f}; // Saved camera position for return space scene
+Vector3 savedCameraTarget   = {0.0f, 0.0f, 0.0f};          // Saved camera rotation for return space scene
 
 // --------------------------------------------------------------------------------------------
 // MAIN FUNCTION
