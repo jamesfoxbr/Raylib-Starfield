@@ -3,6 +3,7 @@
 #include "Space.h"
 #include "StarSystem.h"
 #include "Title.h"
+#include "ResourceManager.h"
 
 Gui::Gui()
 {

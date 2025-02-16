@@ -71,16 +71,11 @@ private:
 	const starMesh planeMesh = GenMeshPlane(3.0f, 3.0f, 2, 2);      // Generate a sphere mesh
 	const Material material = LoadMaterialDefault();                // Load default material
 
+	Model& cubeModel = resourceManager_ref.GetModel("resources/models/cube.obj");
+	Texture& checkerBoardTexture = resourceManager_ref.GetTexture("resources/images/checkerboard.png");
+
 	// Shader responsible for the fireballs effect (stas glowing)
-	Shader shader = LoadShader("resources/shaders/fireballs.vs", "resources/shaders/fireballs.fs");
-
-	// Create a basic checkerboard texture
-	Image checkerboard;
-	Texture2D checkerTexture;
-
-	// skybox model and texture to be used to make the skybox
-	Model skybox;
-	Texture2D skyTexture;
+	Shader& shader = resourceManager_ref.GetShader("resources/shaders/fireballs.vs", "resources/shaders/fireballs.fs");
 
 	void InstantiateStarfield();                 // this function creates the starfield in chunks
 	const void DrawStarNames(const Star& star);  // this function draws the names of the stars above them

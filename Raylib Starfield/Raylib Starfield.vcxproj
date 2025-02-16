@@ -143,6 +143,7 @@
     <ClCompile Include="Controls.cpp" />
     <ClCompile Include="Gui.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="StarSystem.cpp" />
     <ClCompile Include="rlImGui.cpp" />
     <ClCompile Include="Space.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="dependencies\rlImGuiColors.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Gui.h" />
+    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="StarSystem.h" />
     <ClInclude Include="RandomName.h" />
     <ClInclude Include="Scene.h" />

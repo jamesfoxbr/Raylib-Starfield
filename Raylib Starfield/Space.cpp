@@ -11,18 +11,13 @@ Space::Space()
 
    random.seed(555);                                       // Seed the random number generator
 
-   checkerboard = GenImageChecked(2, 2, 1, 1, RED, GREEN); // Create a 2x2 image: red and green colors
-   checkerTexture = LoadTextureFromImage(checkerboard);    // Load texture from image data
-   UnloadImage(checkerboard);                              // Unload image from RAM, not needed anymore
-
-   // Load skybox model and texture
-   skybox = LoadModel("resources/models/cube.obj");
-   skyTexture = LoadTexture("resources/images/skybox.png");
-   SetMaterialTexture(&skybox.materials[0], MATERIAL_MAP_DIFFUSE, skyTexture);
+   SetMaterialTexture(&cubeModel.materials[0],
+                      MATERIAL_MAP_DIFFUSE, 
+                      resourceManager_ref.GetTexture("resources/images/skybox.png"));
 
    // Rotate the skybox 90 degrees around the Y-axis
    Matrix rotation = MatrixRotateX(PI / 2);
-   skybox.transform = MatrixMultiply(skybox.transform, rotation);
+   cubeModel.transform = MatrixMultiply(cubeModel.transform, rotation);
 }
 
 Space::~Space()  
@@ -37,11 +32,7 @@ void Space::Unload()
 {
     // De-Initialization  
    //--------------------------------------------------------------------------------------  
-    UnloadModel(skybox);        // Unload skybox model  
     UnloadMesh(planeMesh);      // Unload the mesh  
-    UnloadShader(shader);
-    UnloadTexture(checkerTexture);
-    UnloadTexture(skyTexture);
 
 	selectedStar = nullptr; // Clear the selected star pointer
     starfields->clear();
@@ -152,7 +143,7 @@ void Space::Draw3D()
 	rlDisableDepthMask();	        // Disable depth writing to see the inside of the cube
 	BeginBlendMode(BLEND_ADDITIVE); // Enable additive blending for the stars
 
-    DrawModel(skybox, camera_ref.position, 100.0f, WHITE);
+    DrawModel(cubeModel, camera_ref.position, 100.0f, WHITE);
     
     // --------------------------------------------------------------------------------------
     Vector3 cameraForward = Vector3Subtract(camera_ref.target, camera_ref.position);
@@ -214,7 +205,7 @@ void Space::Draw3D()
         int loc = GetShaderLocation(shader, "myAlpha");
         const float alpha = 1.0f;
         SetShaderValue(shader, loc, &alpha, RL_SHADER_ATTRIB_FLOAT);
-        Draw3DBillboard(checkerTexture, BillPositions[i], 4.0f, BillColors[i]);
+        Draw3DBillboard(checkerBoardTexture, BillPositions[i], 4.0f, BillColors[i]);
     }
 
 	EndShaderMode();           // End the shader mode
