@@ -1,3 +1,26 @@
+// --------------------------------------------------------------------------------------------
+// Project: Raylib Starfield
+// File: Space.h
+// Description: Main entry point for the Raylib Starfield project.
+//
+// License: Proprietary
+// 
+// This software is the confidential and proprietary information of Marcio Marchado Ribeiro
+// ("Confidential Information"). You shall not disclose such Confidential Information and shall use
+// it only in accordance with the terms of the license agreement you entered into with Marcio Marchado Ribeiro.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//
+// Author: Marcio Marchado Ribeiro
+// Version: 0.1
+// --------------------------------------------------------------------------------------------
+
 #ifndef H_SPACE_H
 #define H_SPACE_H
 
@@ -65,16 +88,16 @@ private:
 	int cubeSelectTimer = 0; 
 	Vector3 cubePos    = {0};
 
-	Image image = GenImageColor(screenWidth, screenHeight, BLANK);  // Empty image (all transparent)
+	Image image = GenImageColor(screenWidth, screenHeight, BLANK);  // Empty image (all transparent) 
 	Texture2D texture = LoadTextureFromImage(image);                // Convert it into a texture
 
 	const starMesh planeMesh = GenMeshPlane(3.0f, 3.0f, 2, 2);      // Generate a sphere mesh
 	const Material material = LoadMaterialDefault();                // Load default material
 
-	Model& cubeModel = resourceManager_ref.GetModel("resources/models/cube.obj");
+	Model& cubeModel             = resourceManager_ref.GetModel("resources/models/cube.obj");
 	Texture& checkerBoardTexture = resourceManager_ref.GetTexture("resources/images/checkerboard.png");
 
-	// Shader responsible for the fireballs effect (stas glowing)
+	// Shader responsible for the fireballs effect (stars glowing)
 	Shader& shader = resourceManager_ref.GetShader("resources/shaders/fireballs.vs", "resources/shaders/fireballs.fs");
 
 	void InstantiateStarfield();                 // this function creates the starfield in chunks
@@ -82,7 +105,7 @@ private:
 };
 
 static std::vector<Vector3> BillPositions;       // positions of the billboards facing the camera
-static std::vector<Color> BillColors;	         // colors of the billboards facing the camera
+static std::vector<Color>   BillColors;	         // colors of the billboards facing the camera
 
 static Vector3 Position3D;
 static Vector2 screenPos;

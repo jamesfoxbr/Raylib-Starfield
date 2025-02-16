@@ -1,3 +1,26 @@
+// --------------------------------------------------------------------------------------------
+// Project: Raylib Starfield
+// File: Space.cpp
+// Description: Main entry point for the Raylib Starfield project.
+//
+// License: Proprietary
+// 
+// This software is the confidential and proprietary information of Marcio Marchado Ribeiro
+// ("Confidential Information"). You shall not disclose such Confidential Information and shall use
+// it only in accordance with the terms of the license agreement you entered into with Marcio Marchado Ribeiro.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//
+// Author: Marcio Marchado Ribeiro
+// Version: 0.1
+// --------------------------------------------------------------------------------------------
+
 #include "Space.h"
 
 Space::Space()
@@ -30,13 +53,13 @@ void Space::Init()
 
 void Space::Unload()
 {
-    // De-Initialization  
-   //--------------------------------------------------------------------------------------  
-    UnloadMesh(planeMesh);      // Unload the mesh  
+   // De-Initialization  
+   //-------------------------------------------------------------------------------------  
+    UnloadMesh(planeMesh);  // Unload the mesh  
 
 	selectedStar = nullptr; // Clear the selected star pointer
-    starfields->clear();
-    delete starfields;  // Correctly delete the vector
+    starfields->clear();    // Clear the starfield vector/array
+    delete starfields;      // Correctly delete the vector
 }
 
 void Space::Update()
@@ -129,8 +152,10 @@ const void Space::DrawStarNames(const Star& star)
 
 		// Draw a rectangle behind the text
         ImageDrawRectangle(&image, static_cast<int>(screenPos.x) + adjustX, static_cast<int>(screenPos.y) + adjustY, width, weight, BLACK);
+
 		// Draw a border around the rectangle
         ImageDrawRectangleLines(&image, {screenPos.x + adjustX, screenPos.y + adjustY, (float)width, weight}, 2, RED);
+
 		// Draw the star name
         ImageDrawText(&image, star.GetName().c_str(), static_cast<int>(screenPos.x), static_cast<int>(screenPos.y), 10, WHITE);
     }
@@ -224,8 +249,6 @@ void Space::Draw3D()
 
 void Space::Draw2D()
 {
-    //UpdateTexture(texture, image.data);  // Send updated image to GPU (one call)
-    //DrawTexture(texture, 0, 0, WHITE);
 }
 
 Star* Space::IsStarClicked(const Star& star) 
