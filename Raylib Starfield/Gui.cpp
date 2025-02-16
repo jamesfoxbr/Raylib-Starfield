@@ -36,7 +36,9 @@ void Gui::DrawInterface()
 	
     switch (loadedScene)
     {
-		// ---------- TITLE ---------- //
+        // --------------------------------------------------------------------//
+        //                           TITLE SCENE GUI                           //
+        // --------------------------------------------------------------------//
     case TITLE:
     {
         // ---------- SELECTION MENU ---------- //
@@ -67,8 +69,10 @@ void Gui::DrawInterface()
     }
         break;
 
+
         // --------------------------------------------------------------------//
-		// ------------------------------ SPACE ------------------------------ //
+		//                         SPACE SCENE GUI                             //
+        // --------------------------------------------------------------------//
     case SPACE:
     {
         // ---------- COORDINATES INFORMATION ---------- //
@@ -94,7 +98,7 @@ void Gui::DrawInterface()
 
         ImGui::End();
 
-        // ---------- STAR INFORMATION ---------- //
+        // ---------- STAR INFORMATION GUI ---------- //
         if (windowOpen)
         {
             const float windowWidth = 200;
@@ -132,12 +136,12 @@ void Gui::DrawInterface()
             
             ImGui::End();
         }
-
-        
     }
         break;
 
-		// ---------- STARSYSTEM ---------- //
+        // --------------------------------------------------------------------//
+        //                       STAR SYSTEM SCENE GUI                         //
+        // --------------------------------------------------------------------//
     case STARSYSTEM:
     {
         const float windowWidth = 200;
