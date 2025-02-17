@@ -28,7 +28,6 @@
 #include "rlgl.h"
 #include <stddef.h>
 #include <unordered_set>
-
 #include <iostream>
 #include <string>
 #include "Starfield.h"
@@ -88,10 +87,9 @@ private:
 	int cubeSelectTimer = 0; 
 	Vector3 cubePos    = {0};
 
-	Image image = GenImageColor(screenWidth, screenHeight, BLANK);  // Empty image (all transparent) 
+	Image       image = GenImageColor(screenWidth, screenHeight, BLANK);  // Empty image (all transparent) 
 	Texture2D texture = LoadTextureFromImage(image);                // Convert it into a texture
 
-	const starMesh planeMesh = GenMeshPlane(3.0f, 3.0f, 2, 2);      // Generate a sphere mesh
 	const Material material = LoadMaterialDefault();                // Load default material
 
 	Model& cubeModel             = resourceManager_ref.GetModel("resources/models/cube.obj");
@@ -101,7 +99,6 @@ private:
 	Shader& shader = resourceManager_ref.GetShader("resources/shaders/fireballs.vs", "resources/shaders/fireballs.fs");
 
 	void InstantiateStarfield();                 // this function creates the starfield in chunks
-	const void DrawStarNames(const Star& star);  // this function draws the names of the stars above them
 };
 
 static std::vector<Vector3> BillPositions;       // positions of the billboards facing the camera

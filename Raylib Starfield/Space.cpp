@@ -55,8 +55,6 @@ void Space::Unload()
 {
    // De-Initialization  
    //-------------------------------------------------------------------------------------  
-    UnloadMesh(planeMesh);  // Unload the mesh  
-
 	selectedStar = nullptr; // Clear the selected star pointer
     starfields->clear();    // Clear the starfield vector/array
     delete starfields;      // Correctly delete the vector
@@ -136,31 +134,6 @@ void Space::InstantiateStarfield()
     }
 }
 
-
-const void Space::DrawStarNames(const Star& star)
-{
-    if (distance(camera_ref.position, const_cast<Vector3&>(star.GetPosition())) < starDrawDistance / 4)
-    {
-        // Draw the star name above the sphere
-        Position3D = star.GetPosition();
-        Position3D.y += 0.5f; // Adjust the height above the sphere
-        const Vector2 screenPos = GetWorldToScreen(Position3D, camera_ref);
-        const int width   = int(star.GetName().length() * 8);
-        const int weight  = 16;
-        const int adjustX = -4;
-        const int adjustY = -4;
-
-		// Draw a rectangle behind the text
-        ImageDrawRectangle(&image, static_cast<int>(screenPos.x) + adjustX, static_cast<int>(screenPos.y) + adjustY, width, weight, BLACK);
-
-		// Draw a border around the rectangle
-        ImageDrawRectangleLines(&image, {screenPos.x + adjustX, screenPos.y + adjustY, (float)width, weight}, 2, RED);
-
-		// Draw the star name
-        ImageDrawText(&image, star.GetName().c_str(), static_cast<int>(screenPos.x), static_cast<int>(screenPos.y), 10, WHITE);
-    }
-}
-
 void Space::Draw3D()
 {
     // We are inside the cube, we need to disable backface culling!
@@ -213,8 +186,6 @@ void Space::Draw3D()
             }
             else // Draw closer stars
             {
-                DrawStarNames(star);
-
                 // Draw billboard at star position and apply shader
                 BillColors.push_back(star.GetColor());
                 BillPositions.push_back(starPosition);

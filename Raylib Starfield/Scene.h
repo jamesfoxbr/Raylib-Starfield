@@ -33,6 +33,8 @@ public:
 	virtual void Draw3D() = 0;  // Called every frame to draw 3D elements
 	virtual void Unload() = 0;  // Called when the scene is unloaded
     virtual ~Scene() {}         // Virtual destructor
+
+	virtual int GetNumberOfStars() { return 0; }
 };
 
 #endif // !H_SCENE_H

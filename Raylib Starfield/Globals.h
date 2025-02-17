@@ -38,8 +38,8 @@ enum LoadedScene
     STARSYSTEM
 };
 
-static int screenWidth = 900; 
-static int screenHeight = 600;
+static int screenWidth = 1280; 
+static int screenHeight = 800;
 
 extern Vector3 savedCameraPosition;          // Saved camera position for return space scene
 extern Vector3 savedCameraTarget;            // Saved camera rotation for return space scene

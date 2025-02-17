@@ -42,7 +42,7 @@ Starfield::Starfield(const int starCount, const int starDrawDistance, Vector3 po
 
 Starfield::~Starfield()
 {
-    //std::cout << "starfield destroyed \n";
+   
 }
 
 const void Starfield::InitializeStars(const int starCount, const int starDrawDistance, const int chunkSize, std::mt19937& random)
@@ -54,8 +54,8 @@ const void Starfield::InitializeStars(const int starCount, const int starDrawDis
     {     
         Star star;
         star.SetPosition({random() % (size)+position.x,               // x
-                                random() % (size)+position.y,           // y
-                                random() % (size)+position.z});         // z
+                                random() % (size)+position.y,         // y
+                                random() % (size)+position.z});       // z
         star.SetName(GenerateName(size_t(random() % 7 + 1), random)); // Generate a random name for each star
         star.SpectralClass(random() % 100);                           // Assign a spectral class for each star
 

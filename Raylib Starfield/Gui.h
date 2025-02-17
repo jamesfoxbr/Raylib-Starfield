@@ -35,6 +35,11 @@ public:
 	Gui();
 	~Gui();
 	void DrawInterface();
+	void DebugInterface();
+	void TitleInterface();
+	void SpaceInterface();
+	void StarSystemInterface();
+
 	void SetStarName(std::string name);
 	void SetStarClass(char Sclass); 
 	void SetWindowOpen();
