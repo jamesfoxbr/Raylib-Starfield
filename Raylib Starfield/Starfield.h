@@ -36,7 +36,7 @@
 class Starfield
 {
 public:
-	Starfield(const int starCount, const int starDrawDistance, const Vector3 position, const int chunkSize, std::mt19937& random);
+	Starfield(const int starCount, const int starDrawDistance, const Vector3& position, const int chunkSize, std::mt19937& random);
 	~Starfield();
 	const void InitializeStars(const int starCount, const int starDrawDistance, const int chunkSize, std::mt19937& random);
 	const Vector3& GetPosition() const;

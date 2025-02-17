@@ -30,6 +30,7 @@
 #include <unordered_set>
 #include <iostream>
 #include <string>
+#include <vector>
 #include "Starfield.h"
 #include "Utils.h"
 #include "Scene.h"
@@ -73,32 +74,38 @@ public:
 	
 private:
 	std::vector<Starfield>* starfields;
+	std::unordered_set<Vector3, Vector3Hash> activeChunks;
 	std::mt19937 random;
 
-	static constexpr int starDrawDistance = 150;          // how far the stars will be drawn from the camera
+	static constexpr int starDrawDistance = 350;          // how far the stars will be drawn from the camera
 	static constexpr int numberOfStars = NUMBER_OF_STARS; // number of stars in each chunk
 	static constexpr int chunkSize = 100;                 // width, height and depth of the chunk
 	static constexpr int chunkDrawDistance = 2;           // how many chunks will draw in each direction from the central chunk de camera is at momenet
 
+	// Camera control and trickery variables
 	int camX = 0; 
 	int camY = 0;
 	int camZ = 0;
 
-	int cubeSelectTimer = 0; 
+	int newCamX	= 0;
+	int newCamY	= 0;
+	int newCamZ	= 0;
+
+	Vector3 cameraForward;
+
+	// Selection wired cube draw position
 	Vector3 cubePos    = {0};
-
-	Image       image = GenImageColor(screenWidth, screenHeight, BLANK);  // Empty image (all transparent) 
-	Texture2D texture = LoadTextureFromImage(image);                // Convert it into a texture
-
-	const Material material = LoadMaterialDefault();                // Load default material
-
+												         
+	const Material material = LoadMaterialDefault();                      // Load default material
 	Model& cubeModel             = resourceManager_ref.GetModel("resources/models/cube.obj");
 	Texture& checkerBoardTexture = resourceManager_ref.GetTexture("resources/images/checkerboard.png");
 
 	// Shader responsible for the fireballs effect (stars glowing)
 	Shader& shader = resourceManager_ref.GetShader("resources/shaders/fireballs.vs", "resources/shaders/fireballs.fs");
 
+	// Functions
 	void InstantiateStarfield();                 // this function creates the starfield in chunks
+	bool MovingBetweenChunks();
 };
 
 static std::vector<Vector3> BillPositions;       // positions of the billboards facing the camera

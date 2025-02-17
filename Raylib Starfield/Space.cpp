@@ -25,22 +25,22 @@
 
 Space::Space()
 {  
-	loadedScene = SPACE;								   // Set the loaded scene to SPACE
+	loadedScene = SPACE;						 // Set the loaded scene to SPACE
+	camera_ref.position = savedCameraPosition;   // Set the camera position to the saved position
+    camera_ref.target = savedCameraTarget;       // Set the camera target to the saved target
+    starfields = new std::vector<Starfield>();   // Initialize starfields as a vector
+    random.seed(555);                            // Seed the random number generator
 
-	camera_ref.position = savedCameraPosition;             // Set the camera position to the saved position
-	camera_ref.target = savedCameraTarget;                 // Set the camera target to the saved target
-
-   starfields = new std::vector<Starfield>();              // Initialize starfields as a vector
-
-   random.seed(555);                                       // Seed the random number generator
-
-   SetMaterialTexture(&cubeModel.materials[0],
+    // Material for the cube skybox
+    SetMaterialTexture(&cubeModel.materials[0],
                       MATERIAL_MAP_DIFFUSE, 
                       resourceManager_ref.GetTexture("resources/images/skybox.png"));
 
-   // Rotate the skybox 90 degrees around the Y-axis
-   Matrix rotation = MatrixRotateX(PI / 2);
-   cubeModel.transform = MatrixMultiply(cubeModel.transform, rotation);
+    // Rotate the skybox 90 degrees around the Y-axis
+    Matrix rotation = MatrixRotateX(PI / 2);
+    cubeModel.transform = MatrixMultiply(cubeModel.transform, rotation);
+
+    InstantiateStarfield();
 }
 
 Space::~Space()  
@@ -62,7 +62,10 @@ void Space::Unload()
 
 void Space::Update()
 {
-	InstantiateStarfield();
+    if(MovingBetweenChunks())
+    {
+        InstantiateStarfield();
+    }
 }
 
 int Space::GetNumberOfStars()
@@ -79,11 +82,7 @@ int Space::GetNumberOfStars()
 
 void Space::InstantiateStarfield()
 {
-    camX = static_cast<int>(camera_ref.position.x / chunkSize);
-    camY = static_cast<int>(camera_ref.position.y / chunkSize);
-    camZ = static_cast<int>(camera_ref.position.z / chunkSize);
-
-    std::unordered_set<Vector3, Vector3Hash> activeChunks;
+    activeChunks.clear();
 
     for (int dx = -chunkDrawDistance + camX; dx <= chunkDrawDistance + camX; dx++)
     {
@@ -100,10 +99,10 @@ void Space::InstantiateStarfield()
     auto it = starfields->begin();
     while (it != starfields->end())
     {
-		Vector3 pos = it->GetPosition();                 // Get the position of the starfield
-		int starX = static_cast<int>(pos.x / chunkSize); // Get the chunk x position
-		int starY = static_cast<int>(pos.y / chunkSize); // Get the chunk y position
-		int starZ = static_cast<int>(pos.z / chunkSize); // Get the chunk z position
+        Vector3 pos = it->GetPosition();                 // Get the position of the starfield
+        int starX = static_cast<int>(pos.x / chunkSize); // Get the chunk x position
+        int starY = static_cast<int>(pos.y / chunkSize); // Get the chunk y position
+        int starZ = static_cast<int>(pos.z / chunkSize); // Get the chunk z position
 
         if (activeChunks.find(Vector3{(float)starX, (float)starY, (float)starZ}) == activeChunks.end()) 
         {
@@ -128,10 +127,26 @@ void Space::InstantiateStarfield()
 
         if (!exists)
         {
-			// Add a new starfield chunk if it doesn't exist
+            // Add a new starfield chunk if it doesn't exist
             starfields->emplace_back(Starfield(random() % numberOfStars, starDrawDistance, chunk, chunkSize, random));
         }
     }
+}
+
+bool Space::MovingBetweenChunks()
+{
+    newCamX = static_cast<int>(camera_ref.position.x / chunkSize);
+    newCamY = static_cast<int>(camera_ref.position.y / chunkSize);
+    newCamZ = static_cast<int>(camera_ref.position.z / chunkSize);
+
+    // Only update starfields if the camera has moved to a new chunk
+    if (newCamX == camX && newCamY == camY && newCamZ == camZ) return true;
+
+    camX = newCamX;
+    camY = newCamY;
+    camZ = newCamZ;
+
+    return false;
 }
 
 void Space::Draw3D()
@@ -144,15 +159,12 @@ void Space::Draw3D()
     DrawModel(cubeModel, camera_ref.position, 100.0f, WHITE);
     
     // --------------------------------------------------------------------------------------
-    Vector3 cameraForward = Vector3Subtract(camera_ref.target, camera_ref.position);
+    cameraForward = Vector3Subtract(camera_ref.target, camera_ref.position);
     cameraForward = Vector3Normalize(cameraForward); // Get forward direction
 
     // --------------------------------------------------------------------------------------
 	BillColors.clear();    // Clear the billboard colors vector
 	BillPositions.clear(); // Clear the billboard positions vector
-
-	// Clear image to draw the star names
-    ImageClearBackground(&image, {0, 0, 0, 0});
         
     for (const auto& starfield : *starfields)
     {
@@ -161,7 +173,13 @@ void Space::Draw3D()
             const std::string starName = star.GetName();
             const Vector3 starPosition = star.GetPosition();
 
-            // detects the star being clicked
+            // Check if the star is in front of the camera
+            Vector3 toStar = Vector3Subtract(starPosition, camera_ref.position);
+            float dotProduct = Vector3DotProduct(cameraForward, toStar);
+
+            if (dotProduct <= 0) continue; // Skip stars behind the camera
+
+            // detects the star being clicked to draw a selection wire cube on it
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && IsStarClicked(star) != nullptr)
             {
                 cubePos = star.GetPosition();
@@ -172,19 +190,7 @@ void Space::Draw3D()
                 gui_ptr->SetWindowOpen();
             }
 
-            // Check if the star is in front of the camera
-            Vector3 toStar = Vector3Subtract(starPosition, camera_ref.position);
-            float dotProduct = Vector3DotProduct(cameraForward, toStar);
-
-            if (dotProduct <= 0) continue; // Skip stars behind the camera
-
-            if (distance(camera_ref.position, starPosition) > starDrawDistance)
-            {
-                // Draw billboard at star position and apply shader
-                BillColors.push_back(star.GetColor());
-                BillPositions.push_back(starPosition);
-            }
-            else // Draw closer stars
+            if (distance(camera_ref.position, starPosition) < starDrawDistance)
             {
                 // Draw billboard at star position and apply shader
                 BillColors.push_back(star.GetColor());
@@ -220,13 +226,15 @@ void Space::Draw3D()
 
 void Space::Draw2D()
 {
+    /*Vector2 screenPos = GetWorldToScreen(star.GetPosition(), camera_ref);
+    DrawText(star.GetName().c_str(), screenPos.x, screenPos.y - 20, 20, WHITE);*/
 }
 
 Star* Space::IsStarClicked(const Star& star) 
 {
     Vector2 screenPos = GetWorldToScreen(star.GetPosition(), camera_ref);
-    const float starSize = 20.0f;       // Use the star's size for collision detection
-    const float clickDistance = 100.0f; // How far the mouse can be from the star to click it
+    const float starSize = 20.0f;                 // Use the star's size for collision detection
+    const float clickDistance = starDrawDistance; // How far the mouse can be from the star to click it
     
 
     if (CheckCollisionPointCircle({(float)GetMouseX(), (float)GetMouseY()}, screenPos, starSize) && distance(const_cast<Vector3&>(star.GetPosition()), camera_ref.position) < clickDistance)
