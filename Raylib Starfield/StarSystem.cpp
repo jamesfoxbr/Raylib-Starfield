@@ -22,6 +22,7 @@
 // --------------------------------------------------------------------------------------------
 
 #include "StarSystem.h"
+#include <map>
 #include "Globals.h"
 #include "Utils.h"
 
@@ -94,180 +95,40 @@ float StarSystem::GetAtmosphericPressure()
 
 void StarSystem::GenerateWorldType(std::mt19937& rnd)
 {
-	int roll = diceRoller(1, 6, 3, rnd);
-	int secondRoll = diceRoller(1, 6, 3, rnd);
+    int roll       = diceRoller(1, 6, 3, rnd);
+    int secondRoll = diceRoller(1, 6, 3, rnd);
 
-	if (roll <= 7)
-	{ 
-		switch (secondRoll)
-		{
-		case 3:
-			worldType = "Standard (Chthonian)";
-			break;
-		case 4:
-			worldType = "Standard (Chthonian)";
-			break;
-		case 5:
-			worldType = "Standard (Greenhouse)";
-			break;
-		case 6:
-			worldType = "Standard (Greenhouse)";
-			break;
-		case 7:
-			worldType = "Tiny (Sulfur)";
-			break;
-		case 8:
-			worldType = "Tiny (Sulfur)";
-			break;
-		case 9:
-			worldType = "Tiny (Sulfur)";
-			break;
-		case 10:
-			worldType = "Standard (Ammonia)";
-			break;
-		case 11:
-			worldType = "Standard (Ammonia)";
-			break;
-		case 12:
-			worldType = "Standard (Ammonia)";
-			break;
-		case 13:
-			worldType = "Large (Ammonia)";
-			break;
-		case 14:
-			worldType = "Large (Ammonia)";
-			break;
-		case 15:
-			worldType = "Large (Greenhouse)";
-			break;
-		case 16:
-			worldType = "Large (Greenhouse)";
-			break;
-		case 17:
-			worldType = "Large (Chthonian)";
-			break;
-		case 18:
-			worldType = "Large (Chthonian)";
-			break;
+    std::map<int, std::string> worldTypeMap;
 
-		default:
-			break;
-		}
-	}
-	else if (roll >= 8 && roll <= 13)
-	{
-		switch (secondRoll)
-		{
-		case 3:
-			worldType = "Small (Hadean)";
-			break;
-		case 4:
-			worldType = "Small (Ice)";
-			break;
-		case 5:
-			worldType = "Small (Rock)";
-			break;
-		case 6:
-			worldType = "Small (Rock)";
-			break;
-		case 7:
-			worldType = "Tiny (Rock)";
-			break;
-		case 8:
-			worldType = "Tiny (Rock)";
-			break;
-		case 9:
-			worldType = "Tiny (Ice)";
-			break;
-		case 10:
-			worldType = "Tiny (Ice)";
-			break;
-		case 11:
-			worldType = "Asteroid Belt";
-			break;
-		case 12:
-			worldType = "Asteroid Belt";
-			break;
-		case 13:
-			worldType = "Standard (Ocean)";
-			break;
-		case 14:
-			worldType = "Standard (Ocean)";
-			break;
-		case 15:
-			worldType = "Standard(Ice)";
-			break;
-		case 16:
-			worldType = "Standard (Hadean)";
-			break;
-		case 17:
-			worldType = "Large (Ocean)";
-			break;
-		case 18:
-			worldType = "Large (Ice)";
-			break;
+    if (roll <= 7)
+    {
+        worldTypeMap = {
+            {3, "Standard (Chthonian)"}, {4, "Standard (Chthonian)"}, {5, "Standard (Greenhouse)"}, {6, "Standard (Greenhouse)"},
+            {7, "Tiny (Sulfur)"},        {8, "Tiny (Sulfur)"},        {9, "Tiny (Sulfur)"},         {10, "Standard (Ammonia)"}, 
+			{11, "Standard (Ammonia)"}, {12, "Standard (Ammonia)"},   {13, "Large (Ammonia)"},      {14, "Large (Ammonia)"},
+            {15, "Large (Greenhouse)"}, {16, "Large (Greenhouse)"},   {17, "Large (Chthonian)"},    {18, "Large (Chthonian)"}
+        };
+    }
+    else if (roll >= 8 && roll <= 13)
+    {
+        worldTypeMap = {
+            {3, "Small (Hadean)"},  {4, "Small (Ice)"},        {5, "Small (Rock)"},      {6, "Small (Rock)"},
+            {7, "Tiny (Rock)"},     {8, "Tiny (Rock)"},        {9, "Tiny (Ice)"},        {10, "Tiny (Ice)"},
+            {11, "Asteroid Belt"},  {12, "Asteroid Belt"},     {13, "Standard (Ocean)"}, {14, "Standard (Ocean)"},
+            {15, "Standard (Ice)"}, {16, "Standard (Hadean)"}, {17, "Large (Ocean)"},    {18, "Large (Ice)"}
+        };
+    }
+    else
+    {
+        worldTypeMap = {
+            {3, "Standard (Garden)"},  {4, "Standard (Garden)"},  {5, "Standard (Garden)"},  {6, "Standard (Garden)"},
+            {7, "Standard (Garden)"},  {8, "Standard (Garden)"},  {9, "Standard (Garden)"},  {10, "Standard (Garden)"},
+            {11, "Standard (Garden)"}, {12, "Standard (Garden)"}, {13, "Standard (Garden)"}, {14, "Standard (Garden)"},
+            {15, "Standard (Garden)"}, {16, "Standard (Garden)"}, {17, "Large (Garden)"},    {18, "Large (Garden)"}
+        };
+    }
 
-		default:
-			break;
-		}
-	}
-	else
-	{
-		switch (secondRoll)
-		{
-		case 3:
-			worldType = "Standard (Garden)";
-			break;
-		case 4:
-			worldType = "Standard (Garden)";
-			break;
-		case 5:
-			worldType = "Standard (Garden)";
-			break;
-		case 6:
-			worldType = "Standard (Garden)";
-			break;
-		case 7:
-			worldType = "Standard (Garden)";
-			break;
-		case 8:
-			worldType = "Standard (Garden)";
-			break;
-		case 9:
-			worldType = "Standard (Garden)";
-			break;
-		case 10:
-			worldType = "Standard (Garden)";
-			break;
-		case 11:
-			worldType = "Standard (Garden)";
-			break;
-		case 12:
-			worldType = "Standard (Garden)";
-			break;
-		case 13:
-			worldType = "Standard (Garden)";
-			break;
-		case 14:
-			worldType = "Standard (Garden)";
-			break;
-		case 15:
-			worldType = "Standard (Garden)";
-			break;
-		case 16:
-			worldType = "Standard (Garden)";
-			break;
-		case 17:
-			worldType = "Large (Garden)";
-			break;
-		case 18:
-			worldType = "Large (Garden)";
-			break;
-
-		default:
-			break;
-		}
-	}
+    worldType = worldTypeMap[secondRoll];
 }
 
 void StarSystem::GenerateAtmosphericPressure(std::mt19937& rnd)
