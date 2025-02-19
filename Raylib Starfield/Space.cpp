@@ -29,7 +29,7 @@ Space::Space()
 	camera_ref.position = savedCameraPosition;   // Set the camera position to the saved position
     camera_ref.target = savedCameraTarget;       // Set the camera target to the saved target
     starfields = new std::vector<Starfield>();   // Initialize starfields as a vector
-    random.seed(555);                            // Seed the random number generator
+    random.seed(SEED);                           // Seed the random number generator
 
     // Material for the cube skybox
     SetMaterialTexture(&cubeModel.materials[0],
@@ -55,7 +55,7 @@ void Space::Unload()
 {
    // De-Initialization  
    //-------------------------------------------------------------------------------------  
-	selectedStar = nullptr; // Clear the selected star pointer
+    selectedStarPtr = nullptr; // Clear the selected star pointer
     starfields->clear();    // Clear the starfield vector/array
     delete starfields;      // Correctly delete the vector
 }
@@ -184,9 +184,9 @@ void Space::Draw3D()
             {
                 cubePos = star.GetPosition();
                 
-                selectedStar = IsStarClicked(star);
-				gui_ptr->SetStarName(selectedStar->GetName());
-				gui_ptr->SetStarClass(selectedStar->GetSpectralClass());
+                selectedStarPtr = IsStarClicked(star);
+				gui_ptr->SetStarName(selectedStarPtr->GetName());
+				gui_ptr->SetStarClass(selectedStarPtr->GetSpectralClass());
                 gui_ptr->SetWindowOpen();
             }
 
@@ -224,10 +224,77 @@ void Space::Draw3D()
     }
 }
 
+void Space::DrawHUD()
+{
+    // Get the camera's rotation matrix
+    Matrix rotationMatrix = MatrixLookAt(camera_ref.position, camera_ref.target, camera_ref.up);
+    Quaternion rotation = QuaternionFromMatrix(rotationMatrix);
+
+    // Convert quaternion to Euler angles
+    Vector3 euler = QuaternionToEuler(rotation);
+
+    // Convert radians to degrees
+    euler.x *= RAD2DEG;
+    euler.y *= RAD2DEG;
+    euler.z *= RAD2DEG;
+
+    // Draw the HUD
+    const int fontSize = 20;
+    const int padding = 10;
+    const int screenWidth = GetScreenWidth();
+    const int screenHeight = GetScreenHeight();
+
+    DrawText(TextFormat("Rotation X: %.2f", euler.x), padding, screenHeight - 3 * (fontSize + padding), fontSize, RAYWHITE);
+    DrawText(TextFormat("Rotation Y: %.2f", euler.y), padding, screenHeight - 2 * (fontSize + padding), fontSize, RAYWHITE);
+    DrawText(TextFormat("Rotation Z: %.2f", euler.z), padding, screenHeight - (fontSize + padding), fontSize, RAYWHITE);
+
+    // Draw the fighter airplane graphical HUD
+    const int centerX = screenWidth / 2;
+    const int centerY = screenHeight / 2;
+    const int hudSize = 100;
+
+    // Draw central crosshair
+    DrawLine(centerX - 10, centerY, centerX + 10, centerY, GREEN);
+    DrawLine(centerX, centerY - 10, centerX, centerY + 10, GREEN);
+
+    // Draw horizontal angle lines
+    for (int i = -hudSize; i <= hudSize; i += 20)
+    {
+        DrawLine(centerX - hudSize, centerY + i, centerX + hudSize, centerY + i, GREEN);
+        DrawText(TextFormat("%d", i), centerX + hudSize + 5, centerY + i - 5, fontSize, GREEN);
+    }
+
+    // Draw vertical angle lines
+    for (int i = -hudSize; i <= hudSize; i += 20)
+    {
+        DrawLine(centerX + i, centerY - hudSize, centerX + i, centerY + hudSize, GREEN);
+        DrawText(TextFormat("%d", i), centerX + i - 10, centerY - hudSize - 20, fontSize, GREEN);
+    }
+}
+
 void Space::Draw2D()
 {
-    /*Vector2 screenPos = GetWorldToScreen(star.GetPosition(), camera_ref);
-    DrawText(star.GetName().c_str(), screenPos.x, screenPos.y - 20, 20, WHITE);*/
+    // Draw names above star systems
+    for (const auto& starfield : *starfields)
+    {
+        for (const auto& star : starfield.GetStars())
+        {
+            // Check if the star is in front of the camera
+            Vector3 toStar = Vector3Subtract(star.GetPosition(), camera_ref.position);
+            float dotProduct = Vector3DotProduct(cameraForward, toStar);
+
+            if (dotProduct <= 0) continue; // Skip stars behind the camera
+
+            if (distance(camera_ref.position, star.GetPosition()) < starDrawDistance / 4)
+            {
+                const Vector2 screenPos = GetWorldToScreen(star.GetPosition(), camera_ref);
+                const int fontSize = 18;
+                DrawText(star.GetName().c_str(), static_cast<int>(screenPos.x) - 25, static_cast<int>(screenPos.y) - 25, fontSize, RAYWHITE);
+            }
+        }
+    }
+
+    //DrawHUD();
 }
 
 Star* Space::IsStarClicked(const Star& star) 

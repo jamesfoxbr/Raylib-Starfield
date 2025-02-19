@@ -166,7 +166,7 @@ void Gui::SpaceInterface()
             // Start game (Space scene)
             savedCameraPosition = camera_ref.position;
             savedCameraTarget = camera_ref.target;
-            sceneManager_ref.ChangeScene(new StarSystem());
+            sceneManager_ref.ChangeScene(new StarSystem(selectedStarPtr->GetName(), selectedStarPtr->GetPosition()));
         }
 
         //ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
@@ -185,7 +185,7 @@ void Gui::SpaceInterface()
 
 void Gui::StarSystemInterface()
 {
-    const float windowWidth = 200;
+    const float windowWidth = 300;
     const float windowHeight = 200;
     const float buttonHeight = 20;
 
@@ -193,6 +193,9 @@ void Gui::StarSystemInterface()
     ImGui::SetNextWindowPos({GetScreenWidth() - windowWidth, 0});
 
     ImGui::Begin("Menu", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+    ImGui::Text(("Star Name: " + selectedStar).c_str());
+    ImGui::Text(("World Type: " + sceneManager_ref.currentScene->GetWorldType()).c_str());
+    ImGui::Text(("Atmospheric Pressure: " + std::to_string(sceneManager_ref.currentScene->GetAtmosphericPressure())).c_str());
 
     if (ImGui::Button("RETURN", {windowWidth - 16, buttonHeight}))
     {

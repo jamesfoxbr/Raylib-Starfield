@@ -49,7 +49,7 @@ struct Vector3Hash {
 	}
 };
 
-constexpr int NUMBER_OF_STARS = 200;
+constexpr int NUMBER_OF_STARS = 50;
 
 // This class represents the space scene, where the stars are drawn
 class Space : public Scene
@@ -64,6 +64,7 @@ public:
 	void Init() override;   // Called when the scene is loaded
 	void Update() override;	// Called every frame
 	void Draw3D() override;	// Called every frame to draw 2D elements
+	void DrawHUD();
 	void Draw2D() override;	// Called every frame to draw 3D elements
 	void Unload() override;	// Called when the scene is unloaded
 
@@ -80,7 +81,7 @@ private:
 	static constexpr int starDrawDistance = 350;          // how far the stars will be drawn from the camera
 	static constexpr int numberOfStars = NUMBER_OF_STARS; // number of stars in each chunk
 	static constexpr int chunkSize = 100;                 // width, height and depth of the chunk
-	static constexpr int chunkDrawDistance = 2;           // how many chunks will draw in each direction from the central chunk de camera is at momenet
+	static constexpr int chunkDrawDistance = 3;           // how many chunks will draw in each direction from the central chunk de camera is at momenet
 
 	// Camera control and trickery variables
 	int camX = 0; 
@@ -96,7 +97,7 @@ private:
 	// Selection wired cube draw position
 	Vector3 cubePos    = {0};
 												         
-	const Material material = LoadMaterialDefault();                      // Load default material
+	const Material material      = LoadMaterialDefault();         
 	Model& cubeModel             = resourceManager_ref.GetModel("resources/models/cube.obj");
 	Texture& checkerBoardTexture = resourceManager_ref.GetTexture("resources/images/checkerboard.png");
 

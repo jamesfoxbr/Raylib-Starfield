@@ -27,6 +27,8 @@
 #include "raylib.h"
 #include <math.h>
 #include <stdlib.h>
+#include <string>
+#include <random>
 #include "scene.h"
 #include "Controls.h"
 #include "Gui.h"
@@ -34,7 +36,7 @@
 class StarSystem : public Scene
 {
 public:
-	StarSystem();
+	StarSystem(std::string name, Vector3 position);
 	~StarSystem();
 	void Init() override;   // Called when the scene is loaded
 	void Update() override;	// Called every frame
@@ -42,8 +44,26 @@ public:
 	void Draw3D() override;	// Called every frame to draw 3D elements
 	void Unload() override;	// Called when the scene is unloaded
 
+	std::string GetSystemName() override;
+
+	std::string GetWorldType() override;
+
+	float GetAtmosphericPressure() override;
+
 private:
-	Vector3 position;
+	const Vector3 position;
+	std::mt19937 mt;
+	std::string starName = "";
+	
+	unsigned int numberOfPlanets;
+
+	// Main world
+	std::string worldType = "";
+	float atmosphericPressure;
+
+	void GenerateWorldType(std::mt19937& rnd);
+	void GenerateAtmosphericPressure(std::mt19937& rnd);
+
 };
 
 #endif // !H_STAR_SYSTEM_H

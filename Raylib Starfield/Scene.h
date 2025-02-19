@@ -24,6 +24,8 @@
 #ifndef H_SCENE_H
 #define H_SCENE_H
 
+#include <string>
+
 // Base class for a scene
 class Scene {
 public:
@@ -35,6 +37,9 @@ public:
     virtual ~Scene() {}         // Virtual destructor
 
 	virtual int GetNumberOfStars() { return 0; }
+	virtual std::string GetSystemName() { return ""; }
+	virtual std::string GetWorldType() { return ""; }
+	virtual float GetAtmosphericPressure() { return 0.0f; }
 };
 
 #endif // !H_SCENE_H

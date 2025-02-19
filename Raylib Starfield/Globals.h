@@ -41,6 +41,8 @@ enum LoadedScene
 static int screenWidth = 1280; 
 static int screenHeight = 800;
 
+static const int SEED = 555;
+
 extern Vector3 savedCameraPosition;          // Saved camera position for return space scene
 extern Vector3 savedCameraTarget;            // Saved camera rotation for return space scene
                                              
@@ -51,7 +53,7 @@ extern ResourceManager& resourceManager_ref; // Reference to the resource manage
 extern Controls& control_ref;                // Reference to the controls
 extern Gui* gui_ptr;                         // Pointer to the GUI
                                             
-extern Star* selectedStar;                   // Pointer to the selected star
+extern Star* selectedStarPtr;                   // Pointer to the selected star
                                             
 extern bool exitGame_g;                      // Exit game flag
 extern LoadedScene loadedScene;              // Current loaded scene

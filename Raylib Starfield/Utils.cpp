@@ -24,13 +24,14 @@
 #include "Utils.h"
 #include "Globals.h"
 
-int diceRoller(int minimun, int maximun)
+int diceRoller(int minimun, int maximun, int times, std::mt19937& mt)
 {
-    std::random_device rd;
-    std::mt19937 mt(rd());
     std::uniform_int_distribution<int> dist(minimun, maximun);
 
-    return dist(mt);
+    int result{0};
+    for (int i = 0; i < times; i++)
+        result += dist(mt);
+    return result;
 }
 
 double distance(const Vector3& p1, const Vector3& p2)

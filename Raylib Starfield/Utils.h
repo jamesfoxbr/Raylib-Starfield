@@ -30,7 +30,7 @@
 #include <random>
 #include "raylib.h"
 
-int diceRoller(int minimun, int maximun);
+int diceRoller(int minimun, int maximun, int times, std::mt19937& mt);
 double distance(const Vector3& p1, const Vector3& p2);
 void DrawCoordinates(const Camera& camera);
 void targetCursor();

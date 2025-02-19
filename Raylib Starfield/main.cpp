@@ -51,7 +51,7 @@ Camera& camera_ref = window.camera;                     // Camera reference
 Controls control;                                       // Controls instance
 Controls& control_ref = control;                        // Controls reference
                                                         
-Star* selectedStar = nullptr;                           // Pointer to the selected star
+Star* selectedStarPtr = nullptr;                           // Pointer to the selected star
                                                         
 Gui* gui_ptr = nullptr;                                 // Gui reference
                                                         
