@@ -29,6 +29,7 @@
 #include "Globals.h"
 #include "StarSystem.h"
 #include "ResourceManager.h"
+#include "PlanetScene.h"
 
 // --------------------------------------------------------------------------------------------
 // FUNCTION DECLARATIONS
@@ -69,7 +70,8 @@ int main()
     Gui gui;
 	gui_ptr = &gui;
 
-	sceneManager.ChangeScene(new Title());
+	//sceneManager.ChangeScene(new Title());
+    sceneManager.ChangeScene(new Title());
 
     // Main game loop
     while (!exitGame_g) 

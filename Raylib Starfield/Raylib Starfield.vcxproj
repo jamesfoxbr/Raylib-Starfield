@@ -143,6 +143,8 @@
     <ClCompile Include="Controls.cpp" />
     <ClCompile Include="Gui.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Planet.cpp" />
+    <ClCompile Include="PlanetScene.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="StarSystem.cpp" />
     <ClCompile Include="rlImGui.cpp" />
@@ -160,8 +162,11 @@
     <ClInclude Include="dependencies\imgui_impl_raylib.h" />
     <ClInclude Include="dependencies\rlImGui.h" />
     <ClInclude Include="dependencies\rlImGuiColors.h" />
+    <ClInclude Include="FastNoiseLite.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Gui.h" />
+    <ClInclude Include="Planet.h" />
+    <ClInclude Include="PlanetScene.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="StarSystem.h" />
     <ClInclude Include="RandomName.h" />

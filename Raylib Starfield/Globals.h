@@ -35,7 +35,8 @@ enum LoadedScene
 {
     TITLE,
     SPACE,
-    STARSYSTEM
+    STARSYSTEM,
+    PLANET
 };
 
 static int screenWidth = 1280; 

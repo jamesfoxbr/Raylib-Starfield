@@ -46,6 +46,12 @@ void Controls::Update()
 
 void Controls::Move()
 {
+	// don't pass mouse and keyboard presses further if an ImGui widget is active
+	auto& io = ImGui::GetIO();
+	if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
+		return;
+	}
+
 	// Set movement speed
 	if (IsKeyDown(KEY_LEFT_SHIFT))
 	{
@@ -135,6 +141,12 @@ void Controls::Move()
 
 void Controls::MouseLook()
 {
+	// don't pass mouse and keyboard presses further if an ImGui widget is active
+	auto& io = ImGui::GetIO();
+	if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
+		return;
+	}
+
 	CurrentMousePosition = GetMousePosition();
 	Vector2 storeMousePosition;
 	if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))

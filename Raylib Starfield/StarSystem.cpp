@@ -148,4 +148,13 @@ void StarSystem::GenerateAtmosphericPressure(std::mt19937& rnd)
 	}
 }
 
+void StarSystem::GenerateOrbits(std::mt19937& rnd)
+{
+}
+
+void StarSystem::GeneratePlanets(std::mt19937& rnd)
+{
+
+}
+
 

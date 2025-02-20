@@ -299,6 +299,12 @@ void Space::Draw2D()
 
 Star* Space::IsStarClicked(const Star& star) 
 {
+    // don't pass mouse and keyboard presses further if an ImGui widget is active
+    auto& io = ImGui::GetIO();
+    if (io.WantCaptureMouse || io.WantCaptureKeyboard) {
+        return nullptr;
+    }
+
     Vector2 screenPos = GetWorldToScreen(star.GetPosition(), camera_ref);
     const float starSize = 20.0f;                 // Use the star's size for collision detection
     const float clickDistance = starDrawDistance; // How far the mouse can be from the star to click it
